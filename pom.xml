@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.southtang</groupId>
+    <artifactId>learning</artifactId>
+    <version>${learning.version}</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>dependencies-manager</module>
+        <module>flowable</module>
+    </modules>
+
+    <properties>
+        <learning.version>1.0-SNAPSHOT</learning.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>cn.learning</groupId>
+                <artifactId>dependencies-manager</artifactId>
+                <version>${learning.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <!-- 使用 huawei / aliyun 的 Maven 源，提升下载速度 -->
+    <repositories>
+        <repository>
+            <id>huaweicloud</id>
+            <name>huawei</name>
+            <url>https://mirrors.huaweicloud.com/repository/maven/</url>
+        </repository>
+        <repository>
+            <id>aliyunmaven</id>
+            <name>aliyun</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </repository>
+    </repositories>
+</project>
