@@ -1,0 +1,1 @@
+create database if not exists flowable default character set utf8 collate utf8_bin;

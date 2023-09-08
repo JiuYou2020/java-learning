@@ -99,7 +99,7 @@ BPMN 2.0是行业广泛接受的一种XML标准。在Flowable术语中,我们称
         </sequenceFlow>
         <!--serviceTask为服务任务,这里是==true时的步骤即需要调用服务来完成的任务,需要指定id,name和class,这里的class为自定义的类-->
         <serviceTask id="externalSystemCall" name="Enter holidays in external system"
-                     flowable:class="cn.learning.CallExternalSystemDelegate"/>
+                     flowable:class="cn.learning.flowable.quickstart.CallExternalSystemDelegate"/>
         <sequenceFlow sourceRef="externalSystemCall" targetRef="holidayApprovedTask"/>
         <!--userTask为用户任务,即需要用户来完成的任务,这里表达管理人员统一审核,需要指定id和name-->
         <userTask id="holidayApprovedTask" name="Holiday approved"/>
@@ -226,7 +226,7 @@ public class HolidayRequest {
 
 ```xml
 <serviceTask id="externalSystemCall" name="Enter holidays in external system"
-                     flowable:class="cn.learning.CallExternalSystemDelegate"/>
+                     flowable:class="cn.learning.flowable.quickstart.CallExternalSystemDelegate"/>
 ```
 
 它会路由到`CallExternalSystemDelegate`类去执行后面的操作

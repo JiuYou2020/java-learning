@@ -1,4 +1,4 @@
-package cn.learning;
+package cn.learning.flowable.quickstart;
 
 import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.JavaDelegate;

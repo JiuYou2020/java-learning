@@ -1,4 +1,4 @@
-package cn.learning;
+package cn.learning.flowable.quickstart;
 
 import org.flowable.engine.*;
 import org.flowable.engine.history.HistoricActivityInstance;
@@ -25,7 +25,12 @@ public class HolidayRequest {
         //todo 1.
         //这段代码主要作用就是使用Flowable提供的API完成流程引擎的配置、创建工作,为后续的流程部署与执行等操作做准备。
         //通过构建ProcessEngine对象,我们就可以进一步地使用Flowable的流程引擎来开发业务流程应用程序了。
-        ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration().setJdbcUrl("jdbc:h2:mem:flowable;DB_CLOSE_DELAY=-1").setJdbcUsername("sa").setJdbcPassword("").setJdbcDriver("org.h2.Driver").setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
+        ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration()
+                .setJdbcUrl("jdbc:h2:mem:flowable;DB_CLOSE_DELAY=-1")
+                .setJdbcUsername("sa")
+                .setJdbcPassword("")
+                .setJdbcDriver("org.h2.Driver")
+                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
 
         ProcessEngine processEngine = cfg.buildProcessEngine();
         //todo 4.
