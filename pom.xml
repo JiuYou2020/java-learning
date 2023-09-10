@@ -12,6 +12,7 @@
     <modules>
         <module>dependencies-manager</module>
         <module>flowable</module>
+        <module>rabbitmq</module>
     </modules>
 
     <properties>

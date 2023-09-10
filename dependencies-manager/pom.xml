@@ -27,6 +27,12 @@
         <mysql.version>8.0.11</mysql.version>
         <mybatis.version>2.2.2</mybatis.version>
         <lombok.version>1.18.8</lombok.version>
+        <!--        rabbit-springboot-quickstart-->
+        <amqp.version>2.7.14</amqp.version>
+
+
+        <rabbit.quickstart>4.0.3</rabbit.quickstart>
+        <spring.cloud.version>2021.0.5</spring.cloud.version>
     </properties>
 
     <dependencyManagement>
@@ -77,6 +83,23 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+                <version>${rabbit.quickstart}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-amqp</artifactId>
+                <version>${amqp.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
