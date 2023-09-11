@@ -20,7 +20,7 @@ public class RabbitConfig {
         public Queue demo01Queue() {
             return new Queue(Demo01Message.QUEUE, // Queue 名字
                     true, // durable: 是否持久化
-                    false, // exclusive: 是否排它
+                    false, // exclusive: 是否排它,即是否只能被当前创建的连接使用,而且当连接关闭后队列即被删除
                     false); // autoDelete: 是否自动删除
         }
 

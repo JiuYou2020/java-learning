@@ -13,6 +13,18 @@
     <packaging>pom</packaging>
     <modules>
         <module>rabbitmq-springboot-quickstart</module>
+        <module>rabbitmq-springboot-batch-sending</module>
+        <module>rabbitmq-springboot-batch-consumer</module>
+        <module>rabbitmq-springboot-batch-consumer2</module>
+        <module>rabbitmq-springboot-consumer-retry</module>
+        <module>rabbitmq-springboot-timed-message</module>
+        <module>rabbitmq-springboot-message-model</module>
+        <module>rabbitmq-springboot-concurrency</module>
+        <module>rabbitmq-springboot-orderly</module>
+        <module>rabbitmq-springboot-ack</module>
+        <module>rabbitmq-springboot-confirm</module>
+        <module>rabbitmq-springboot-error-handler</module>
+        <module>rabbitmq-springboot-confirm-async</module>
     </modules>
 
     <properties>
