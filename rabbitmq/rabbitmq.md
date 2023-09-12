@@ -161,7 +161,7 @@ Spring-AMQP 通过 [BatchingRabbitTemplate](https://github.com/spring-projects/s
 
 我们已经实现批量发送消息到 RabbitMQ Broker 中。那么，我们来思考一个问题，这批消息在 RabbitMQ Broker 到底是存储**一条**消息，还是**多条**消息？
 
-- 如果胖友使用过 Kafka、RocketMQ 这两个消息队列，那么判断肯定会是**多条**消息。
+- 如果小伙伴使用过 Kafka、RocketMQ 这两个消息队列，那么判断肯定会是**多条**消息。
 
 😭 实际上，RabbitMQ Broker 存储的是**一条**消息。又或者说，**RabbitMQ 并没有提供批量接收消息的 API 接口**。
 
@@ -210,7 +210,7 @@ Spring-AMQP 通过 [BatchingRabbitTemplate](https://github.com/spring-projects/s
 
 ## 3.4 消费重试
 
-在开始本小节之前，胖友首先要对 RabbitMQ 的[死信队列](https://www.rabbitmq.com/dlx.html)的机制，有一定的了解。
+在开始本小节之前，小伙伴首先要对 RabbitMQ 的[死信队列](https://www.rabbitmq.com/dlx.html)的机制，有一定的了解。
 
 在消息**消费失败**的时候，Spring-AMQP 会通过**消费重试**机制，重新投递该消息给 Consumer ，让 Consumer 有机会重新消费消息，实现消费成功。
 
@@ -292,7 +292,7 @@ spring:
 
 在消息队列中，有两种经典的消息模式：「点对点」和「发布订阅」。可以看看[《消息队列两种模式：点对点与发布订阅》](http://www.iocoder.cn/Fight/There-are-two-modes-of-message-queuing-point-to-point-and-publish-subscription/?self)文章。
 
-如果胖友有使用过 RocketMQ 或者 Kafka 消息队列，可能比较习惯的叫法是：
+如果小伙伴有使用过 RocketMQ 或者 Kafka 消息队列，可能比较习惯的叫法是：
 
 > **集群消费（Clustering）**：对应「点对点」 集群消费模式下，相同 Consumer Group 的每个 Consumer 实例平均分摊消息。
 >
@@ -336,13 +336,13 @@ spring:
 
 在 `@RabbitListener` 注解中，有 `concurrency` 属性，它可以指定并发消费的线程数。例如说，如果设置 `concurrency=4` 时，Spring-AMQP 就会为**该** `@RabbitListener` 创建 4 个线程，进行并发消费。
 
-考虑到让胖友能够更好的理解 `concurrency` 属性，我们来简单说说 Spring-AMQP 在这块的实现方式。我们来举个例子：
+考虑到让小伙伴能够更好的理解 `concurrency` 属性，我们来简单说说 Spring-AMQP 在这块的实现方式。我们来举个例子：
 
 - 首先，我们来创建一个 Queue 为 `"DEMO"` 。
 - 然后，我们创建一个 Demo9Consumer 类，并在其消费方法上，添加 `@RabbitListener(concurrency=2)` 注解。
 - 再然后，我们启动项目。Spring-AMQP 会根据 `@RabbitListener(concurrency=2)` 注解，创建 **2** 个 RabbitMQ Consumer 。注意噢，是 **2** 个 RabbitMQ Consumer 呢！！！后续，每个 RabbitMQ Consumer 会被**单独**分配到一个线程中，进行拉取消息，消费消息。
 
-酱紫讲解一下，胖友对 Spring-AMQP 实现**多线程**的并发消费的机制，是否理解了。
+酱紫讲解一下，小伙伴对 Spring-AMQP 实现**多线程**的并发消费的机制，是否理解了。
 
 > 代码地址:[learning/rabbitmq/rabbitmq-springboot-concurrency at master · JiuYou2020/learning (github.com)](https://github.com/JiuYou2020/learning/tree/master/rabbitmq/rabbitmq-springboot-concurrency)
 
@@ -478,7 +478,7 @@ spring:
 
 实际场景下，因为自动确认存在可能**丢失消息**的情况，所以在对**可靠性**有要求的场景下，我们基本采用手动确认。当然，如果允许消息有一定的丢失，对**性能**有更高的场景下，我们可以考虑采用自动确认。
 
-😈 更多关于消费者的消息确认的内容，胖友可以阅读如下的文章：
+😈 更多关于消费者的消息确认的内容，小伙伴可以阅读如下的文章：
 
 - [《Consumer Acknowledgements and Publisher Confirms》](https://www.rabbitmq.com/confirms.html) 的消费者部分的内容，对应中文翻译为 [《消费者应答（ACK）和发布者确认（Confirm）》](https://blog.bossma.cn/rabbitmq/consumer-ack-and-publisher-confirm/) 。
 - [《RabbitMQ 之消息确认机制（事务 + Confirm）》](http://www.iocoder.cn/RabbitMQ/message-confirmation-mechanism-transaction-Confirm/?self) 文章的[「消息确认（Consumer端）」](https://www.iocoder.cn/Spring-Boot/RabbitMQ/#)小节。
@@ -737,3 +737,761 @@ public class DemoProducer {
 另外，RabbitListenerErrorHandler 需要每个 `@RabbitListener` 注解上，需要每个手动设置下 `errorHandler` 属性。而 ErrorHandler 是相对全局的，所有 SimpleRabbitListenerContainerFactory 创建的 SimpleMessageListenerContainer 都会生效。
 
 具体选择 ErrorHandler 还是 RabbitLoggingErrorHandler ，我暂时没有答案。不过个人感觉，如果不需要对 Consumer 消费的结果（包括成功和异常）做进一步处理，还是考虑 ErrorHandler 即可。在 ErrorHandler 中，我们可以通过判断 Throwable 异常是不是 ListenerExecutionFailedException 异常，从而拿到 Message 相关的信息。
+
+
+
+
+
+
+
+# 4. RabbitMQ-SpringCloud
+
+## 4.1 概述
+
+本文我们来学习 [Spring Cloud Stream RabbitMQ](https://github.com/spring-cloud/spring-cloud-stream-binder-rabbit) 组件，基于 [Spring Cloud Stream](https://github.com/spring-cloud/spring-cloud-stream) 的编程模型，接入 RabbitMQ 作为消息中间件，实现消息驱动的微服务。
+
+> RabbitMQ 是一套开源（MPL）的消息队列服务软件，是由 LShift 提供的一个 Advanced Message Queuing Protocol (AMQP) 的开源实现，由以高性能、健壮以及可伸缩性出名的 Erlang 写成。
+
+## 4.2 Spring Cloud Stream 介绍
+
+[Spring Cloud Stream](https://github.com/spring-cloud/spring-cloud-stream) 是一个用于构建基于**消息**的微服务应用框架，使用 [Spring Integration](https://www.oschina.net/p/spring+integration) 与 Broker 进行连接。
+
+> 友情提示：可能有小伙伴对 Broker 不太了解，我们来简单解释下。
+>
+> 一般来说，消息队列中间件都有一个 **Broker Server**（代理服务器），消息中转角色，负责存储消息、转发消息。
+>
+> 例如说在 RocketMQ 中，Broker 负责接收从生产者发送来的消息并存储、同时为消费者的拉取请求作准备。另外，Broker 也存储消息相关的元数据，包括消费者组、消费进度偏移和主题和队列消息等。
+
+Spring Cloud Stream 提供了消息中间件的**统一抽象**，推出了 publish-subscribe、consumer groups、partition 这些统一的概念。
+
+Spring Cloud Stream 内部有两个概念：**Binder** 和 **Binding**。
+
+1. **[Binder](https://github.com/spring-cloud/spring-cloud-stream/blob/master/spring-cloud-stream/src/main/java/org/springframework/cloud/stream/binder/Binder.java)**，跟消息中间件集成的组件，用来创建对应的 Binding。各消息中间件都有自己的 Binder 具体实现。
+
+
+
+```java
+public interface Binder<T, 
+    C extends ConsumerProperties, // 消费者配置
+    P extends ProducerProperties> { // 生产者配置
+    
+    // 创建消费者的 Binding
+    Binding<T> bindConsumer(String name, String group, T inboundBindTarget, C consumerProperties);
+
+    // 创建生产者的 Binding
+    Binding<T> bindProducer(String name, T outboundBindTarget, P producerProperties);
+    
+}
+```
+
+
+
+- Kafka 实现了 [KafkaMessageChannelBinder](https://github.com/spring-cloud/spring-cloud-stream-binder-kafka/blob/master/spring-cloud-stream-binder-kafka/src/main/java/org/springframework/cloud/stream/binder/kafka/KafkaMessageChannelBinder.java)
+- RabbitMQ 实现了 [RabbitMessageChannelBinder](https://github.com/spring-cloud/spring-cloud-stream-binder-rabbit/blob/master/spring-cloud-stream-binder-rabbit/src/main/java/org/springframework/cloud/stream/binder/rabbit/RabbitMessageChannelBinder.java)
+- RocketMQ 实现了 [RocketMQMessageChannelBinder](https://github.com/alibaba/spring-cloud-alibaba/blob/master/spring-cloud-stream-binder-rocketmq/src/main/java/com/alibaba/cloud/stream/binder/rocketmq/RocketMQMessageChannelBinder.java)
+
+2. **[Binding](https://github.com/spring-cloud/spring-cloud-stream/blob/master/spring-cloud-stream/src/main/java/org/springframework/cloud/stream/binder/Binding.java)**，包括 Input Binding 和 Output Binding。Binding 在消息中间件与应用程序提供的 Provider 和 Consumer 之间提供了一个桥梁，实现了开发者只需使用应用程序的 Provider 或 Consumer 生产或消费数据即可，屏蔽了开发者与底层消息中间件的接触。
+
+最终整体交互如下图所示：![Spring Cloud Stream Application](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913012507166-1937213626.png)
+
+可能看完之后，小伙伴们对 Spring Cloud Stream 还是有点懵逼，并且觉得概念怎么这么多呢？不要慌，我们先来快速入个门，会有更加具象的感受。
+
+## 4.3 快速入门
+
+> 示例代码对应仓库：[learning/rabbitmq/rabbitmq-springcloud-quickstart at master · JiuYou2020/learning (github.com)](https://github.com/JiuYou2020/learning/tree/master/rabbitmq/rabbitmq-springcloud-quickstart)
+>
+> 友情提示：这可能是一个信息量有点大的入门内容，请保持耐心~
+
+本小节，我们一起来快速入门下，会创建 2 个项目，分别作为生产者和消费者。最终项目如下图所示：
+
+![image-20230912215258007](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913012508015-132672952.png)
+
+> 友情提示：考虑到伙伴们能够有更舒适的入门体验，需要对 RabbitMQ 的基本概念有一定的了解，特别是对 Exchange 的四种类型 Direct、Topic、Fanout、Headers 噢。
+
+### 4.3.1 搭建生产者
+
+创建`producer`项目，作为生产者。
+
+#### 4.3.1.1 引入依赖
+
+创建 [`pom.xml`](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-producer-demo/pom.xml) 文件中，引入 Spring Cloud Stream RabbitMQ 相关依赖。
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.learning</groupId>
+        <artifactId>rabbitmq-springcloud-quickstart</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>producer</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <description>
+        版本兼容:https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E
+    </description>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <!-- 引入 SpringMVC 相关依赖，并实现对其的自动配置 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- 引入 Spring Cloud Stream RabbitMQ 相关依赖，将 RabbitMQ 作为消息队列，并实现对其的自动配置 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+
+
+通过引入 [`spring-cloud-starter-stream-rabbit`](https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-stream-rabbit) 依赖，引入并实现 Stream RabbitMQ 的自动配置。在该依赖中，已经帮我们自动引入 RabbitMQ 的大量依赖，非常方便
+
+#### 4.3.1.2 配置文件
+
+创建 [`application.yaml`](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-producer-demo/src/main/resources/application.yml) 配置文件，添加 Spring Cloud Stream RabbitMQ 相关配置。
+
+```yml
+spring:
+  application:
+    name: demo-producer-application
+  cloud:
+    # Spring Cloud Stream 配置项，对应 BindingServiceProperties 类
+    stream:
+      # Binder 配置项，对应 BinderProperties Map
+      binders:
+        rabbit001:
+          type: rabbit # 设置 Binder 的类型
+          environment: # 设置 Binder 的环境配置
+            # 如果是 RabbitMQ 类型的时候，则对应的是 RabbitProperties 类
+            spring:
+              rabbitmq:
+                host: 127.0.0.1 # RabbitMQ 服务的地址
+                port: 5672 # RabbitMQ 服务的端口
+                username: guest # RabbitMQ 服务的账号
+                password: guest # RabbitMQ 服务的密码
+      # Binding 配置项，对应 BindingProperties Map
+      bindings:
+        # 注意,这里的key有通道名-out/in-序号组成,且需要与Controller类中保持一致
+        demo01-out-0:
+          destination: DEMO-TOPIC-01 # 目的地。这里使用 RabbitMQ Exchange
+          content-type: application/json # 内容格式。这里使用 JSON
+          binder: rabbit001 # 设置使用的 Binder 名字
+
+server:
+  port: 18080
+```
+
+> `spring.cloud.stream` 为 Spring Cloud Stream 配置项，对应 [BindingServiceProperties](https://github.com/spring-cloud/spring-cloud-stream/blob/master/spring-cloud-stream/src/main/java/org/springframework/cloud/stream/config/BindingServiceProperties.java) 类。配置的层级有点深，我们一层一层来看看。
+
+- `spring.cloud.stream.binders` 为 Binder 配置项，对应 [BinderProperties](https://github.com/spring-cloud/spring-cloud-stream/blob/master/spring-cloud-stream/src/main/java/org/springframework/cloud/stream/config/BinderProperties.java) Map。其中 *key* 为 Binder 的名字。这里，我们配置了一个名字为 `rabbit001` 的 Binder。
+
+  - `type`：Binder 的类型。这里，我们设置为了 `rabbit`，表示使用 Spring Cloud Stream RabbitMQ 提供的 Binder 实现。
+
+  - `environment`：Binder 的环境。因为 Spring Cloud Steam RabbitMQ 底层使用的是 [`spring-rabbit`](https://github.com/spring-projects/spring-amqp/tree/master/spring-rabbit)，所以在使用 RabbitMQ 类型的时候，则对应的是 [RabbitProperties](https://github.com/spring-projects/spring-boot/blob/master/spring-boot-project/spring-boot-autoconfigure/src/main/java/org/springframework/boot/autoconfigure/amqp/RabbitProperties.java) 类。
+
+-  `spring.cloud.stream.bindings` 为 Binding 配置项，对应 [BindingProperties](https://github.com/spring-cloud/spring-cloud-stream/blob/master/spring-cloud-stream/src/main/java/org/springframework/cloud/stream/config/BindingProperties.java) Map。其中，*key* 为 Binding 的名字。要注意， Binding 分成 Input 和 Output 两种类型，**并且需要在配置文件中体现出来**,例如produer为`demo-out-0`,consumer为`demo-in-0`(`@Input` 还是 `@Output` 注解已弃用,不再推荐使用).**这里，我们配置了一个名字为 `demo01-out-0:` 的 Binding**。从命名上，我们的意图是想作为 Output Binding，用于生产者发送消息。
+
+  - `destination`：目的地。**在 RabbitMQ 中，使用 Exchange 作为目的地，默认为 Topic 类型**。这里我们设置为 `DEMO-TOPIC-01`。
+
+  - `content-type`：内容格式。这里使用 JSON 格式，因为稍后我们将发送消息的类型为 POJO，使用 JSON 进行序列化。
+
+  - `binder`：使用的 Binder 名字。这里我们设置为 `rabbit001`，就是我们上面刚创建的。
+
+    > 友情提示：如果只有一个 Binder 的情况，可以不进行设置。又或者通过 `spring.cloud.stream.default-binder` 配置项来设置默认的 Binder 的名字。
+
+#### 4.3.1.3 Demo01Message
+
+创建 Demo01Message 类，示例 Message 消息。代码如下：
+
+```java
+public class Demo01Message {
+
+    /**
+     * 编号
+     */
+    private Integer id;
+
+    public Demo01Message setId(Integer id) {
+        this.id = id;
+        return this;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Demo01Message{" +
+                "id=" + id +
+                '}';
+    }
+
+}
+```
+
+#### 4.3.1.4 Demo01Controller
+
+创建 [Demo01Controller](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-producer-demo/src/main/java/cn/iocoder/springcloud/labx10/rabbitmqdemo/producerdemo/controller/Demo01Controller.java) 类，提供发送消息的 HTTP 接口。代码如下：
+
+```java
+package cn.learning.rabbitmq.cloud.quickstart.producer.controller;
+
+import cn.learning.rabbitmq.cloud.quickstart.producer.message.Demo01Message;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Random;
+
+@RestController
+@RequestMapping("/demo01")
+public class Demo01Controller {
+
+    @Autowired
+    private StreamBridge streamBridge;
+
+    @GetMapping("/send")
+    public boolean send() {
+        // 创建 Message
+        Demo01Message message = new Demo01Message()
+                .setId(new Random().nextInt());
+        // 创建 Spring Message 对象,使用函数式变成模型的方式而不是加上已弃用的@enableBinding/@output注解,demo01-out-0是配置文件中的spring.cloud.stream.bindings.demo01-out-0
+        return streamBridge.send("demo01-out-0", MessageBuilder.withPayload(message).build());
+    }
+
+    @GetMapping("/send_tag")
+    public boolean sendTag() {
+        for (String tag : new String[]{"yunai", "yutou", "tudou"}) {
+            // 创建 Message
+            Demo01Message message = new Demo01Message()
+                    .setId(new Random().nextInt());
+            // 创建 Spring Message 对象
+            Message<Demo01Message> springMessage = MessageBuilder.withPayload(message)
+                    // 设置 Tag
+                    .setHeader("tag", tag)
+                    .build();
+            // 发送消息,使用函数式变成模型的方式而不是加上已弃用的@enableBinding/@output注解
+            streamBridge.send("demo01-out-0", springMessage);
+
+        }
+        return true;
+    }
+
+}
+```
+
+#### 4.3.1.5 ProducerApplication
+
+创建 [ProducerApplication](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-producer-demo/src/main/java/cn/iocoder/springcloud/labx10/rabbitmqdemo/producerdemo/ProducerApplication.java) 类，启动应用。代码如下：
+
+```java
+@SpringBootApplication
+public class ProducerApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ProducerApplication.class, args);
+    }
+
+}
+```
+
+### 4.3.2 搭建消费者
+
+创建`consumer`项目，作为消费者。
+
+#### 4.3.2.1 引入依赖
+
+创建 [`pom.xml`](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-consumer-demo/pom.xml) 文件中，引入 Spring Cloud Stream RabbitMQ 相关依赖。
+
+> 友情提示：[4.3.1.1 引入依赖](# 4.3.1.1 引入依赖)一致
+
+#### 4.3.2.2 配置文件
+
+创建 [`application.yaml`](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-consumer-demo/src/main/resources/application.yml) 配置文件，添加 Spring Cloud Stream RabbitMQ 相关配置。
+
+```yml
+spring:
+  application:
+    name: demo-consumer-application
+  cloud:
+    # Spring Cloud Stream 配置项，对应 BindingServiceProperties 类
+    stream:
+      # Binder 配置项，对应 BinderProperties Map
+      binders:
+        rabbit001:
+          type: rabbit # 设置 Binder 的类型
+          environment: # 设置 Binder 的环境配置
+            # 如果是 RabbitMQ 类型的时候，则对应的是 RabbitProperties 类
+            spring:
+              rabbitmq:
+                host: 127.0.0.1 # RabbitMQ 服务的地址
+                port: 5672 # RabbitMQ 服务的端口
+                username: guest # RabbitMQ 服务的账号
+                password: guest # RabbitMQ 服务的密码
+      # Binding 配置项，对应 BindingProperties Map
+      bindings:
+        # 注意,这里的key有通道名-out/in-序号组成,且需要与Consumer类中的bean的名称保持一致,例如demo01-in-0可以简写为demo01
+        demo01-in-0:
+          destination: DEMO-TOPIC-01 # 目的地。这里使用 RabbitMQ Exchange
+          content-type: application/json # 内容格式。这里使用 JSON
+          group: demo01-consumer-group-DEMO-TOPIC-01 # 消费者分组
+          binder: rabbit001  # 设置使用的 Binder 名字
+
+server:
+  port: ${random.int[10000,19999]} # 随机端口，方便启动多个消费者
+
+```
+
+总体来说，和之前的是比较接近的，所以我们只说差异点噢。
+
+- `spring.cloud.stream.bindings` 为 Binding 配置项
+
+  - `group`：消费者分组。
+
+    > **消费者组（Consumer Group）**：同一类 Consumer 的集合，这类 Consumer 通常消费同一类消息且消费逻辑一致。消费者组使得在消息消费方面，实现负载均衡和容错的目标变得非常容易。要注意的是，消费者组的消费者实例必须订阅完全相同的 Topic。
+
+- 对于消费队列的消费者，会有两种消费模式：集群消费（Clustering）和广播消费（Broadcasting）。
+
+> - **集群消费（Clustering）**：集群消费模式下,相同 Consumer Group 的每个 Consumer 实例平均分摊消息。
+> - **广播消费（Broadcasting）**：广播消费模式下，相同 Consumer Group 的每个 Consumer 实例都接收全量的消息。
+
+RabbitMQ 的消费者**两种模式都支持**。因为这里我们配置了消费者组，所以采用**集群消费**。至于如何使用广播消费，我们稍后举例子。
+
+**一定要理解集群消费和广播消费的差异**。我们来举个例子，有一个消费者分组,其中有两个消费者A,B,现在我们发送三条消息
+
+- 集群消费:A消费2条,B消费1条
+- 广播消费:A消费3条,B消费3条
+
+通过**集群消费**的机制，我们可以实现针对相同 Topic ，不同消费者分组实现各自的业务逻辑。例如说：用户注册成功时，发送一条 Topic 为 `"USER_REGISTER"` 的消息。然后，不同模块使用不同的消费者分组，订阅该 Topic ，实现各自的拓展逻辑：
+
+- 积分模块：判断如果是手机注册，给用户增加 20 积分。
+- 优惠劵模块：因为是新用户，所以发放新用户专享优惠劵。
+- 站内信模块：因为是新用户，所以发送新用户的欢迎语的站内信。
+- ... 等等
+
+这样，我们就可以将注册成功后的业务拓展逻辑，实现业务上的**解耦**，未来也更加容易拓展。同时，也提高了注册接口的性能，避免用户需要等待业务拓展逻辑执行完成后，才响应注册成功。
+
+同时，相同消费者分组的多个实例，可以实现**高可用**，保证在一个实例意外挂掉的情况下，其它实例能够顶上。并且，多个实例都进行消费，能够提升**消费速度**。
+
+> 友情提示：如果还不理解的话，没有关系，我们下面会演示下我们上面举的例子。
+
+#### 4.3.2.3 Demo01Message
+
+> 友情提示：和[4.3.1.3 Demo01Message](#_4.3.1.3 Demo01Message)基本一样
+
+#### 4.3.2.4 Demo01Consumer
+
+创建 [Demo01Consumer](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-consumer-demo/src/main/java/cn/iocoder/springcloud/labx10/rabbitmqdemo/consumerdemo/listener/Demo01Consumer.java) 类，消费消息。代码如下：
+
+```java
+package cn.learning.rabbitmq.cloud.quickstart.consumer.consumer;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
+import java.util.function.Consumer;
+
+@Component
+@Slf4j
+public class Demo01Consumer {
+    /**
+     * bean的名称需要与配置文件中`spring.cloud.stream.bindings.demo01-in-0`对应
+     *
+     * @return Consumer<String>
+     */
+    @Bean
+    public Consumer<String> demo01() {
+        return message -> {
+            log.info("[demo01][线程编号:{} 消息内容：{}]", Thread.currentThread().getId(), message);
+        };
+    }
+}
+```
+
+因为我们消费的消息是 POJO 类型，所以我们需要添加 [`@Payload`](https://github.com/spring-projects/spring-framework/blob/master/spring-messaging/src/main/java/org/springframework/messaging/handler/annotation/Payload.java) 注解，声明需要进行反序列化成 POJO 对象。
+
+#### 4.3.2.5 ConsumerApplication
+
+创建 [ConsumerApplication](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-consumer-demo/src/main/java/cn/iocoder/springcloud/labx10/rabbitmqdemo/consumerdemo/ConsumerApplication.java) 类，启动应用。代码如下：
+
+```java
+@SpringBootApplication
+public class ConsumerApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ConsumerApplication.class, args);
+    }
+
+}
+```
+
+### 4.3.3 测试单集群多实例的场景
+
+本小节，我们会在**一个**消费者集群启动**两个**实例，测试在集群消费的情况下的表现。
+
+1. 执行 **Consumer**Application 两次，启动两个**消费者**的实例，从而实现在消费者分组 `demo01-consumer-group-DEMO-TOPIC-01` 下有两个消费者实例。
+
+> 友情提示：因为 IDEA 默认同一个程序只允许启动 1 次，所以我们需要配置 DemoProviderApplication 为 `Allow parallel run`。如下图所示：![image-20230912223234404](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913012508760-1489304070.png)
+
+此时在 IDEA 控制台看到 RabbitMQ 相关的日志如下：
+
+```java
+# 在 RabbitMQ 声明一个 `DEMO-TOPIC-01.demo01-consumer-group-DEMO-TOPIC-01` 队列，并绑定到名字为 `DEMO-TOPIC-01` 的 Exchange 上
+2023-09-12 22:33:41.735  INFO 20220 --- [           main] c.s.b.r.p.RabbitExchangeQueueProvisioner : declaring queue for inbound: DEMO-TOPIC-01.demo01-consumer-group-DEMO-TOPIC-01, bound to: DEMO-TOPIC-01
+
+# 连接到 RabbitMQ Broker
+2023-09-12 22:33:41.737  INFO 20220 --- [           main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [127.0.0.1:5672]
+2023-09-12 22:33:41.895  INFO 20220 --- [           main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#1f6917fb:0/SimpleConnection@d1d8e1a [delegate=amqp://guest@127.0.0.1:5672/, localPort= 6488]
+
+# 订阅消费 `DEMO-TOPIC-01.demo01-consumer-group-DEMO-TOPIC-01` 队列的消息
+2023-09-12 22:33:42.179  INFO 20220 --- [           main] o.s.i.a.i.AmqpInboundChannelAdapter      : started bean 'inbound.DEMO-TOPIC-01.demo01-consumer-group-DEMO-TOPIC-01'
+```
+
+重点是第一条日志，为什么呢？在我们添加了 `spring.cloud.stream.bindings.{bindingName}` 配置项时，并且是 Input 类型时，每个 RabbitMQ Binding 都会：
+
+- 【Queue】创建一个 `{destination}.{group}` 队列，例如这里创建的队列是 `DEMO-TOPIC-01.demo01-consumer-group-DEMO-TOPIC-01`。
+- 【Exchange】同时创建的还有类型为 Topic 的 Exchange，并进行绑定。
+
+下面，我们打开 RabbitMQ 运维界面，查看下**名字为 `DEMO-TOPIC-01` 的 Exchange**，会更加好理解。如下图所示：![image-20230912223647290](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913012509352-1125187070.png)
+
+2. 执行 **Producer**Application，启动**生产者**的实例。
+
+之后，请求 http://127.0.0.1:18080/demo01/send 接口三次，发送三条消息。此时在 IDEA 控制台看到消费者打印日志如下：
+
+
+
+```java
+// ConsumerApplication 控制台 01
+2023-09-12 22:37:31.541  INFO 20220 --- [DEMO-TOPIC-01-1] c.l.r.c.q.c.consumer.Demo01Consumer      : [demo01][线程编号:36 消息内容：{"id":-560689743}]
+
+// ConsumerApplication 控制台 02
+2023-09-12 22:37:29.944  INFO 7560 --- [DEMO-TOPIC-01-1] c.l.r.c.q.c.consumer.Demo01Consumer      : [demo01][线程编号:37 消息内容：{"id":-2084140846}]
+2023-09-12 22:37:32.127  INFO 7560 --- [DEMO-TOPIC-01-1] c.l.r.c.q.c.consumer.Demo01Consumer      : [demo01][线程编号:37 消息内容：{"id":-169129061}]
+```
+
+**符合预期**。从日志可以看出，每条消息仅被消费一次。对了，有点忘记提下，非常关键！当 RabbitMQ Consumer 订阅**相同 Queue** 时，每条消息有且仅被一个 Consumer 消费，通过这样的方式实现**集群消费**，也就是说，Stream RabbitMQ 是通过消费**相同 Queue 实现消费者组**。
+
+> 友情提示：RabbitMQ 本身没有消费组的概念，而是由 Spring Cloud Stream 定义的统一抽象，而后交给不同消息队列的 Spring Cloud Stream XXX 去具体实现。例如说，Spring Cloud Stream RabbitMQ 就基于 RabbitMQ 的上述特性，实现消费组的功能。
+
+### 4.3.4 测试多集群多实例的场景
+
+本小节，我们会在**二个**消费者集群**各**启动**两个**实例，测试在集群消费的情况下的表现。
+
+1. 执行 **Consumer**Application 两次，启动两个**消费者**的实例，从而实现在消费者分组 `demo01-consumer-group-DEMO-TOPIC-01` 下有两个消费者实例。
+
+2. 修改 `consumer` 项目的配置文件，修改 `spring.cloud.stream.bindings.demo01-in-1.group` 配置项，将消费者分组改成 `X-demo01-consumer-group-DEMO-TOPIC-01`。
+
+然后，执行 **Consumer**Application 两次，再启动两个**消费者**的实例，从而实现在消费者分组 `X-demo01-consumer-group-DEMO-TOPIC-01` 下有两个消费者实例。
+
+此时，我们打开 RabbitMQ 运维界面，查看下**名字为 `DEMO-TOPIC-01` 的 Exchange**，可以看到**两个消费者的两个队列**。
+
+3. 执行 **Producer**Application，启动**生产者**的实例。
+
+之后，请求 http://127.0.0.1:18080/demo01/send 接口三次，发送三条消息。从日志可以看出，每条消息被**每个**消费者集群都进行了消费，且仅被消费一次。
+
+### 4.3.5 小结
+
+至此，我们已经完成了 Stream RocketMQ 的快速入门，是不是还是蛮简答的噢。现在小伙伴可以在回过头看看 Binder 和 Binding 的概念，是不是就清晰一些了。
+
+## 4.4 定时消息
+
+> 暂未完成,敬请期待~
+
+在 RabbitMQ 中，我们可以通过使用 [`rabbitmq-delayed-message-exchange`](https://github.com/rabbitmq/rabbitmq-delayed-message-exchange) 插件提供的定时消息功能。也可以通过RabbitMQ的[死信队列实现定时消息](# 3.5 定时消息)
+
+这两种实现定时消息的方案，各有优缺点，目前采用 `rabbitmq-delayed-message-exchange` 插件较多，不然 Spring Cloud Stream RabbitMQ 也不会选择将其集成进来。至于两者的对比，小伙伴可以阅读[《RabbitMQ 延迟队列的两种实现方式》](http://www.iocoder.cn/Fight/RabbitMQ-deferred-queues-are-implemented-in-two-ways/?self)文章。
+
+> **定时消息**，是指消息发到 Broker 后，不能立刻被 Consumer 消费，要到特定的时间点或者等待特定的时间后才能被消费。
+
+相比定时任务来说，我们可以使用定时消息实现**更细粒度**且**动态**的定时功能。例如说，新创建的订单 2 小时超时关闭的场景：
+
+- 如果使用定时任务，我们需要每秒扫描订单表，是否有超过支付时间的订单。这样会增加对订单表的查询压力，同时定时任务本身是**串行**的，需要一个一个处理。
+- 如果使用定时消息，我们需要创建订单的时候，同时发送一条检查支付超时的定时消息。这样就无需每秒查询查询订单表，同时多个定时消息可以**并行**消费，提升处理速度。
+
+另外，定时消息更有利于**不同环境的隔离**。再举个例子，我们生产和预发布环境使用的是相同的数据库，还是新创建的订单 2 小时超时关闭的场景，假设我们现在修改了超时支付的逻辑：
+
+- 如果使用定时任务，在我们把程序发布到预发布的时候，因为使用相同数据库，会导致所有订单都执行了新的逻辑。如果新的逻辑有问题，将会影响到所有订单。
+
+- 如果使用定时消息，我们只需要把正服和预发布使用**不同的** RabbitMQ Exchange，这样预发布发送的延迟消息，只会被预发布的消费者消费，生产发送的延迟消息，只会被生产的消费者消费。如果新的逻辑有问题，只会影响到预发布的订单。
+
+  > 友情提示：建议不同的环境，使用**不同的** RabbitMQ Exchange 噢，例如说 `exchange-01` 可以带上具体环境的后缀，从而拆分成 `exchange-01-dev`、`exchange-01-prod` 等。
+
+
+
+## 4.5 消费重试
+
+> 示例代码对应仓库：[learning/rabbitmq/rabbitmq-springcloud-consumer-retry at master · JiuYou2020/learning (github.com)](https://github.com/JiuYou2020/learning/tree/master/rabbitmq/rabbitmq-springcloud-consumer-retry)
+>
+> :rotating_light: 请在对死信队列有一定了解之后食用本节
+
+在消息**消费失败**的时候，Spring-AMQP 会通过**消费重试**机制，重新投递该消息给 Consumer ，让 Consumer 有机会重新消费消息，实现消费成功。
+
+> 友情提示：Spring Cloud Stream RabbitMQ 是基于 [Spring-AMQP](https://github.com/spring-projects/spring-amqp) 操作 RabbitMQ，它仅仅是上层的封装哟。
+
+当然，Spring-AMQP 并不会无限重新投递消息给 Consumer 重新消费，而是在默认情况下，达到 N 次重试次数时，Consumer 还是消费失败时，该消息就会进入到**死信队列**。后续，我们可以通过对死信队列中的消息进行重发，来使得消费者实例再次进行消费。
+
+- 消费重试和死信队列，是 RocketMQ 自带的功能。
+- 而在 RabbitMQ 中，消费重试是由 Spring-AMQP 所封装提供的，死信队列是 RabbitMQ 自带的功能。
+
+那么消费失败到达最大次数的消息，是怎么进入到死信队列的呢？Spring-AMQP 在消息到达最大消费次数的时候，会将该消息进行否定(`basic.nack`)，并且 `requeue=false` ，这样后续就可以利用 RabbitMQ 的[死信队列](https://www.rabbitmq.com/dlx.html)的机制，将该消息转发到死信队列。
+
+另外，每条消息的失败重试，是可以配置一定的**间隔时间**。具体，我们在示例的代码中，来进行具体的解释。
+
+下面，我们来实现一个 Consumer 消费重试的示例。最终项目如下图所示：![image-20230913004849688](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913012510261-1814979108.png)
+
+### 4.5.1 搭建生产者
+
+直接使用快速入门小节的 `producer`即可
+
+### 4.5.2 搭建消费者
+
+直接使用快速入门小节的 `consumer`即可
+
+#### 4.5.2.1 配置文件
+
+修改 [`application.yml`](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-consumer-retry/src/main/resources/application.yml) 配置文件，增加**消费重试**相关的配置项。最终配置如下：
+
+
+
+```yml
+spring:
+  application:
+    name: demo-consumer-application
+  cloud:
+    # Spring Cloud Stream 配置项，对应 BindingServiceProperties 类
+    stream:
+      # Binder 配置项，对应 BinderProperties Map
+      binders:
+        rabbit001:
+          type: rabbit # 设置 Binder 的类型
+          environment: # 设置 Binder 的环境配置
+            # 如果是 RabbitMQ 类型的时候，则对应的是 RabbitProperties 类
+            spring:
+              rabbitmq:
+                host: 127.0.0.1 # RabbitMQ 服务的地址
+                port: 5672 # RabbitMQ 服务的端口
+                username: guest # RabbitMQ 服务的账号
+                password: guest # RabbitMQ 服务的密码
+      # Binding 配置项，对应 BindingProperties Map
+      bindings:
+        # 注意,这里的key有通道名-out/in-序号组成,且需要与Consumer类中的bean的名称保持一致,例如demo01-in-0可以简写为demo01
+        demo01-in-0:
+          destination: DEMO-TOPIC-01 # 目的地。这里使用 RabbitMQ Exchange
+          content-type: application/json # 内容格式。这里使用 JSON
+          group: demo01-consumer-group-DEMO-TOPIC-01 # 消费者分组
+          binder: rabbit001  # 设置使用的 Binder 名字
+          # Consumer 配置项，对应 ConsumerProperties 类
+          consumer:
+            max-attempts: 3 # 重试次数，默认为 3 次。
+            back-off-initial-interval: 3000 # 重试间隔的初始值，单位毫秒，默认为 1000
+            back-off-multiplier: 2.0 # 重试间隔的递乘系数，默认为 2.0
+            back-off-max-interval: 10000 # 重试间隔的最大值，单位毫秒，默认为 10000
+          # RabbitMQ 自定义 Binding 配置项，对应 RabbitBindingProperties Map
+      rabbit:
+        bindings:
+          demo01-in-0:
+            # RabbitMQ Consumer 配置项，对应 RabbitConsumerProperties 类
+            consumer:
+              auto-bind-dlq: true # 是否创建对应的死信队列，并进行绑定，默认为 false。
+              republish-to-dlq: true # 消费失败的消息发布到对应的死信队列时，是否添加异常异常的信息到消息头
+
+
+server:
+  port: ${random.int[10000,19999]} # 随机端口，方便启动多个消费者
+
+```
+
+1. `spring.cloud.stream.bindings.<bindingName>.consumer` 为 Spring Cloud Stream Consumer **通用**配置项，对应 [ConsumerProperties](https://github.com/spring-cloud/spring-cloud-stream/blob/master/spring-cloud-stream/src/main/java/org/springframework/cloud/stream/binder/ConsumerProperties.java) 类。
+
+   - `max-attempts`：最大重试次数，默认为 3 次。如果想要禁用掉重试，可以设置为 1。
+
+     > `max-attempts` 配置项要注意，是一条消息一共尝试消费总共 `max-attempts` 次，包括首次的正常消费。
+
+   - `back-off-initial-interval`：重试间隔的初始值，单位毫秒，默认为 1000。
+
+   - `back-off-multiplier`：重试间隔的递乘系数，默认为 2.0。
+
+   - `back-off-max-interval`：重试间隔的最大值，单位毫秒，默认为 10000。
+
+将四个参数组合在一起，我们来看一个消费重试的过程：
+
+- 第一次 00:00:00：首次消费，失败。
+
+- 第二次 00:00:03：3 秒后重试，因为重试间隔的初始值为 `back-off-initial-interval`，等于 3000 毫秒。
+
+- 第三次 00:00:09：6 秒后重试，因为有重试间隔的递乘系数 `back-off-multiplier`，所以是 `2.0 * 3000` 等于 6000 毫秒。
+- 第四次，没有，因为到达最大重试次数，等于 3。
+
+2. `spring.cloud.stream.rabbit.bindings.<bindingName>.consumer` 为 Spring Cloud Stream RabbitMQ Consumer **专属**配置项，我们新增了两个配置项：
+
+- `auto-bind-dlq`：是否创建对应的死信队列，并进行绑定，默认为`false`。
+  - Spring Cloud Stream RabbitMQ 默认会将消息发送到死信队列，如果这里我们不设置为 `true`，那么我们就需要手工去创建 `DEMO-TOPIC-01.demo01-consumer-group-DEMO-TOPIC-01` 对应的死信队列，否则会因为死信队列不存在而报错。
+  - 默认情况下，创建的死信队列为原队列添加 `.ldq` 后缀，可以通过 `deadLetterQueueName` 配置项来自定义。例如说 `DEMO-TOPIC-01.demo01-consumer-group-DEMO-TOPIC-01` 对应的死信队列为 `DEMO-TOPIC-01.demo01-consumer-group-DEMO-TOPIC-01.ldq`。
+- `republish-to-dlq`：消费失败的消息发布到对应的死信队列时，是否添加异常异常的信息到消息头，默认为 `true`。通过这样的方式，我们可以知道一条消息消费失败的原因~
+
+#### 4.5.2.2 Demo01Consumer
+
+修改 [Demo01Consumer](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-consumer-retry/src/main/java/cn/iocoder/springcloud/labx10/rabbitmqdemo/consumerdemo/listener/Demo01Consumer.java) 类，直接抛出异常，模拟消费失败，从而演示消费重试的功能。代码如下：
+
+```java
+@Component
+@Slf4j
+public class Demo01Consumer {
+    /**
+     * bean的名称需要与配置文件中`spring.cloud.stream.bindings.demo01-in-0`对应
+     *
+     * @return Consumer<String>
+     */
+    @Bean
+    public Consumer<String> demo01() {
+        return message -> {
+            log.info("[demo01][线程编号:{} 消息内容：{}]", Thread.currentThread().getId(), message);
+            // <X> 注意，此处抛出一个 RuntimeException 异常，模拟消费失败
+            throw new RuntimeException("我就是故意抛出一个异常");
+        };
+    }
+}
+```
+
+
+
+### 4.5.3 简单测试
+
+1. 执行 **Consumer**Application，启动一个**消费者**的实例。
+
+我们打开 RabbitMQ 运维界面，查看下名字为 `DLX` 的 Exchange，用于死信队列。如下图所示：![ 的 Exchange](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913012511690-1823731907.png)
+
+2. 执行 **Producer**Application，启动**生产者**的实例。
+
+之后，请求 http://127.0.0.1:18080/demo01/send 接口，发送消息。IDEA 控制台输出日志如下：
+
+
+
+```java
+// 第一次消费
+2023-09-13 00:41:06.484  INFO 7956 --- [DEMO-TOPIC-01-1] c.l.r.c.c.c.consumer.Demo01Consumer      : [demo01][线程编号:37 消息内容：{"id":979955782}]
+// 第二次消费，3 秒后
+2023-09-13 00:41:09.491  INFO 7956 --- [DEMO-TOPIC-01-1] c.l.r.c.c.c.consumer.Demo01Consumer      : [demo01][线程编号:37 消息内容：{"id":979955782}]
+// 第三次消费，6 秒后
+2023-09-13 00:41:15.502  INFO 7956 --- [DEMO-TOPIC-01-1] c.l.r.c.c.c.consumer.Demo01Consumer      : [demo01][线程编号:37 消息内容：{"id":979955782}]
+
+// 内置的 LoggingHandler 打印异常日志
+2023-09-13 00:41:15.504 ERROR 7956 --- [DEMO-TOPIC-01-1] o.s.integration.handler.LoggingHandler   : org.springframework.messaging.MessageHandlingException: error occurred in message handler [org.springframework.cloud.stream.function.FunctionConfiguration$FunctionToDestinationBinder$1@2860f94]; nested exception is java.lang.RuntimeException: 我就是故意抛出一个异常// ... 省略异常堆栈
+Caused by: java.lang.RuntimeException: 我就是故意抛出一个异常 // ... 省略异常堆栈
+```
+
+
+
+我们打开 RabbitMQ 运维界面，查看下名字为 `DEMO-TOPIC-01.demo01-consumer-group-DEMO-TOPIC-01.dlq` 的死信队列，并获取一条死信消息，可以从消息头看到具体消费失败的异常堆栈。如下图所示：![image-20230913004537806](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913012512665-1915877712.png)
+
+### 4.5.4 另一种重试方案
+
+目前我们看到的重试方案，是通过 [RetryTemplate](https://docs.spring.io/spring-retry/docs/api/current/org/springframework/retry/support/RetryTemplate.html) 来实现**客户端级别**的消费。而 RetryTemplate 又是通过 **sleep** 来实现消费间隔的时候，这样将影响 Consumer 的整体消费速度，毕竟 sleep 会占用掉线程。
+
+实际上，我们可以结合 RabbitMQ 的定时消息，手动将消费失败的消息发送到定时消息的队列，而延迟时间为下一次重试消费的间隔。通过这样的方式，避免使用 RetryTemplate 使用 **sleep** 所带来的影响。
+
+## 4.6. 消费异常处理机制
+
+> 示例代码对应仓库：[learning/rabbitmq/rabbitmq-springcloud-error-handler at master · JiuYou2020/learning (github.com)](https://github.com/JiuYou2020/learning/tree/master/rabbitmq/rabbitmq-springcloud-error-handler)
+
+在 Spring Cloud Stream 中，提供了**通用**的消费异常处理机制，可以拦截到消费者消费消息时发生的异常，进行自定义的处理逻辑。
+
+下面，我们来搭建一个 Spring Cloud Stream 消费异常处理机制的示例。最终项目如下图所示：![image-20230913012248908](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913012513603-2109335382.png)
+
+### 4.6.1 搭建生产者
+
+复用上一节的`consumer-retry-producer`
+
+### 4.6.2 搭建消费者
+
+复用上一节的`consumer-retry-consumer`
+
+#### 4.6.2.1 Demo01Consumer
+
+修改 [Demo01Consumer](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-consumer-error-handler/src/main/java/cn/iocoder/springcloud/labx10/rabbitmqdemo/consumerdemo/listener/Demo01Consumer.java) 类，增加消费异常处理方法。完整代码如下：
+
+```java
+public class Demo01Consumer {
+    /**
+     * bean的名称需要与配置文件中`spring.cloud.stream.bindings.demo01-in-0`对应
+     *
+     * @return Consumer<String>
+     */
+    @Bean
+    public Consumer<String> demo01() {
+        return message -> {
+            log.info("[demo01][线程编号:{} 消息内容：{}]", Thread.currentThread().getId(), message);
+            // <X> 注意，此处抛出一个 RuntimeException 异常，模拟消费失败
+            throw new RuntimeException("我就是故意抛出一个异常");
+        };
+    }
+
+    @ServiceActivator(inputChannel = "DEMO-TOPIC-01.demo01-consumer-group-DEMO-TOPIC-01.errors")
+    public void handleError(ErrorMessage errorMessage) {
+        log.error("[handleError][payload：{}]", errorMessage.getPayload().getMessage());
+        log.error("[handleError][originalMessage：{}]", errorMessage.getOriginalMessage());
+        log.error("[handleError][headers：{}]", errorMessage.getHeaders());
+    }
+
+    /**
+     * // 指定输入通道名字，这里假设是 "errorChannel"
+     *
+     * @param errorMessage errorMessage
+     */
+    @ServiceActivator(inputChannel = IntegrationContextUtils.ERROR_CHANNEL_BEAN_NAME)
+    public void globalHandleError(ErrorMessage errorMessage) {
+        log.error("[globalHandleError][payload：{}]", errorMessage.getPayload().getMessage());
+        log.error("[globalHandleError][originalMessage：{}]", errorMessage.getOriginalMessage());
+        log.error("[globalHandleError][headers：{}]", errorMessage.getHeaders());
+    }
+}
+```
+
+1. 在 Spring Integration 的设定中，若 `#demo01()` 方法消费消息发生异常时，会发送错误消息（[ErrorMessage](https://github.com/spring-projects/spring-framework/blob/master/spring-messaging/src/main/java/org/springframework/messaging/support/ErrorMessage.java)）到对应的**错误 Channel（`<destination>.<group>.errors`）中。同时，所有错误 Channel 都桥接到了 Spring Integration 定义的全局错误 Channel(`errorChannel`)**。
+
+> 友情提示：先暂时记住 Spring Integration 这样的设定，博主也没去深究 T T，也是一脸懵逼。
+
+因此，我们有**两种**方式来实现异常处理：
+
+- **局部**的异常处理：通过订阅指定**错误 Channel**
+- **全局**的异常处理：通过订阅**全局错误 Channel**
+
+2. 在 `#handleError(ErrorMessage errorMessage)` 方法上，我们声明了 [`@ServiceActivator`](https://github.com/spring-projects/spring-integration/blob/master/spring-integration-core/src/main/java/org/springframework/integration/annotation/ServiceActivator.java) 注解，订阅**指定错误 Channel**的错误消息，实现 `#demo01()` 方法的**局部**异常处理。如下图所示：![image-20230913012120635](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913012514545-777821192.png)
+
+3. 在 `#globalHandleError(ErrorMessage errorMessage)` 方法上，我们声明了 `@ServiceActivator` 注解，订阅**全局错误 Channel**的错误消息，实现**全局**异常处理。
+
+4. 在**全局**和**局部**异常处理都定义的情况下，错误消息仅会被**符合条件**的**局部**错误异常处理。如果没有符合条件的，错误消息才会被**全局**异常处理。
+
+### 4.6.3 简单测试
+
+1. 执行 **Consumer**Application，启动**消费者**的实例。
+
+2. 执行 **Producer**Application，启动**生产者**的实例。
+
+之后，请求 http://127.0.0.1:18080/demo01/send 接口，发送一条消息。
+
+> 😆 不过要注意，如果异常处理方法成功，没有重新抛出异常，会认定为该消息被**消费成功**，所以就不会发到死信队列了噢。
+
+# 
