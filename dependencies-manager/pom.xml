@@ -27,10 +27,9 @@
         <mysql.version>8.0.11</mysql.version>
         <mybatis.version>2.2.2</mybatis.version>
         <lombok.version>1.18.8</lombok.version>
-        <!--        rabbit-springboot-quickstart-->
+        <!--        rabbit-springboot-->
         <amqp.version>2.7.14</amqp.version>
-
-
+        <!--        rabbit-spring-cloud-->
         <rabbit.quickstart>4.0.3</rabbit.quickstart>
         <spring.cloud.version>2021.0.5</spring.cloud.version>
     </properties>

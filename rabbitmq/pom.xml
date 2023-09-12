@@ -25,6 +25,9 @@
         <module>rabbitmq-springboot-confirm</module>
         <module>rabbitmq-springboot-error-handler</module>
         <module>rabbitmq-springboot-confirm-async</module>
+        <module>rabbitmq-springcloud-quickstart</module>
+        <module>rabbitmq-springcloud-consumer-retry</module>
+        <module>rabbitmq-springcloud-error-handler</module>
     </modules>
 
     <properties>
