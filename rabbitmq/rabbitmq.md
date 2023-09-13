@@ -602,8 +602,8 @@ public enum ConfirmType {
 
 **在上述的示例中，我们都采用了 Spring-AMQP 默认的 `NONE` 模式**。下面，我们来搭建两个示例：
 
-- 在[「14.1 同步 Confirm 模式」](https://www.iocoder.cn/Spring-Boot/RabbitMQ/#) 中，我们会使用 `SIMPLE` 类型，实现同步的 Confirm 模式。
-- 在[「14.2 异步 Confirm 模式」](https://www.iocoder.cn/Spring-Boot/RabbitMQ/#) 中，我们会使用 `CORRELATED` 类型，使用异步的 Confirm 模式。
+- 在`「14.1 同步 Confirm 模式」` 中，我们会使用 `SIMPLE` 类型，实现同步的 Confirm 模式。
+- 在`「14.2 异步 Confirm 模式」` 中，我们会使用 `CORRELATED` 类型，使用异步的 Confirm 模式。
 
 ### 3.10.1 同步 Confirm 模式
 
@@ -948,7 +948,7 @@ public class Demo01Message {
 
 #### 4.3.1.4 Demo01Controller
 
-创建 [Demo01Controller](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-producer-demo/src/main/java/cn/iocoder/springcloud/labx10/rabbitmqdemo/producerdemo/controller/Demo01Controller.java) 类，提供发送消息的 HTTP 接口。代码如下：
+创建 Demo01Controller 类，提供发送消息的 HTTP 接口。代码如下：
 
 ```java
 package cn.learning.rabbitmq.cloud.quickstart.producer.controller;
@@ -1003,7 +1003,7 @@ public class Demo01Controller {
 
 #### 4.3.1.5 ProducerApplication
 
-创建 [ProducerApplication](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-producer-demo/src/main/java/cn/iocoder/springcloud/labx10/rabbitmqdemo/producerdemo/ProducerApplication.java) 类，启动应用。代码如下：
+创建 ProducerApplication 类，启动应用。代码如下：
 
 ```java
 @SpringBootApplication
@@ -1102,7 +1102,7 @@ RabbitMQ 的消费者**两种模式都支持**。因为这里我们配置了消�
 
 #### 4.3.2.4 Demo01Consumer
 
-创建 [Demo01Consumer](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-consumer-demo/src/main/java/cn/iocoder/springcloud/labx10/rabbitmqdemo/consumerdemo/listener/Demo01Consumer.java) 类，消费消息。代码如下：
+创建 Demo01Consumer 类，消费消息。代码如下：
 
 ```java
 package cn.learning.rabbitmq.cloud.quickstart.consumer.consumer;
@@ -1134,7 +1134,7 @@ public class Demo01Consumer {
 
 #### 4.3.2.5 ConsumerApplication
 
-创建 [ConsumerApplication](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-consumer-demo/src/main/java/cn/iocoder/springcloud/labx10/rabbitmqdemo/consumerdemo/ConsumerApplication.java) 类，启动应用。代码如下：
+创建 ConsumerApplication 类，启动应用。代码如下：
 
 ```java
 @SpringBootApplication
@@ -1353,7 +1353,7 @@ server:
 
 #### 4.5.2.2 Demo01Consumer
 
-修改 [Demo01Consumer](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-consumer-retry/src/main/java/cn/iocoder/springcloud/labx10/rabbitmqdemo/consumerdemo/listener/Demo01Consumer.java) 类，直接抛出异常，模拟消费失败，从而演示消费重试的功能。代码如下：
+修改 Demo01Consumer 类，直接抛出异常，模拟消费失败，从而演示消费重试的功能。代码如下：
 
 ```java
 @Component
@@ -1430,7 +1430,7 @@ Caused by: java.lang.RuntimeException: 我就是故意抛出一个异常 // ... 
 
 #### 4.6.2.1 Demo01Consumer
 
-修改 [Demo01Consumer](https://github.com/YunaiV/SpringBoot-Labs/blob//master/labx-10-spring-cloud-stream-rabbitmq/labx-10-sc-stream-rabbitmq-consumer-error-handler/src/main/java/cn/iocoder/springcloud/labx10/rabbitmqdemo/consumerdemo/listener/Demo01Consumer.java) 类，增加消费异常处理方法。完整代码如下：
+修改 Demo01Consumer 类，增加消费异常处理方法。完整代码如下：
 
 ```java
 public class Demo01Consumer {
@@ -1494,4 +1494,322 @@ public class Demo01Consumer {
 
 > 😆 不过要注意，如果异常处理方法成功，没有重新抛出异常，会认定为该消息被**消费成功**，所以就不会发到死信队列了噢。
 
-# 
+
+
+
+
+
+
+# 5. Bus RabbitMQ-SpringCloud
+
+## 5.1 概述
+
+> 友情提示：在开始本文之前，小伙伴需要对 RabbitMQ 进行简单的学习。
+>
+> ps: Spring Cloud Bus 在日常开发中，**基本不会使用到**。绝大多数情况下，我们通过使用 Spring Cloud Stream 即可实现它所有的功能，并且更加强大和灵活。
+>
+> 也因此,在这里,仅做快速入门案例
+
+本文我们来学习 [Spring Cloud Bus RabbitMQ](https://github.com/spring-cloud/spring-cloud-bus/blob/master/spring-cloud-starter-bus-amqp) 组件，基于 [Spring Cloud Bus](https://github.com/spring-cloud/spring-cloud-bus) 的编程模型，接入 RabbitMQ 消息队列，实现**事件总线**的功能。
+
+## 5.2 SpringBoot事件机制Event
+
+> 在这里,我们需要去简单了解SpringBoot事件机制Event,可以参考:[springboot事件机制event - JiuYou2020 - 博客园 (cnblogs.com)](https://www.cnblogs.com/jiuyou2020/p/17700470.html)
+
+## 5.3 快速入门
+
+在上文中，我们已经了解到，Spring 内置了事件机制，可以实现 **JVM 进程内**的事件发布与监听。但是如果想要**跨 JVM 进程**的事件发布与监听，此时它就无法满足我们的诉求了。
+
+因此，Spring Cloud Bus 在 Spring 事件机制的基础之上进行**拓展**，结合 RabbitMQ、Kafka、RocketMQ 等等消息队列作为事件的**“传输器”**，通过发送事件（消息）到消息队列上，从而广播到订阅该事件（消息）的所有节点上。最终如下图所示：![整体模型](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913185350810-676457289.png)
+
+Spring Cloud Bus 定义了 [RemoteApplicationEvent](https://github.com/spring-cloud/spring-cloud-bus/blob/master/spring-cloud-bus/src/main/java/org/springframework/cloud/bus/event/RemoteApplicationEvent.java) 类，远程的 ApplicationEvent 的**抽象基类**。核心代码如下：
+
+```java
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonIgnoreProperties("source") // <2>
+public abstract class RemoteApplicationEvent extends ApplicationEvent { // <1>
+
+	private final String originService;
+
+	private final String destinationService;
+
+	private final String id;
+	
+	// ... 
+}
+```
+
+- 显然，我们使用 Spring Cloud Bus 发送的自定义事件，必须要**继承**` RemoteApplicationEvent` 类。
+
+- `<1>` 处，继承 Spring 事件机制定义的 [ApplicationEvent](https://github.com/spring-projects/spring-framework/blob/master/spring-context/src/main/java/org/springframework/context/ApplicationEvent.java) 抽象基类。
+
+- `<2>` 处，通过 Jackson 的 `@JsonIgnoreProperties` 注解，设置忽略继承自 ApplicationEvent 的 `source` 属性，避免序列化问题。
+
+- `id` 属性，事件编号。一般情况下，RemoteApplicationEvent 会使用 `UUID.randomUUID().toString()` 代码，自动生成 UUID 即可。
+
+- `originService` 属性，来源服务。Spring Cloud Bus 提供好了 [`ServiceMatcher#getServiceId()`](https://github.com/spring-cloud/spring-cloud-bus/blob/master/spring-cloud-bus/src/main/java/org/springframework/cloud/bus/ServiceMatcher.java) 方法，获取服务编号作为 `originService` 属性的值。
+
+  > 友情提示：这个属性非常关键
+
+- `destinationService` 属性，目标服务。该属性的格式是 `{服务名}:{服务实例编号}`。
+
+  > 举个板栗：
+  >
+  > - 如果想要广播给所有服务的所有实例，则设置为 `**:**`。
+  > - 如果想要广播给 `users` 服务的所有实例，则设置为 `users:**`。
+  > - 如如果想要广播给 `users` 服务的指定实例，则设置为 `users:bc6d27d7-dc0f-4386-81fc-0b3363263a15`。
+
+下面以一个`Spring Cloud Bus`快速入门的示例来进行讲解
+
+> 代码地址:[learning/rabbitmq/bus-rabbitmq-springcloud-quickstart at master · JiuYou2020/learning (github.com)](https://github.com/JiuYou2020/learning/tree/master/rabbitmq/bus-rabbitmq-springcloud-quickstart)
+
+![image-20230913180808428](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913185351875-382999075.png)
+
+- `bus-publisher`：扮演事件**发布器**的角色，使用 Spring Cloud Bus 发送事件。
+- `bus_listener`：扮演事件**监听器**的角色，使用 Spring Cloud Bus 监听事件。
+
+### 5.3.1 事件发布器项目
+
+创建 `bus-publisher`项目，扮演事件**发布器**的角色，使用 Spring Cloud Bus 发送事件。
+
+1. 创建 `pom.xml`文件，引入 Spring Cloud Bus 相关依赖：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.learning</groupId>
+        <artifactId>bus-rabbitmq-springcloud-quickstart</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bus-listener</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <description>
+        版本兼容:https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E
+    </description>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <!-- 引入 SpringMVC 相关依赖，并实现对其的自动配置 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- 引入 Spring Cloud Stream RabbitMQ 相关依赖，将 RabbitMQ 作为消息队列，并实现对其的自动配置 -->
+         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+
+
+2. 配置文件
+
+创建 [`application.yml`](https://github.com/YunaiV/SpringBoot-Labs/blob/master/labx-18/labx-18-sc-bus-rabbitmq-demo-publisher/src/main/resources/application.yml) 配置文件，添加 Spring Cloud Bus 相关配置：
+
+```yml
+spring:
+  application:
+    name: publisher-demo
+
+  # RabbitMQ 相关配置项
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  # Bus 相关配置项，对应 BusProperties
+  cloud:
+    bus:
+      enabled: true # 是否开启，默认为 true
+      destination: springCloudBus # 目标消息队列，默认为 springCloudBus
+```
+
+- `spring.rabbitmq` 配置项，为 RabbitMQ 相关配置项。
+- `spring.cloud.bus` 配置项，为 Spring Cloud Bus 配置项，对应 [BusProperties](https://github.com/spring-cloud/spring-cloud-bus/blob/master/spring-cloud-bus/src/main/java/org/springframework/cloud/bus/BusProperties.java) 类。一般情况下，使用默认值即可。
+
+3. 创建 UserRegisterEvent 类，用户注册事件。代码如下：
+
+```java
+/**
+ * 用户注册事件
+ */
+public class UserRegisterEvent extends RemoteApplicationEvent {
+
+    /**
+     * 用户名
+     */
+    private String username;
+
+    public UserRegisterEvent() { // 序列化
+    }
+
+    public UserRegisterEvent(Object source, String originService, String destinationService, String username) {
+        super(source, originService, DEFAULT_DESTINATION_FACTORY.getDestination(destinationService));
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+}
+```
+
+- 继承 RemoteApplicationEvent 抽象基类。
+-  创建一个空的构造方法，毕竟要序列化。
+
+4. DemoController
+
+创建 DemoController类，提供 `/demo/register` 注册接口，发送 UserRegisterEvent 事件。代码如下：
+
+```java
+@RestController
+@Slf4j
+@RequestMapping("/demo")
+public class DemoController {
+
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
+    @Autowired
+    private ServiceMatcher busServiceMatcher;
+
+    @GetMapping("/register")
+    public String register(String username) {
+        // ... 执行注册逻辑
+        log.info("[register][执行用户({}) 的注册逻辑]", username);
+
+        // ... 发布<2>
+        applicationEventPublisher.publishEvent(new UserRegisterEvent(this, busServiceMatcher.getBusId(),//<1>
+                null, username));
+        return "success";
+    }
+}
+```
+
+
+
+`<1>` 处，创建 UserRegisterEvent 对象。
+
+- `originService` 属性，通过 `ServiceMatcher#getServiceId()` 方法，获得服务编号。
+- `destinationService` 属性，我们传入 `null` 值。RemoteApplicationEvent 会自动转换成 `**`，表示广播给所有监听该消息的实例。
+
+`<2>` 处，和 Spring 事件机制**一样**，通过 ApplicationEventPublisher 的 `#publishEvent(event)` 方法，直接发送事件到 Spring Cloud Bus 消息总线。好奇的小伙伴，可以打开 [BusAutoConfiguration](https://github.com/spring-cloud/spring-cloud-bus/blob/master/spring-cloud-bus/src/main/java/org/springframework/cloud/bus/BusAutoConfiguration.java#L142-L151) 的代码，如下图所示：![BusAutoConfiguration 源码](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913185352942-1687765544.png)
+
+> 友情提示：如果小伙伴仔细看的话，还可以发现 Spring Cloud Bus 是使用 Spring Cloud Stream 进行消息的收发的。
+
+5. PublisherDemoApplication
+
+创建 [PublisherDemoApplication](https://github.com/YunaiV/SpringBoot-Labs/blob/master/labx-18/labx-18-sc-bus-rabbitmq-demo-publisher/src/main/java/cn/iocoder/springcloud/labx18/publisherdemo/PublisherDemoApplication.java) 类，作为启动类。代码如下：
+
+```java
+@SpringBootApplication
+public class PublisherDemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(PublisherDemoApplication.class, args);
+    }
+
+}
+```
+
+
+
+### 5.3.2 事件监听器项目
+
+创建 `bus-listener`项目，扮演事件**监听器**的角色，使用 Spring Cloud Bus 监听事件。
+
+1. 引入依赖
+
+> 与发布器一致
+
+2. 配置文件
+
+> 与发布器一致
+
+3. UserRegisterEvent
+
+> 与发布器一致
+
+4. UserRegisterListener
+
+创建 `UserRegisterListener`类，监听 UserRegisterEvent 事件。代码如下：
+
+```java
+@Component
+@Slf4j
+public class UserRegisterListener implements ApplicationListener<UserRegisterEvent> {
+
+
+    @Override
+    public void onApplicationEvent(UserRegisterEvent event) {
+        log.info("[onApplicationEvent][监听到用户({}) 注册]", event.getUsername());
+    }
+
+}
+```
+
+和 Spring 事件机制**一样**，只需要监听指定事件即可。好奇的小伙伴，可以打开 [BusAutoConfiguration](https://github.com/spring-cloud/spring-cloud-bus/blob/master/spring-cloud-bus/src/main/java/org/springframework/cloud/bus/BusAutoConfiguration.java#L153-L190) 的代码，如下图所示：![BusAutoConfiguration 源码](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913185354009-1046476376.png)
+
+5. ListenerDemoApplication
+
+创建 `ListenerDemoApplication` 类，作为启动类。代码如下：
+
+```java
+@SpringBootApplication
+@RemoteApplicationEventScan
+public class ListenerDemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ListenerDemoApplication.class, args);
+    }
+
+}
+```
+
+在类上，添加 Spring Cloud Bus 定义的 [`@RemoteApplicationEventScan`](https://github.com/spring-cloud/spring-cloud-bus/blob/master/spring-cloud-bus/src/main/java/org/springframework/cloud/bus/jackson/RemoteApplicationEventScan.java) 注解，声明要从 Spring Cloud Bus 监听 RemoteApplicationEvent 事件。
+
+### 5.3.3 简单测试
+
+1. 执行 PublisherDemoApplication 一次，启动一个事件**发布器**。
+
+2. 执行 ListenerDemoApplication **两次**，启动两个事件**监听器**。需要将「Allow parallel run」进行勾选
+
+此时，我们可以在 RabbitMQ 运维界面看到 **springCloudBus** 这个 Exchange，如下图所示：![RabbitMQ 运维界面](https://img2023.cnblogs.com/blog/3014862/202309/3014862-20230913185355041-647450113.png)
+
+3. 调用 http://127.0.0.1:8080/demo/register?username=lihua 接口，进行注册。IDEA 控制台打印日志如下：
+
+```java
+# PublisherDemoApplication 控制台
+2023-09-13 18:04:57.267  INFO 7568 --- [nio-8080-exec-1] c.l.r.b.q.controller.DemoController      : [register][执行用户(lihua) 的注册逻辑]
+
+# ListenerDemoApplication 控制台 01
+2023-09-13 18:04:58.110  INFO 12324 --- [MK3DbwlRsYcwg-1] c.l.r.b.q.listener.UserRegisterListener  : [onApplicationEvent][监听到用户(lihua) 注册]
+
+# ListenerDemoApplication 控制台 02
+2023-09-13 18:04:58.126  INFO 1408 --- [m28zHyTurUL2w-1] c.l.r.b.q.listener.UserRegisterListener  : [onApplicationEvent][监听到用户(lihua) 注册]
+```
+
+发布的 UserRegisterEvent 事件，被两个事件监听器的进程都监听成功。
+
+
+
+----------------基本完成 2023/9/13----------------
