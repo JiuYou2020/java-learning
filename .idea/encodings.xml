@@ -9,6 +9,18 @@
     <file url="file://$PROJECT_DIR$/flowable/flowable-springboot/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flowable/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flowable/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/bus-listener-actuator/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/bus-listener-actuator/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/bus-publisher-actuator/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/bus-publisher-actuator/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-quickstart/bus-listener/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-quickstart/bus-listener/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-quickstart/bus-publisher/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-quickstart/bus-publisher/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-quickstart/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-quickstart/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq/rabbitmq-springboot-ack/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq/rabbitmq-springboot-ack/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq/rabbitmq-springboot-batch-consumer/src/main/java" charset="UTF-8" />
@@ -63,5 +75,7 @@
     <file url="file://$PROJECT_DIR$/rabbitmq/rabbitmq-springcloud-quickstart/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/springboot-event/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/springboot-event/src/main/resources" charset="UTF-8" />
   </component>
 </project>

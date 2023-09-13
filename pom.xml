@@ -13,6 +13,7 @@
         <module>dependencies-manager</module>
         <module>flowable</module>
         <module>rabbitmq</module>
+        <module>springboot-event</module>
     </modules>
 
     <properties>
