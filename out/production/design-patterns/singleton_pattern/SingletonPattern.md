@@ -8,7 +8,7 @@
 
 ## UML
 
-![image-20240422104318446](/home/code/Java/Project/learning/design-patterns/src/singleton_pattern/.gitbook/assets/image-20240422104318446.png)
+![image-20240422152041183](./.gitbook/assets/image-20240422152041183.png)
 
 ## 主要优点
 
