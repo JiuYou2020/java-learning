@@ -7,6 +7,7 @@
         <option value="$PROJECT_DIR$/dependencies-manager/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/rabbitmq/rabbitmq-springcloud-quickstart/producer/pom.xml" />
+        <option value="$PROJECT_DIR$/elastic-search-entry/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
