@@ -16,7 +16,7 @@
 
 ## UML
 
-![image-20240422104958853](/home/code/Java/Project/learning/design-patterns/src/simple_factory_pattern/.gitbook/assets/image-20240422104958853.png)
+![image-20240422104958853](./.gitbook/assets/image-20240422104958853.png)
 
 ## 主要优点
 
@@ -40,6 +40,6 @@
 
 有时候，为了简化简单工厂模式，可以将抽象产品类和工厂类合并，将静态工厂方法移至抽象产品类中。
 
-![image-20240422115557488](/home/code/Java/Project/learning/design-patterns/src/simple_factory_pattern/.gitbook/assets/image-20240422115557488.png)
+![image-20240422115557488](./.gitbook/assets/image-20240422115557488.png)
 
 客户端可以通过产品父类的静态工厂方法，根据参数的不同创建不同类型的产品子类对象，这种做法在JDK等类库和框架中也广泛存在。
