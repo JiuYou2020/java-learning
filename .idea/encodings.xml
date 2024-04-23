@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/MyRPC/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/MyRPC/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dependencies-manager/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dependencies-manager/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/elastic-search-entry/src/main/java" charset="UTF-8" />
@@ -10,6 +12,14 @@
     <file url="file://$PROJECT_DIR$/flowable/flowable-springboot/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flowable/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flowable/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myrpc/client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myrpc/client/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myrpc/rpc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myrpc/rpc/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myrpc/server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myrpc/server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myrpc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myrpc/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/bus-listener-actuator/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/bus-listener-actuator/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/bus-publisher-actuator/src/main/java" charset="UTF-8" />
