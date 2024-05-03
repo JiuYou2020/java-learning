@@ -1,4 +1,4 @@
-package factory_method_pattern.product_example.product;
+package creative_mode.factory_method_pattern.product_example.product;
 
 /**
  * @author jiuyou2020

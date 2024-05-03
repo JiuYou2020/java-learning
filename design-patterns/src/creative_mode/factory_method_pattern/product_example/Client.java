@@ -1,9 +1,9 @@
-package factory_method_pattern.product_example;
+package creative_mode.factory_method_pattern.product_example;
 
-import factory_method_pattern.product_example.factory.ComputerProductFactory;
-import factory_method_pattern.product_example.factory.Factory;
-import factory_method_pattern.product_example.factory.PhoneProductFactory;
-import factory_method_pattern.product_example.product.Product;
+import creative_mode.factory_method_pattern.product_example.factory.ComputerProductFactory;
+import creative_mode.factory_method_pattern.product_example.factory.Factory;
+import creative_mode.factory_method_pattern.product_example.factory.PhoneProductFactory;
+import creative_mode.factory_method_pattern.product_example.product.Product;
 
 /**
  * @author jiuyou2020

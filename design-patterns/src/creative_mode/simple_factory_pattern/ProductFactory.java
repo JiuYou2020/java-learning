@@ -1,4 +1,4 @@
-package simple_factory_pattern;
+package creative_mode.simple_factory_pattern;
 
 /**
  * @author jiuyou2020

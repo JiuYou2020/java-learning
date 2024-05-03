@@ -1,7 +1,7 @@
-package factory_method_pattern.product_example.factory;
+package creative_mode.factory_method_pattern.product_example.factory;
 
-import factory_method_pattern.product_example.product.ComputerProduct;
-import factory_method_pattern.product_example.product.Product;
+import creative_mode.factory_method_pattern.product_example.product.ComputerProduct;
+import creative_mode.factory_method_pattern.product_example.product.Product;
 
 /**
  * @author jiuyou2020

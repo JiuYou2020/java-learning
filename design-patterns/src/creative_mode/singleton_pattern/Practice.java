@@ -1,4 +1,4 @@
-package singleton_pattern;
+package creative_mode.singleton_pattern;
 
 import java.util.ArrayList;
 import java.util.List;

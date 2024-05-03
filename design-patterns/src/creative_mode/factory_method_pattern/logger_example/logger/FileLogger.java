@@ -1,4 +1,4 @@
-package factory_method_pattern.logger_example.logger;
+package creative_mode.factory_method_pattern.logger_example.logger;
 
 /**
  * @author jiuyou2020

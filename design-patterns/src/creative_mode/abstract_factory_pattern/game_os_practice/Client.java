@@ -1,9 +1,9 @@
-package abstract_factory_pattern.game_os_practice;
+package creative_mode.abstract_factory_pattern.game_os_practice;
 
-import abstract_factory_pattern.game_os_practice.factory.Factory;
-import abstract_factory_pattern.game_os_practice.factory.ProductFactoryIos;
-import abstract_factory_pattern.game_os_practice.product.InterfaceController;
-import abstract_factory_pattern.game_os_practice.product.OperationController;
+import creative_mode.abstract_factory_pattern.game_os_practice.factory.Factory;
+import creative_mode.abstract_factory_pattern.game_os_practice.factory.ProductFactoryIos;
+import creative_mode.abstract_factory_pattern.game_os_practice.product.InterfaceController;
+import creative_mode.abstract_factory_pattern.game_os_practice.product.OperationController;
 
 /**
  * @author jiuyou2020

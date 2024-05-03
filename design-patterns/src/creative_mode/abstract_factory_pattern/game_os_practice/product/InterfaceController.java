@@ -1,4 +1,4 @@
-package abstract_factory_pattern.game_os_practice.product;
+package creative_mode.abstract_factory_pattern.game_os_practice.product;
 
 /**
  * @author jiuyou2020

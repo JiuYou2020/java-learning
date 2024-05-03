@@ -1,8 +1,8 @@
-package factory_method_pattern.logger_example;
+package creative_mode.factory_method_pattern.logger_example;
 
-import factory_method_pattern.logger_example.factory.DatabaseLoggerFactory;
-import factory_method_pattern.logger_example.factory.LoggerFactory;
-import factory_method_pattern.logger_example.utils.YMLUtil;
+import creative_mode.factory_method_pattern.logger_example.factory.DatabaseLoggerFactory;
+import creative_mode.factory_method_pattern.logger_example.factory.LoggerFactory;
+import creative_mode.factory_method_pattern.logger_example.utils.YMLUtil;
 
 /**
  * @author jiuyou2020

@@ -1,9 +1,9 @@
-package abstract_factory_pattern.product_example;
+package creative_mode.abstract_factory_pattern.product_example;
 
-import abstract_factory_pattern.product_example.factory.Factory;
-import abstract_factory_pattern.product_example.factory.ProductFactoryHuawei;
-import abstract_factory_pattern.product_example.product.ComputerProduct;
-import abstract_factory_pattern.product_example.product.PhoneProduct;
+import creative_mode.abstract_factory_pattern.product_example.factory.Factory;
+import creative_mode.abstract_factory_pattern.product_example.factory.ProductFactoryHuawei;
+import creative_mode.abstract_factory_pattern.product_example.product.ComputerProduct;
+import creative_mode.abstract_factory_pattern.product_example.product.PhoneProduct;
 
 /**
  * @author jiuyou2020

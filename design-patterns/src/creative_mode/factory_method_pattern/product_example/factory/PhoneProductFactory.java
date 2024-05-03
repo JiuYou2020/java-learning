@@ -1,8 +1,8 @@
-package factory_method_pattern.product_example.factory;
+package creative_mode.factory_method_pattern.product_example.factory;
 
 
-import factory_method_pattern.product_example.product.PhoneProduct;
-import factory_method_pattern.product_example.product.Product;
+import creative_mode.factory_method_pattern.product_example.product.PhoneProduct;
+import creative_mode.factory_method_pattern.product_example.product.Product;
 
 /**
  * @author jiuyou2020

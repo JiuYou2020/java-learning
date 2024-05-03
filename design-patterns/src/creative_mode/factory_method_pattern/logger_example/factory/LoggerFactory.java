@@ -1,6 +1,6 @@
-package factory_method_pattern.logger_example.factory;
+package creative_mode.factory_method_pattern.logger_example.factory;
 
-import factory_method_pattern.logger_example.logger.Logger;
+import creative_mode.factory_method_pattern.logger_example.logger.Logger;
 
 /**
  * @author jiuyou2020

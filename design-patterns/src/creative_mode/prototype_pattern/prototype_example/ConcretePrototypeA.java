@@ -1,4 +1,4 @@
-package prototype_pattern.prototype_example;
+package creative_mode.prototype_pattern.prototype_example;
 
 /**
  * @author jiuyou2020

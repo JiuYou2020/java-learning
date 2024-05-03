@@ -1,9 +1,9 @@
-package abstract_factory_pattern.product_example.factory;
+package creative_mode.abstract_factory_pattern.product_example.factory;
 
-import abstract_factory_pattern.product_example.product.ComputerProduct;
-import abstract_factory_pattern.product_example.product.ConcreteComputerProductIphone;
-import abstract_factory_pattern.product_example.product.ConcretePhoneProductIphone;
-import abstract_factory_pattern.product_example.product.PhoneProduct;
+import creative_mode.abstract_factory_pattern.product_example.product.ComputerProduct;
+import creative_mode.abstract_factory_pattern.product_example.product.ConcreteComputerProductIphone;
+import creative_mode.abstract_factory_pattern.product_example.product.ConcretePhoneProductIphone;
+import creative_mode.abstract_factory_pattern.product_example.product.PhoneProduct;
 
 /**
  * @author jiuyou2020

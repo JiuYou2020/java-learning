@@ -1,4 +1,4 @@
-package builder_pattern.video_player_example;
+package creative_mode.builder_pattern.video_player_example;
 
 /**
  * @author jiuyou2020

@@ -1,4 +1,4 @@
-package prototype_pattern.work_report_example;
+package creative_mode.prototype_pattern.work_report_example;
 
 import java.io.*;
 
