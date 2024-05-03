@@ -8,6 +8,8 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/rabbitmq/rabbitmq-springcloud-quickstart/producer/pom.xml" />
         <option value="$PROJECT_DIR$/elastic-search-entry/pom.xml" />
+        <option value="$PROJECT_DIR$/myrpc/client/pom.xml" />
+        <option value="$PROJECT_DIR$/myrpc/server/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
@@ -19,7 +21,7 @@
       </set>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

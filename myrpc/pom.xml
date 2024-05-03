@@ -14,8 +14,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>client</module>
-        <module>server</module>
         <module>rpc</module>
+        <module>common</module>
     </modules>
 
     <properties>
