@@ -15,6 +15,7 @@
         <module>rabbitmq</module>
         <module>springboot-event</module>
         <module>myrpc</module>
+        <module>spring-learning</module>
     </modules>
 
     <properties>
