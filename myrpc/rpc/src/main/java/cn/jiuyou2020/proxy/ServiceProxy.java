@@ -9,7 +9,6 @@ import java.lang.reflect.Proxy;
 /**
  * @author jiuyou2020
  * @description 远程服务代理，用于创建远程服务代理对象
- * @date 2024/4/24 下午8:19
  */
 public class ServiceProxy {
     @SuppressWarnings("unchecked")

@@ -29,6 +29,13 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author jiuyou2020
+ * @description 远程服务代理，用于创建远程服务代理对象
+ *
+ * 通过实现<a href="https://docs.spring.io/spring-framework/reference/core/aot.html#aot.bestpractices.bean-registration">ImportBeanDefinitionRegistrar</a>接口，可以在Spring容器启动时动态注册BeanDefinition
+ *
+ */
 public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, EnvironmentAware {
     private ResourceLoader resourceLoader;
 
@@ -46,7 +53,6 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        ImportBeanDefinitionRegistrar.super.registerBeanDefinitions(importingClassMetadata, registry);
         registerRemoteServices(importingClassMetadata, registry);
     }
 
