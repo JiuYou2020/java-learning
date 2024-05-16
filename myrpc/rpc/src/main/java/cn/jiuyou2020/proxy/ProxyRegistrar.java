@@ -9,6 +9,7 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -17,24 +18,18 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author jiuyou2020
  * @description 远程服务代理，用于创建远程服务代理对象
- *
+ * <p>
  * 通过实现<a href="https://docs.spring.io/spring-framework/reference/core/aot.html#aot.bestpractices.bean-registration">ImportBeanDefinitionRegistrar</a>接口，可以在Spring容器启动时动态注册BeanDefinition
- *
  */
 public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, EnvironmentAware {
     private ResourceLoader resourceLoader;
@@ -80,11 +75,11 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
                 Map<String, Object> attributes = annotationMetadata
                         .getAnnotationAttributes(RemoteService.class.getCanonicalName());
                 // 获取Feign客户端的名称
-                // String name = getClientName(attributes);
+//                String name = getClientName(attributes);
                 // 获取Feign客户端的类名
-                // String className = annotationMetadata.getClassName();
+                String className = annotationMetadata.getClassName();
                 // 注册Feign客户端的配置信息，如果有的话
-                // registerClientConfiguration(registry, name, className, attributes.get("configuration"));
+//                registerClientConfiguration(registry, name, className, attributes.get("configuration"));
 
                 // 注册Feign客户端
                 registerFeignClient(registry, annotationMetadata, attributes);
@@ -92,35 +87,79 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
         }
     }
 
+    /**
+     * 注册Feign客户端的BeanDefinition
+     *
+     * @param registry           BeanDefinition注册表
+     * @param annotationMetadata 注解元数据
+     * @param attributes         注解属性
+     */
     private void registerFeignClient(BeanDefinitionRegistry registry, AnnotationMetadata annotationMetadata, Map<String, Object> attributes) {
-        String className = annotationMetadata.getClassName();
-        BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(className);
-        definition.addPropertyValue("name", attributes.get("value"));
+        // 创建 FeignClientFactoryBean 的 BeanDefinition
+        BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(FeignClientFactoryBean.class);
         definition.addPropertyValue("url", attributes.get("url"));
+        definition.addPropertyValue("path", attributes.get("path"));
+        String name = (String) attributes.get("name");
+        definition.addPropertyValue("name", name);
+        String contextId = (String) attributes.get("name");
+        definition.addPropertyValue("contextId", contextId);
+        String className = annotationMetadata.getClassName();
+        definition.addPropertyValue("type", className);
+        definition.addPropertyValue("dismiss404", Boolean.parseBoolean(String.valueOf(attributes.get("dismiss404"))));
+        Object fallback = attributes.get("fallback");
+        if (fallback != null) {
+            definition.addPropertyValue("fallback",
+                    (fallback instanceof Class ? fallback : ClassUtils.resolveClassName(fallback.toString(), null)));
+        }
+        Object fallbackFactory = attributes.get("fallbackFactory");
+        if (fallbackFactory != null) {
+            definition.addPropertyValue("fallbackFactory", fallbackFactory instanceof Class ? fallbackFactory
+                    : ClassUtils.resolveClassName(fallbackFactory.toString(), null));
+        }
+        definition.addPropertyValue("fallbackFactory", attributes.get("fallbackFactory"));
+        definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+        String[] qualifiers = getQualifiers(attributes);
+        if (ObjectUtils.isEmpty(qualifiers)) {
+            qualifiers = new String[]{contextId + "FeignClient"};
+        }
+        // 设置 Bean 的限定符（qualifiers）,qualifiers的作用是为Bean定义添加限定符，以便在注入时进行区分
+        definition.addPropertyValue("qualifiers", qualifiers);
         AbstractBeanDefinition beanDefinition = definition.getBeanDefinition();
         Class<?> type = ClassUtils.resolveClassName(className, null);
         beanDefinition.setAttribute(FactoryBean.OBJECT_TYPE_ATTRIBUTE, type);
-        BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, className);
-        BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
-        System.out.println("是否有Bean：" + registry.containsBeanDefinition(className));
-        System.out.println("Bean的类型：" + registry.getBeanDefinition(className).getBeanClassName());
-        BeanDefinition definition1 = registry.getBeanDefinition(className);
-        System.out.println("Bean的属性：" + definition1.getPropertyValues());
+        // 获取primary属性值
+        boolean primary = (Boolean) attributes.get("primary");
+        beanDefinition.setPrimary(primary);
+        // 注册Feign客户端的代理类
+        registry.registerBeanDefinition(name, beanDefinition);
+//        BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, className, qualifiers);
+//        BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
+//        System.out.println(11);
     }
 
-    private String getClientName(Map<String, Object> attributes) {
-        if (attributes.isEmpty()) {
+    private String[] getQualifiers(Map<String, Object> client) {
+        if (client == null) {
             return null;
         }
-        String name = (String) attributes.get("name");
-        if (!StringUtils.hasText(name)) {
-            name = (String) attributes.get("value");
+        List<String> qualifierList = new ArrayList<>(Arrays.asList((String[]) client.get("qualifiers")));
+        qualifierList.removeIf(qualifier -> !StringUtils.hasText(qualifier));
+        if (qualifierList.isEmpty() && getQualifier(client) != null) {
+            qualifierList = Collections.singletonList(getQualifier(client));
         }
-        if (StringUtils.hasText(name)) {
-            return name;
-        }
-        throw new IllegalStateException("FeignClient name must be set");
+        return !qualifierList.isEmpty() ? qualifierList.toArray(new String[0]) : null;
     }
+
+    private String getQualifier(Map<String, Object> client) {
+        if (client == null) {
+            return null;
+        }
+        String qualifier = (String) client.get("qualifier");
+        if (StringUtils.hasText(qualifier)) {
+            return qualifier;
+        }
+        return null;
+    }
+
 
     /**
      * 获取扫描的包路径
@@ -155,49 +194,5 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
                 return isCandidate;
             }
         };
-    }
-
-
-    @Component
-    public static class MyFeignClientScanner {
-
-        public MyFeignClientScanner() {
-            ClassPathScanningCandidateComponentProvider scanner =
-                    new ClassPathScanningCandidateComponentProvider(false);
-
-            scanner.addIncludeFilter(new AnnotationTypeFilter(RemoteService.class));
-
-            for (BeanDefinition bd : scanner.findCandidateComponents("cn.jiuyou2020")) {
-                try {
-                    Class<?> clazz = Class.forName(bd.getBeanClassName());
-                    RemoteService annotation = clazz.getAnnotation(RemoteService.class);
-                    if (annotation != null) {
-                        Object proxy = createProxy(clazz, annotation);
-                        // 注册到 Spring 容器
-                        // 省略实现
-                    }
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-
-        private Object createProxy(Class<?> serviceInterface, RemoteService annotation) {
-            String name = annotation.value();
-            String url = annotation.url();
-
-            InvocationHandler handler = (proxy, method, args) -> {
-                // 远程调用逻辑
-                // 省略实现，可以使用 HttpClient 或其他 HTTP 客户端库发送 HTTP 请求到指定的远程服务
-                return "Result from remote service";
-            };
-
-            return Proxy.newProxyInstance(
-                    serviceInterface.getClassLoader(),
-                    new Class<?>[]{serviceInterface},
-                    handler
-            );
-        }
     }
 }

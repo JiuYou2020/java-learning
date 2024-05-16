@@ -21,4 +21,9 @@ public class OrderController {
     public String reduceStock() {
         return orderService.placeAnOrder();
     }
+
+    @GetMapping("/getUser")
+    public String getUser() {
+        return orderService.getUser();
+    }
 }

@@ -7,4 +7,6 @@ package cn.jiuyou2020.rpc.service;
  */
 public interface OrderService {
     String placeAnOrder();
+
+    String getUser();
 }

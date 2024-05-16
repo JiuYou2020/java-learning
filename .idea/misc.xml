@@ -10,6 +10,7 @@
         <option value="$PROJECT_DIR$/elastic-search-entry/pom.xml" />
         <option value="$PROJECT_DIR$/myrpc/client/pom.xml" />
         <option value="$PROJECT_DIR$/myrpc/server/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-learning/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
