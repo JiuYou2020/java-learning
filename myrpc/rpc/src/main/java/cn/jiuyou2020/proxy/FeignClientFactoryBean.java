@@ -1,18 +1,4 @@
-package cn.jiuyou2020.proxy;/*
- * Copyright 2013-2024 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+package cn.jiuyou2020.proxy;
 
 
 import org.apache.commons.logging.Log;
@@ -28,14 +14,10 @@ import org.springframework.util.Assert;
 
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, ApplicationContextAware, BeanFactoryAware {
 
-    /***********************************
-     * WARNING! Nothing in this class should be @Autowired. It causes NPEs because of some
-     * lifecycle race condition.
-     ***********************************/
-
-// 日志对象，用于记录日志
+    // 日志对象，用于记录日志
     private static final Log LOG = LogFactory.getLog(FeignClientFactoryBean.class);
 
     // Feign客户端的类型
@@ -53,9 +35,6 @@ public class FeignClientFactoryBean implements FactoryBean<Object>, Initializing
     // Feign客户端的路径
     private String path;
 
-    // 是否忽略404错误
-    private boolean dismiss404;
-
     // 是否继承父上下文
     private boolean inheritParentContext = true;
 
@@ -64,16 +43,6 @@ public class FeignClientFactoryBean implements FactoryBean<Object>, Initializing
 
     // Spring Bean工厂
     private BeanFactory beanFactory;
-
-    // Feign客户端的fallback类
-    private Class<?> fallback = void.class;
-
-    // Feign客户端的fallback工厂类
-    private Class<?> fallbackFactory = void.class;
-
-    // 是否刷新客户端
-    private boolean refreshableClient = false;
-
 
     // 修饰符数组
     private String[] qualifiers = new String[]{};
@@ -155,14 +124,6 @@ public class FeignClientFactoryBean implements FactoryBean<Object>, Initializing
         this.path = path;
     }
 
-    public boolean isDismiss404() {
-        return dismiss404;
-    }
-
-    public void setDismiss404(boolean dismiss404) {
-        this.dismiss404 = dismiss404;
-    }
-
     public boolean isInheritParentContext() {
         return inheritParentContext;
     }
@@ -179,26 +140,6 @@ public class FeignClientFactoryBean implements FactoryBean<Object>, Initializing
     public void setApplicationContext(ApplicationContext context) throws BeansException {
         applicationContext = context;
         beanFactory = context;
-    }
-
-    public Class<?> getFallback() {
-        return fallback;
-    }
-
-    public void setFallback(Class<?> fallback) {
-        this.fallback = fallback;
-    }
-
-    public Class<?> getFallbackFactory() {
-        return fallbackFactory;
-    }
-
-    public void setFallbackFactory(Class<?> fallbackFactory) {
-        this.fallbackFactory = fallbackFactory;
-    }
-
-    public void setRefreshableClient(boolean refreshableClient) {
-        this.refreshableClient = refreshableClient;
     }
 
     public String[] getQualifiers() {
@@ -218,17 +159,17 @@ public class FeignClientFactoryBean implements FactoryBean<Object>, Initializing
             return false;
         }
         FeignClientFactoryBean that = (FeignClientFactoryBean) o;
-        return Objects.equals(applicationContext, that.applicationContext) && Objects.equals(beanFactory, that.beanFactory) && dismiss404 == that.dismiss404 && inheritParentContext == that.inheritParentContext && Objects.equals(fallback, that.fallback) && Objects.equals(fallbackFactory, that.fallbackFactory) && Objects.equals(name, that.name) && Objects.equals(path, that.path) && Objects.equals(type, that.type) && Objects.equals(url, that.url) && Objects.equals(refreshableClient, that.refreshableClient);
+        return Objects.equals(applicationContext, that.applicationContext) && Objects.equals(beanFactory, that.beanFactory) && inheritParentContext == that.inheritParentContext && Objects.equals(name, that.name) && Objects.equals(path, that.path) && Objects.equals(type, that.type) && Objects.equals(url, that.url);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(applicationContext, beanFactory, dismiss404, inheritParentContext, fallback, fallbackFactory, name, path, type, url, refreshableClient);
+        return Objects.hash(applicationContext, beanFactory, inheritParentContext, name, path, type, url);
     }
 
     @Override
     public String toString() {
-        return new StringBuilder("FeignClientFactoryBean{").append("type=").append(type).append(", ").append("name='").append(name).append("', ").append("url='").append(url).append("', ").append("path='").append(path).append("', ").append("dismiss404=").append(dismiss404).append(", ").append("inheritParentContext=").append(inheritParentContext).append(", ").append("applicationContext=").append(applicationContext).append(", ").append("beanFactory=").append(beanFactory).append(", ").append("fallback=").append(fallback).append(", ").append("fallbackFactory=").append(fallbackFactory).append("}").append("connectTimeoutMillis=").append("}").append("readTimeoutMillis=").append("}").append("followRedirects=").append("refreshableClient=").append(refreshableClient).append("}").toString();
+        return "FeignClientFactoryBean{" + "type=" + type + ", " + "name='" + name + "', " + "url='" + url + "', " + "path='" + path + "', " + "inheritParentContext=" + inheritParentContext + ", " + "applicationContext=" + applicationContext + ", " + "beanFactory=" + beanFactory + "}" + "connectTimeoutMillis=" + "}" + "readTimeoutMillis=" + "}";
     }
 
     @Override

@@ -46,39 +46,6 @@ public @interface RemoteService {
      * @return an absolute URL or resolvable hostname (the protocol is optional).
      */
     String url() default "";
-
-    /**
-     * @return whether 404s should be decoded instead of throwing FeignExceptions
-     */
-    boolean dismiss404() default false;
-
-    /**
-     * A custom configuration class for the feign client. Can contain override
-     * <code>@Bean</code> definition for the pieces that make up the client, for instance
-     * {@link feign.codec.Decoder}, {@link feign.codec.Encoder}, {@link feign.Contract}.
-     *
-     * @see FeignClientsConfiguration for the defaults
-     * @return list of configurations for feign client
-     */
-    Class<?>[] configuration() default {};
-
-    /**
-     * Fallback class for the specified Feign client interface. The fallback class must
-     * implement the interface annotated by this annotation and be a valid spring bean.
-     * @return fallback class for the specified Feign client interface
-     */
-    Class<?> fallback() default void.class;
-
-    /**
-     * Define a fallback factory for the specified Feign client interface. The fallback
-     * factory must produce instances of fallback classes that implement the interface
-     * annotated by {@link FeignClient}. The fallback factory must be a valid spring bean.
-     *
-     * @see FallbackFactory for details.
-     * @return fallback factory for the specified Feign client interface
-     */
-    Class<?> fallbackFactory() default void.class;
-
     /**
      * @return path prefix to be used by all method-level mappings.
      */
