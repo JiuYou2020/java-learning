@@ -16,12 +16,32 @@ public class OrderServiceImpl implements OrderService {
     private StockApi stockApi;
 
     @Override
-    public String placeAnOrder() {
-        return stockApi.reduceStock();
+    public String testGetParam(String stockId, int num) {
+        return stockApi.testGetParam(stockId, num);
     }
 
     @Override
-    public String getUser() {
-        return stockApi.getUser();
+    public String testGet() {
+        return stockApi.testGet();
+    }
+
+    @Override
+    public String testPost() {
+        return stockApi.testPost();
+    }
+
+    @Override
+    public String testPostRequestBody(String requestBody) {
+        return stockApi.testPostRequestBody(requestBody);
+    }
+
+    @Override
+    public String testDeleteParam(String stockId) {
+        return stockApi.testDeleteParam(stockId);
+    }
+
+    @Override
+    public String testPut(String stockId) {
+        return stockApi.testPut(stockId);
     }
 }

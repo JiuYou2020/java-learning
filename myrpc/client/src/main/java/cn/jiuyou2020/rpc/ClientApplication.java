@@ -1,12 +1,11 @@
 package cn.jiuyou2020.rpc;
 
-import cn.jiuyou2020.proxy.ProxyRegistrar;
+import cn.jiuyou2020.annonation.EnableMyRpc;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
-@Import(ProxyRegistrar.class)
+@EnableMyRpc
 public class ClientApplication {
 
     public static void main(String[] args) {

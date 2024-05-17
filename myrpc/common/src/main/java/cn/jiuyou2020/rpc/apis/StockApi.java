@@ -10,9 +10,21 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @RemoteService(url = "http://localhost:8080", name = "demo")
 public interface StockApi {
-    @GetMapping("/stock/reduce")
-    String reduceStock();
+    @GetMapping("/testGetParam")
+    String testGetParam(String stockId, int num);
 
-    @GetMapping("/getUser")
-    String getUser();
+    @GetMapping("/testGet")
+    String testGet();
+
+    @GetMapping("/testPost")
+    String testPost();
+
+    @GetMapping("/testPostRequestBody")
+    String testPostRequestBody(String requestBody);
+
+    @GetMapping("/testDeleteParam")
+    String testDeleteParam(String stockId);
+
+    @GetMapping("/testPut")
+    String testPut(String stockId);
 }
