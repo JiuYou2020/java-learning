@@ -15,7 +15,8 @@ public class YMLUtil {
     public static Object getBean() {
         Object obj = null;
         try {
-            obj = Class.forName(getLoggerClassName()).newInstance();
+            Class<?> clazz = Class.forName(getLoggerClassName());
+            obj = clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
