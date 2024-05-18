@@ -16,6 +16,7 @@
         <module>client</module>
         <module>rpc</module>
         <module>common</module>
+        <module>server</module>
     </modules>
 
     <properties>

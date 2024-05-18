@@ -6,30 +6,105 @@
 
     <groupId>cn.southtang</groupId>
     <artifactId>learning</artifactId>
-    <version>${learning.version}</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>dependencies-manager</module>
+        <module>elastic-search-entry</module>
         <module>flowable</module>
         <module>rabbitmq</module>
         <module>springboot-event</module>
         <module>myrpc</module>
         <module>spring-learning</module>
+        <module>design-pattern</module>
     </modules>
 
     <properties>
         <learning.version>1.0-SNAPSHOT</learning.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--  flowable-quickstart      -->
+        <flowable.engine.version>6.8.0</flowable.engine.version>
+        <h2.version>1.3.176</h2.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <!--         flowable-springboot      -->
+        <springboot.version>2.7.14</springboot.version>
+        <flowable.springboot.version>6.8.0</flowable.springboot.version>
+        <mysql.version>8.0.11</mysql.version>
+        <mybatis.version>2.2.2</mybatis.version>
+        <lombok.version>1.18.8</lombok.version>
+        <!--        rabbit-springboot-->
+        <amqp.version>2.7.14</amqp.version>
+        <!--        rabbit-spring-cloud-->
+        <rabbit.quickstart>4.0.3</rabbit.quickstart>
+        <spring.cloud.version>2021.0.5</spring.cloud.version>
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>cn.learning</groupId>
-                <artifactId>dependencies-manager</artifactId>
-                <version>${learning.version}</version>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-engine</artifactId>
+                <version>${flowable.engine.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${springboot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-spring-boot-starter</artifactId>
+                <version>${flowable.springboot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+                <version>${rabbit.quickstart}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-amqp</artifactId>
+                <version>${amqp.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

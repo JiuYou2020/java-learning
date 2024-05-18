@@ -5,9 +5,12 @@
     <file url="file://$PROJECT_DIR$/MyRPC/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dependencies-manager/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dependencies-manager/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/design-pattern/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/design-pattern/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/design-patterns/src/behavioral_mode/interpreter_pattern/string_command_example/Client.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/design-patterns/src/behavioral_mode/interpreter_pattern/string_command_example/CommandNode.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/elastic-search-entry/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/elastic-search-entry/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flowable/flowable-quickstart/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flowable/flowable-quickstart/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flowable/flowable-springboot/src/main/java" charset="UTF-8" />
@@ -94,5 +97,7 @@
     <file url="file://$PROJECT_DIR$/spring-learning/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/springboot-event/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/springboot-event/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>
 </project>
