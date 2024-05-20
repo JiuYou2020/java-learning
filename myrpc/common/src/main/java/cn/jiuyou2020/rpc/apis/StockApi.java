@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @description
  * @date 2024/4/24 下午8:19
  */
-@RemoteService(url = "http://localhost:8080", name = "demo")
+@RemoteService(url = "http://localhost:8083", name = "demo")
 public interface StockApi {
     @GetMapping("/testGetParam")
     String testGetParam(String stockId, int num);

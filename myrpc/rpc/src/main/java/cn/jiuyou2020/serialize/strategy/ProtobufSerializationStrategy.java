@@ -1,6 +1,6 @@
 package cn.jiuyou2020.serialize.strategy;
 
-import cn.jiuyou2020.serialize.SerializationDataOuterClass;
+import cn.jiuyou2020.serialize.SerializationDataOuterClass.SerializationData;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 /**
@@ -10,16 +10,16 @@ import com.google.protobuf.InvalidProtocolBufferException;
 public class ProtobufSerializationStrategy implements SerializationStrategy {
     @Override
     public byte[] serialize(Object object) throws Exception {
-        if (object instanceof SerializationDataOuterClass.SerializationData) {
-            return ((SerializationDataOuterClass.SerializationData) object).toByteArray();
+        if (object instanceof SerializationData) {
+            return ((SerializationData) object).toByteArray();
         }
         throw new Exception("protobuf序列化失败");
     }
 
     @Override
     public <T> T deserialize(byte[] data, Class<T> clazz) throws InvalidProtocolBufferException {
-        if (clazz == SerializationDataOuterClass.SerializationData.class) {
-            return (T) SerializationDataOuterClass.SerializationData.parseFrom(data);
+        if (clazz == SerializationData.class) {
+            return (T) SerializationData.parseFrom(data);
         }
         throw new InvalidProtocolBufferException("protobuf反序列化失败");
     }

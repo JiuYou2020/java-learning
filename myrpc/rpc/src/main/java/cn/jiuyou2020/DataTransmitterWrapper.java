@@ -1,7 +1,8 @@
 package cn.jiuyou2020;
 
+import cn.jiuyou2020.nettransmit.NettyClient;
 import cn.jiuyou2020.proxy.FeignClientFactoryBean;
-import cn.jiuyou2020.serialize.SerializationDataOuterClass;
+import cn.jiuyou2020.serialize.SerializationDataOuterClass.SerializationData;
 import cn.jiuyou2020.serialize.SerializationFacade;
 import cn.jiuyou2020.serialize.SerializationFacadeImpl;
 import cn.jiuyou2020.serialize.strategy.ProtobufSerializationStrategy;
@@ -25,25 +26,26 @@ public class DataTransmitterWrapper {
     public Object executeDataTransmit(Method method, Object[] args, FeignClientFactoryBean clientFactoryBean) throws Exception {
         //执行序列化
         byte[] serialize = executeSerialize(method, args, clientFactoryBean);
-
-        SerializationDataOuterClass.SerializationData deserialize = serializationFacade.deserialize(serialize, SerializationDataOuterClass.SerializationData.class);
-        return deserialize.toString();
+        //进行数据传输
+        NettyClient nettyClient = new NettyClient();
+        byte[] receivedData = nettyClient.connect(clientFactoryBean.getUrl(), serialize);
+        return serializationFacade.deserialize(receivedData, method.getReturnType());
     }
 
     /**
      * 执行序列化
      */
     private byte[] executeSerialize(Method method, Object[] args, FeignClientFactoryBean clientFactoryBean) throws Exception {
-        constructApiUrl(clientFactoryBean, method);
         String methodName = method.getName();
         String[] params = Arrays.stream(method.getParameterTypes()).map(Class::getName).toArray(String[]::new);
         String[] paramsData = Arrays.stream(args).map(Object::toString).toArray(String[]::new);
-        SerializationDataOuterClass.SerializationData serializationData = SerializationDataOuterClass.SerializationData.newBuilder()
+        SerializationData serializationData = SerializationData.newBuilder()
+                .setClassName(clientFactoryBean.getType().getName())
                 .setMethodName(methodName)
                 .addAllParameterTypes(Arrays.asList(params))
                 .addAllArgs(Arrays.asList(paramsData))
-                .setUrl(clientFactoryBean.getUrl())
                 .build();
+
         return serializationFacade.serialize(serializationData);
     }
 

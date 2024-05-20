@@ -3,8 +3,8 @@ syntax = "proto3";
 package cn.jiuyou2020.serialize;
 
 message SerializationData {
-  string methodName = 1;
-  string url = 2;
+  string className  = 1;
+  string methodName = 2;
   repeated string parameterTypes = 3;
   repeated string args = 4;
 }

@@ -1,18 +1,18 @@
-package cn.jiuyou2020.protocolencoding;
+package cn.jiuyou2020.nettransmit.protocolencoding;
 
 public class RpcMessage {
-    public final short MAGIC = (short) 0xCAFEBABE;
-    public final short HEADER_SIZE = 139;
-    public final short VERSION = 1;  //1 byte
-    private byte serializationType;         //1 byte
-    private boolean isHeartbeat;            //1 bit
-    private boolean isOneWay;               //1 bit
-    private boolean isResponse;             //1 bit
-    private byte statusCode;                //1 byte
-    private short reserved;                 //2 bytes
-    private int messageId;                  //4 bytes
-    private int bodySize;                   //4 bytes
-    private byte[] body;                    //n bytes
+    public static final short MAGIC = (short) 0xCAFEBABE;      //2 bytes
+    public static final short HEADER_SIZE = 21;                //2 bytes
+    public static final short VERSION = 1;                     //2 bytes
+    private byte serializationType;                     //1 byte
+    private boolean isHeartbeat;                        //1 byte
+    private boolean isOneWay;                           //1 byte
+    private boolean isResponse;                         //1 byte
+    private byte statusCode;                            //1 byte
+    private short reserved;                             //2 bytes
+    private int messageId;                              //4 bytes
+    private int bodySize;                               //4 bytes
+    private byte[] body;                                //n bytes
 
     private RpcMessage(Builder builder) {
         this.serializationType = builder.serializationType;

@@ -1,22 +1,24 @@
 package cn.jiuyou2020.nettransmit;
 
+import cn.jiuyou2020.nettransmit.protocolencoding.RpcMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelPromise;
 import io.netty.handler.timeout.IdleStateEvent;
 
-import java.util.Arrays;
-
 public class ClientHandler extends ChannelInboundHandlerAdapter {
+    private ChannelPromise promise;
+    private RpcMessage response;
+
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg instanceof byte[]) {
-            byte[] data = (byte[]) msg;
-            System.out.println("Received byte array: " + Arrays.toString(data));
-        } else if (msg instanceof String) {
-            String message = (String) msg;
-            System.out.println("Received message: " + message);
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        if (promise != null) {
+            response = (RpcMessage) msg;
+            promise.setSuccess();
         }
+        // 关闭连接
+        ctx.close();
     }
 
     @Override
@@ -32,7 +34,15 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
         ctx.close();
+        throw new RuntimeException(cause);
+    }
+
+    public void setPromise(ChannelPromise promise) {
+        this.promise = promise;
+    }
+
+    public RpcMessage getResponse() {
+        return response;
     }
 }

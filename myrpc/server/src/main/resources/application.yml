@@ -1,2 +1,4 @@
 server:
   port: 8081
+rpc:
+  port: 8083
