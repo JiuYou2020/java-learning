@@ -1,6 +1,6 @@
 # 1. 概述
 
-[RabbitMQ](https://www.rabbitmq.com/) 是由 LShift 提供的一个 [Advanced Message Queuing Protocol (AMQP)](https://zh.wikipedia.org/zh-hans/高级消息队列协议) 的开源实现，由以高性能、健壮以及可伸缩性出名的 [Erlang](https://www.erlang.org/) 写成，因此也是继承了这些优点。
+[RabbitMQ](https://www.rabbitmq.com/) 是由 LShift 提供的一个 [Advanced RpcMessage Queuing Protocol (AMQP)](https://zh.wikipedia.org/zh-hans/高级消息队列协议) 的开源实现，由以高性能、健壮以及可伸缩性出名的 [Erlang](https://www.erlang.org/) 写成，因此也是继承了这些优点。
 
 > FROM [《维基百科 —— RabbitMQ》](https://zh.wikipedia.org/wiki/RabbitMQ)
 >
@@ -39,7 +39,7 @@ RabbitMQ,默认guest用户，密码也是guest。java
 
   它提供了一个“模板”作为发送消息的高级抽象。
 
-- It also provides support for Message-driven POJOs with a "listener container". 
+- It also provides support for RpcMessage-driven POJOs with a "listener container". 
 
   它还通过“侦听器容器”为消息驱动的 POJO 提供支持。
 
@@ -168,7 +168,7 @@ Spring-AMQP 通过 [BatchingRabbitTemplate](https://github.com/spring-projects/s
 那么，为什么我们在**批量发送消息**能够实现呢？答案是批量发送消息是 Spring-AMQP 的 [SimpleBatchingStrategy](https://github.com/spring-projects/spring-amqp/blob/master/spring-rabbit/src/main/java/org/springframework/amqp/rabbit/batch/SimpleBatchingStrategy.java) 所封装提供：
 
 - 在 Producer 最终批量发送消息时，SimpleBatchingStrategy 会通过 [`#assembleMessage()`](https://github.com/spring-projects/spring-amqp/blob/master/spring-rabbit/src/main/java/org/springframework/amqp/rabbit/batch/SimpleBatchingStrategy.java#L141-L156) 方法，将批量发送的**多条**消息**组装**成一条“批量”消息，然后进行发送。
-- 在 Consumer 拉取到消息时，会根据[`#canDebatch(MessageProperties properties)`](https://github.com/spring-projects/spring-amqp/blob/master/spring-rabbit/src/main/java/org/springframework/amqp/rabbit/batch/SimpleBatchingStrategy.java#L158-L163) 方法，判断该消息是否为一条“批量”消息？如果是，则调用[`# deBatch(Message message, Consumer fragmentConsumer)`](https://github.com/spring-projects/spring-amqp/blob/master/spring-rabbit/src/main/java/org/springframework/amqp/rabbit/batch/SimpleBatchingStrategy.java#L165-L194) 方法，将一条“批量”消息**拆开**，变成**多条**消息。
+- 在 Consumer 拉取到消息时，会根据[`#canDebatch(MessageProperties properties)`](https://github.com/spring-projects/spring-amqp/blob/master/spring-rabbit/src/main/java/org/springframework/amqp/rabbit/batch/SimpleBatchingStrategy.java#L158-L163) 方法，判断该消息是否为一条“批量”消息？如果是，则调用[`# deBatch(RpcMessage message, Consumer fragmentConsumer)`](https://github.com/spring-projects/spring-amqp/blob/master/spring-rabbit/src/main/java/org/springframework/amqp/rabbit/batch/SimpleBatchingStrategy.java#L165-L194) 方法，将一条“批量”消息**拆开**，变成**多条**消息。
 
 
 
@@ -428,7 +428,7 @@ spring:
 
 那么，让我们来思考下，如果我们希望在 RabbitMQ 上，实现顺序消息需要做两个事情。
 
-① **事情一**，我们需要保证 RabbitMQ Producer 发送相关联的消息发送到相同的 Queue 中。例如说，我们要发送用户信息发生变更的 Message ，那么如果我们希望使用顺序消息的情况下，可以将**用户编号**相同的消息发送到相同的 Queue 中。
+① **事情一**，我们需要保证 RabbitMQ Producer 发送相关联的消息发送到相同的 Queue 中。例如说，我们要发送用户信息发生变更的 RpcMessage ，那么如果我们希望使用顺序消息的情况下，可以将**用户编号**相同的消息发送到相同的 Queue 中。
 
 ② **事情二**，我们在有**且仅启动一个** Consumer 消费该队列，保证 Consumer 严格顺序消费。
 
@@ -736,7 +736,7 @@ public class DemoProducer {
 
 另外，RabbitListenerErrorHandler 需要每个 `@RabbitListener` 注解上，需要每个手动设置下 `errorHandler` 属性。而 ErrorHandler 是相对全局的，所有 SimpleRabbitListenerContainerFactory 创建的 SimpleMessageListenerContainer 都会生效。
 
-具体选择 ErrorHandler 还是 RabbitLoggingErrorHandler ，我暂时没有答案。不过个人感觉，如果不需要对 Consumer 消费的结果（包括成功和异常）做进一步处理，还是考虑 ErrorHandler 即可。在 ErrorHandler 中，我们可以通过判断 Throwable 异常是不是 ListenerExecutionFailedException 异常，从而拿到 Message 相关的信息。
+具体选择 ErrorHandler 还是 RabbitLoggingErrorHandler ，我暂时没有答案。不过个人感觉，如果不需要对 Consumer 消费的结果（包括成功和异常）做进一步处理，还是考虑 ErrorHandler 即可。在 ErrorHandler 中，我们可以通过判断 Throwable 异常是不是 ListenerExecutionFailedException 异常，从而拿到 RpcMessage 相关的信息。
 
 
 
@@ -750,7 +750,7 @@ public class DemoProducer {
 
 本文我们来学习 [Spring Cloud Stream RabbitMQ](https://github.com/spring-cloud/spring-cloud-stream-binder-rabbit) 组件，基于 [Spring Cloud Stream](https://github.com/spring-cloud/spring-cloud-stream) 的编程模型，接入 RabbitMQ 作为消息中间件，实现消息驱动的微服务。
 
-> RabbitMQ 是一套开源（MPL）的消息队列服务软件，是由 LShift 提供的一个 Advanced Message Queuing Protocol (AMQP) 的开源实现，由以高性能、健壮以及可伸缩性出名的 Erlang 写成。
+> RabbitMQ 是一套开源（MPL）的消息队列服务软件，是由 LShift 提供的一个 Advanced RpcMessage Queuing Protocol (AMQP) 的开源实现，由以高性能、健壮以及可伸缩性出名的 Erlang 写成。
 
 ## 4.2 Spring Cloud Stream 介绍
 
@@ -917,7 +917,7 @@ server:
 
 #### 4.3.1.3 Demo01Message
 
-创建 Demo01Message 类，示例 Message 消息。代码如下：
+创建 Demo01Message 类，示例 RpcMessage 消息。代码如下：
 
 ```java
 public class Demo01Message {
@@ -956,7 +956,7 @@ package cn.learning.rabbitmq.cloud.quickstart.producer.controller;
 import cn.learning.rabbitmq.cloud.quickstart.producer.message.Demo01Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.messaging.Message;
+import org.springframework.messaging.RpcMessage;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -973,21 +973,21 @@ public class Demo01Controller {
 
     @GetMapping("/send")
     public boolean send() {
-        // 创建 Message
+        // 创建 RpcMessage
         Demo01Message message = new Demo01Message()
                 .setId(new Random().nextInt());
-        // 创建 Spring Message 对象,使用函数式变成模型的方式而不是加上已弃用的@enableBinding/@output注解,demo01-out-0是配置文件中的spring.cloud.stream.bindings.demo01-out-0
+        // 创建 Spring RpcMessage 对象,使用函数式变成模型的方式而不是加上已弃用的@enableBinding/@output注解,demo01-out-0是配置文件中的spring.cloud.stream.bindings.demo01-out-0
         return streamBridge.send("demo01-out-0", MessageBuilder.withPayload(message).build());
     }
 
     @GetMapping("/send_tag")
     public boolean sendTag() {
         for (String tag : new String[]{"yunai", "yutou", "tudou"}) {
-            // 创建 Message
+            // 创建 RpcMessage
             Demo01Message message = new Demo01Message()
                     .setId(new Random().nextInt());
-            // 创建 Spring Message 对象
-            Message<Demo01Message> springMessage = MessageBuilder.withPayload(message)
+            // 创建 Spring RpcMessage 对象
+            RpcMessage<Demo01Message> springMessage = MessageBuilder.withPayload(message)
                     // 设置 Tag
                     .setHeader("tag", tag)
                     .build();

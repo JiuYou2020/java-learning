@@ -2,7 +2,7 @@ package cn.learning.behavioral_mode.iterator_pattern;
 import java.util.*;
 
 public class Client {
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		List<Object> products = new ArrayList<>();
 		products.add("Core Java Book");
 		products.add("Advanced Java Book");

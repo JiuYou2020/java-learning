@@ -1,14 +1,15 @@
 package cn.jiuyou2020;
 
 import cn.jiuyou2020.proxy.FeignClientFactoryBean;
-import cn.jiuyou2020.serialize.SerializationData;
+import cn.jiuyou2020.serialize.SerializationDataOuterClass;
 import cn.jiuyou2020.serialize.SerializationFacade;
 import cn.jiuyou2020.serialize.SerializationFacadeImpl;
-import cn.jiuyou2020.serialize.strategy.JsonSerializationStrategy;
+import cn.jiuyou2020.serialize.strategy.ProtobufSerializationStrategy;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
  * @author: jiuyou2020
@@ -18,14 +19,14 @@ public class DataTransmitterWrapper {
     private final SerializationFacade serializationFacade;
 
     public DataTransmitterWrapper() {
-        this.serializationFacade = new SerializationFacadeImpl(new JsonSerializationStrategy());
+        this.serializationFacade = new SerializationFacadeImpl(new ProtobufSerializationStrategy());
     }
 
     public Object executeDataTransmit(Method method, Object[] args, FeignClientFactoryBean clientFactoryBean) throws Exception {
         //执行序列化
         byte[] serialize = executeSerialize(method, args, clientFactoryBean);
 
-        SerializationData deserialize = serializationFacade.deserialize(serialize, SerializationData.class);
+        SerializationDataOuterClass.SerializationData deserialize = serializationFacade.deserialize(serialize, SerializationDataOuterClass.SerializationData.class);
         return deserialize.toString();
     }
 
@@ -35,8 +36,14 @@ public class DataTransmitterWrapper {
     private byte[] executeSerialize(Method method, Object[] args, FeignClientFactoryBean clientFactoryBean) throws Exception {
         constructApiUrl(clientFactoryBean, method);
         String methodName = method.getName();
-        Class<?>[] parameterTypes = method.getParameterTypes();
-        SerializationData serializationData = new SerializationData(methodName, parameterTypes, args, clientFactoryBean.getUrl());
+        String[] params = Arrays.stream(method.getParameterTypes()).map(Class::getName).toArray(String[]::new);
+        String[] paramsData = Arrays.stream(args).map(Object::toString).toArray(String[]::new);
+        SerializationDataOuterClass.SerializationData serializationData = SerializationDataOuterClass.SerializationData.newBuilder()
+                .setMethodName(methodName)
+                .addAllParameterTypes(Arrays.asList(params))
+                .addAllArgs(Arrays.asList(paramsData))
+                .setUrl(clientFactoryBean.getUrl())
+                .build();
         return serializationFacade.serialize(serializationData);
     }
 
