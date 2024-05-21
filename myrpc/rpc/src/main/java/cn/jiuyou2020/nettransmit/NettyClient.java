@@ -1,5 +1,6 @@
 package cn.jiuyou2020.nettransmit;
 
+import cn.jiuyou2020.PropertyContext;
 import cn.jiuyou2020.nettransmit.protocolencoding.RpcDecoder;
 import cn.jiuyou2020.nettransmit.protocolencoding.RpcEncoder;
 import cn.jiuyou2020.nettransmit.protocolencoding.RpcMessage;
@@ -31,7 +32,7 @@ public class NettyClient {
             clientHandler.setPromise(promise);
             // 构造一个RpcMessage对象
             RpcMessage message = new RpcMessage.Builder()
-                    .setSerializationType((byte) 1)
+                    .setSerializationType((byte) PropertyContext.getSerializationType().getValue())
                     .setIsHeartbeat(false)
                     .setIsOneWay(false)
                     .setIsResponse(false)

@@ -12,15 +12,6 @@ import java.util.List;
  */
 public class RpcDecoder extends ByteToMessageDecoder {
 
-//    @Override
-//    protected void decode(ChannelHandlerContext ctx, RpcMessage msg, List<Object> out) throws Exception {
-//        byte[] body = msg.getBody();
-//        SerializationFacadeImpl serializationFacade = new SerializationFacadeImpl(new ProtobufSerializationStrategy());
-//        SerializationDataOuterClass.SerializationData deserialize = serializationFacade.deserialize(body, SerializationDataOuterClass.SerializationData.class);
-//        System.out.println(deserialize);
-//        ctx.writeAndFlush(deserialize.toString());
-//    }
-
     /**
      * 在Netty的ByteToMessageDecoder中，decode方法的参数out是一个输出列表，用于存储解码后的消息。
      * <p>

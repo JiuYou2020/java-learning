@@ -1,6 +1,8 @@
 package cn.jiuyou2020.annonation;
 
+import cn.jiuyou2020.PropertyContext;
 import cn.jiuyou2020.proxy.ProxyRegistrar;
+import cn.jiuyou2020.serialize.AutoConfigurationConfig;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -12,7 +14,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import(ProxyRegistrar.class)
+@Import({ProxyRegistrar.class, PropertyContext.class, AutoConfigurationConfig.class})
 public @interface EnableMyRpc {
 
 }

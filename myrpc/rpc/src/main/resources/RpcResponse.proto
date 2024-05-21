@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package cn.jiuyou2020.serialize.message;
+option java_outer_classname = "RpcResponseOuterClass";
+
+message RpcResponseProto {
+  bytes result = 1;
+  string returnType = 2; // New field for return type
+  string errorMessage = 3;
+}

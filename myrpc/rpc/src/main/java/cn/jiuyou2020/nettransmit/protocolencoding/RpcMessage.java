@@ -4,7 +4,7 @@ public class RpcMessage {
     public static final short MAGIC = (short) 0xCAFEBABE;      //2 bytes
     public static final short HEADER_SIZE = 21;                //2 bytes
     public static final short VERSION = 1;                     //2 bytes
-    private byte serializationType;                     //1 byte
+    private byte serializationType;                     //1 byte //0是json序列化，1是protobuf序列化
     private boolean isHeartbeat;                        //1 byte
     private boolean isOneWay;                           //1 byte
     private boolean isResponse;                         //1 byte

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package cn.jiuyou2020.serialize.message;
+option java_outer_classname = "RpcRequestOuterClass";
+
+
+message RpcRequestProto {
+  string className = 1;  // New field for class type
+  string methodName = 2;
+  repeated string parameterTypes = 3;
+  repeated bytes parameters = 4;
+  string returnType = 5; // New field for return type
+}

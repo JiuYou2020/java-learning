@@ -2,6 +2,7 @@ package cn.jiuyou2020.nettransmit;
 
 import cn.jiuyou2020.nettransmit.protocolencoding.RpcDecoder;
 import cn.jiuyou2020.nettransmit.protocolencoding.RpcEncoder;
+import cn.jiuyou2020.reflectioncall.ReflectionCall;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -63,7 +64,7 @@ public class NettyServer implements EnvironmentAware {
                 public void initChannel(SocketChannel ch) {
                     ch.pipeline().addLast(new RpcDecoder());
                     ch.pipeline().addLast(new RpcEncoder());
-                    ch.pipeline().addLast(new ServerHandler());
+                    ch.pipeline().addLast(new ServerHandler(new ReflectionCall()));
                 }
             });
 
