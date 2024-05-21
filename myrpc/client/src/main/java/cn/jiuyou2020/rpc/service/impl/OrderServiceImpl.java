@@ -1,6 +1,6 @@
 package cn.jiuyou2020.rpc.service.impl;
 
-import cn.jiuyou2020.rpc.apis.StockApi;
+import cn.jiuyou2020.rpc.apis.StockService;
 import cn.jiuyou2020.rpc.service.OrderService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -13,35 +13,35 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderServiceImpl implements OrderService {
     @Resource
-    private StockApi stockApi;
+    private StockService stockService;
 
     @Override
     public String testGetParam(String stockId, int num) {
-        return stockApi.testGetParam(stockId, num);
+        return stockService.testGetParam(stockId, num);
     }
 
     @Override
     public String testGet() {
-        return stockApi.testGet();
+        return stockService.testGet();
     }
 
     @Override
     public String testPost() {
-        return stockApi.testPost();
+        return stockService.testPost();
     }
 
     @Override
     public String testPostRequestBody(String requestBody) {
-        return stockApi.testPostRequestBody(requestBody);
+        return stockService.testPostRequestBody(requestBody);
     }
 
     @Override
     public String testDeleteParam(String stockId) {
-        return stockApi.testDeleteParam(stockId);
+        return stockService.testDeleteParam(stockId);
     }
 
     @Override
     public String testPut(String stockId) {
-        return stockApi.testPut(stockId);
+        return stockService.testPut(stockId);
     }
 }

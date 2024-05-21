@@ -9,7 +9,6 @@ public class JsonRpcRequest extends RpcRequest {
     String methodName;
     Class<?>[] parameterTypes;
     Object[] parameters;
-    Class<?> returnType;
 
     @Override
     public String getClassName() {
@@ -31,11 +30,6 @@ public class JsonRpcRequest extends RpcRequest {
         return parameters;
     }
 
-    @Override
-    public Class<?> getReturnType() {
-        return returnType;
-    }
-
     public void setClassName(String className) {
         this.className = className;
     }
@@ -50,9 +44,5 @@ public class JsonRpcRequest extends RpcRequest {
 
     public void setParameters(Object[] parameters) {
         this.parameters = parameters;
-    }
-
-    public void setReturnType(Class<?> returnType) {
-        this.returnType = returnType;
     }
 }

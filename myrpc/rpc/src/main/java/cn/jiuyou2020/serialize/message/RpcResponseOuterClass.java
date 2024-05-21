@@ -25,32 +25,12 @@ public final class RpcResponseOuterClass {
     com.google.protobuf.ByteString getResult();
 
     /**
-     * <pre>
-     * New field for return type
-     * </pre>
-     *
-     * <code>string returnType = 2;</code>
-     * @return The returnType.
-     */
-    String getReturnType();
-    /**
-     * <pre>
-     * New field for return type
-     * </pre>
-     *
-     * <code>string returnType = 2;</code>
-     * @return The bytes for returnType.
-     */
-    com.google.protobuf.ByteString
-        getReturnTypeBytes();
-
-    /**
-     * <code>string errorMessage = 3;</code>
+     * <code>string errorMessage = 2;</code>
      * @return The errorMessage.
      */
     String getErrorMessage();
     /**
-     * <code>string errorMessage = 3;</code>
+     * <code>string errorMessage = 2;</code>
      * @return The bytes for errorMessage.
      */
     com.google.protobuf.ByteString
@@ -70,7 +50,6 @@ public final class RpcResponseOuterClass {
     }
     private RpcResponseProto() {
       result_ = com.google.protobuf.ByteString.EMPTY;
-      returnType_ = "";
       errorMessage_ = "";
     }
 
@@ -110,58 +89,11 @@ public final class RpcResponseOuterClass {
       return result_;
     }
 
-    public static final int RETURNTYPE_FIELD_NUMBER = 2;
-    @SuppressWarnings("serial")
-    private volatile Object returnType_ = "";
-    /**
-     * <pre>
-     * New field for return type
-     * </pre>
-     *
-     * <code>string returnType = 2;</code>
-     * @return The returnType.
-     */
-    @Override
-    public String getReturnType() {
-      Object ref = returnType_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        returnType_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * New field for return type
-     * </pre>
-     *
-     * <code>string returnType = 2;</code>
-     * @return The bytes for returnType.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getReturnTypeBytes() {
-      Object ref = returnType_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        returnType_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int ERRORMESSAGE_FIELD_NUMBER = 3;
+    public static final int ERRORMESSAGE_FIELD_NUMBER = 2;
     @SuppressWarnings("serial")
     private volatile Object errorMessage_ = "";
     /**
-     * <code>string errorMessage = 3;</code>
+     * <code>string errorMessage = 2;</code>
      * @return The errorMessage.
      */
     @Override
@@ -178,7 +110,7 @@ public final class RpcResponseOuterClass {
       }
     }
     /**
-     * <code>string errorMessage = 3;</code>
+     * <code>string errorMessage = 2;</code>
      * @return The bytes for errorMessage.
      */
     @Override
@@ -213,11 +145,8 @@ public final class RpcResponseOuterClass {
       if (!result_.isEmpty()) {
         output.writeBytes(1, result_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(returnType_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, returnType_);
-      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(errorMessage_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, errorMessage_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, errorMessage_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -232,11 +161,8 @@ public final class RpcResponseOuterClass {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(1, result_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(returnType_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, returnType_);
-      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(errorMessage_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, errorMessage_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, errorMessage_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -255,8 +181,6 @@ public final class RpcResponseOuterClass {
 
       if (!getResult()
           .equals(other.getResult())) return false;
-      if (!getReturnType()
-          .equals(other.getReturnType())) return false;
       if (!getErrorMessage()
           .equals(other.getErrorMessage())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
@@ -272,8 +196,6 @@ public final class RpcResponseOuterClass {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + RESULT_FIELD_NUMBER;
       hash = (53 * hash) + getResult().hashCode();
-      hash = (37 * hash) + RETURNTYPE_FIELD_NUMBER;
-      hash = (53 * hash) + getReturnType().hashCode();
       hash = (37 * hash) + ERRORMESSAGE_FIELD_NUMBER;
       hash = (53 * hash) + getErrorMessage().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
@@ -406,7 +328,6 @@ public final class RpcResponseOuterClass {
         super.clear();
         bitField0_ = 0;
         result_ = com.google.protobuf.ByteString.EMPTY;
-        returnType_ = "";
         errorMessage_ = "";
         return this;
       }
@@ -445,9 +366,6 @@ public final class RpcResponseOuterClass {
           result.result_ = result_;
         }
         if (((from_bitField0_ & 0x00000002) != 0)) {
-          result.returnType_ = returnType_;
-        }
-        if (((from_bitField0_ & 0x00000004) != 0)) {
           result.errorMessage_ = errorMessage_;
         }
       }
@@ -499,14 +417,9 @@ public final class RpcResponseOuterClass {
         if (other.getResult() != com.google.protobuf.ByteString.EMPTY) {
           setResult(other.getResult());
         }
-        if (!other.getReturnType().isEmpty()) {
-          returnType_ = other.returnType_;
-          bitField0_ |= 0x00000002;
-          onChanged();
-        }
         if (!other.getErrorMessage().isEmpty()) {
           errorMessage_ = other.errorMessage_;
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000002;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -541,15 +454,10 @@ public final class RpcResponseOuterClass {
                 break;
               } // case 10
               case 18: {
-                returnType_ = input.readStringRequireUtf8();
+                errorMessage_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000002;
                 break;
               } // case 18
-              case 26: {
-                errorMessage_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000004;
-                break;
-              } // case 26
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -599,101 +507,9 @@ public final class RpcResponseOuterClass {
         return this;
       }
 
-      private Object returnType_ = "";
-      /**
-       * <pre>
-       * New field for return type
-       * </pre>
-       *
-       * <code>string returnType = 2;</code>
-       * @return The returnType.
-       */
-      public String getReturnType() {
-        Object ref = returnType_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          returnType_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <pre>
-       * New field for return type
-       * </pre>
-       *
-       * <code>string returnType = 2;</code>
-       * @return The bytes for returnType.
-       */
-      public com.google.protobuf.ByteString
-          getReturnTypeBytes() {
-        Object ref = returnType_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          returnType_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * New field for return type
-       * </pre>
-       *
-       * <code>string returnType = 2;</code>
-       * @param value The returnType to set.
-       * @return This builder for chaining.
-       */
-      public Builder setReturnType(
-          String value) {
-        if (value == null) { throw new NullPointerException(); }
-        returnType_ = value;
-        bitField0_ |= 0x00000002;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * New field for return type
-       * </pre>
-       *
-       * <code>string returnType = 2;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearReturnType() {
-        returnType_ = getDefaultInstance().getReturnType();
-        bitField0_ = (bitField0_ & ~0x00000002);
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * New field for return type
-       * </pre>
-       *
-       * <code>string returnType = 2;</code>
-       * @param value The bytes for returnType to set.
-       * @return This builder for chaining.
-       */
-      public Builder setReturnTypeBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
-        returnType_ = value;
-        bitField0_ |= 0x00000002;
-        onChanged();
-        return this;
-      }
-
       private Object errorMessage_ = "";
       /**
-       * <code>string errorMessage = 3;</code>
+       * <code>string errorMessage = 2;</code>
        * @return The errorMessage.
        */
       public String getErrorMessage() {
@@ -709,7 +525,7 @@ public final class RpcResponseOuterClass {
         }
       }
       /**
-       * <code>string errorMessage = 3;</code>
+       * <code>string errorMessage = 2;</code>
        * @return The bytes for errorMessage.
        */
       public com.google.protobuf.ByteString
@@ -726,7 +542,7 @@ public final class RpcResponseOuterClass {
         }
       }
       /**
-       * <code>string errorMessage = 3;</code>
+       * <code>string errorMessage = 2;</code>
        * @param value The errorMessage to set.
        * @return This builder for chaining.
        */
@@ -734,22 +550,22 @@ public final class RpcResponseOuterClass {
           String value) {
         if (value == null) { throw new NullPointerException(); }
         errorMessage_ = value;
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
       /**
-       * <code>string errorMessage = 3;</code>
+       * <code>string errorMessage = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearErrorMessage() {
         errorMessage_ = getDefaultInstance().getErrorMessage();
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
       /**
-       * <code>string errorMessage = 3;</code>
+       * <code>string errorMessage = 2;</code>
        * @param value The bytes for errorMessage to set.
        * @return This builder for chaining.
        */
@@ -758,7 +574,7 @@ public final class RpcResponseOuterClass {
         if (value == null) { throw new NullPointerException(); }
         checkByteStringIsUtf8(value);
         errorMessage_ = value;
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -841,10 +657,9 @@ public final class RpcResponseOuterClass {
   static {
     String[] descriptorData = {
       "\n\021RpcResponse.proto\022\037cn.jiuyou2020.seria" +
-      "lize.message\"L\n\020RpcResponseProto\022\016\n\006resu" +
-      "lt\030\001 \001(\014\022\022\n\nreturnType\030\002 \001(\t\022\024\n\014errorMes" +
-      "sage\030\003 \001(\tB\027B\025RpcResponseOuterClassb\006pro" +
-      "to3"
+      "lize.message\"8\n\020RpcResponseProto\022\016\n\006resu" +
+      "lt\030\001 \001(\014\022\024\n\014errorMessage\030\002 \001(\tB\027B\025RpcRes" +
+      "ponseOuterClassb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -855,7 +670,7 @@ public final class RpcResponseOuterClass {
     internal_static_cn_jiuyou2020_serialize_message_RpcResponseProto_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_cn_jiuyou2020_serialize_message_RpcResponseProto_descriptor,
-        new String[] { "Result", "ReturnType", "ErrorMessage", });
+        new String[] { "Result", "ErrorMessage", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

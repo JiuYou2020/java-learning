@@ -12,8 +12,10 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import jakarta.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 
@@ -22,6 +24,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class NettyServer implements EnvironmentAware {
+    @Resource
+    private ApplicationContext applicationContext;
+
     private int port;
     private Environment environment;
     private static final Log LOG = LogFactory.getLog(NettyServer.class);
@@ -64,7 +69,7 @@ public class NettyServer implements EnvironmentAware {
                 public void initChannel(SocketChannel ch) {
                     ch.pipeline().addLast(new RpcDecoder());
                     ch.pipeline().addLast(new RpcEncoder());
-                    ch.pipeline().addLast(new ServerHandler(new ReflectionCall()));
+                    ch.pipeline().addLast(new ServerHandler(new ReflectionCall(applicationContext)));
                 }
             });
 

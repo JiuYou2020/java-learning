@@ -1,7 +1,5 @@
 package cn.jiuyou2020.serialize.message;
 
-import cn.jiuyou2020.serialize.SerializationType;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,13 +8,13 @@ import java.util.Map;
  * @description:
  */
 public abstract class RpcRequest {
-    private static final Map<SerializationType, RpcRequest> map = new HashMap<>();
+    private static final Map<Integer, RpcRequest> map = new HashMap<>();
 
-    public static void addRpcRequest(SerializationType type, RpcRequest request) {
+    public static void addRpcRequest(Integer type, RpcRequest request) {
         map.put(type, request);
     }
 
-    public static RpcRequest getRpcRequest(SerializationType serializationType) {
+    public static RpcRequest getRpcRequest(Integer serializationType) {
         return map.get(serializationType);
     }
 
@@ -28,5 +26,4 @@ public abstract class RpcRequest {
 
     public abstract <T> T getParameterTypes();
 
-    public abstract <T> T getReturnType();
 }

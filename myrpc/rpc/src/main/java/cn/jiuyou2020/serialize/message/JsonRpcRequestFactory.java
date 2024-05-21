@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
  * @author: jiuyou2020
  * @description:
  */
-public class RpcRequestJsonFactory extends RpcRequestFactory {
+public class JsonRpcRequestFactory extends RpcRequestFactory {
     public RpcRequest createRpcRequest(Method method, Object[] args, FeignClientFactoryBean clientFactoryBean) {
         JsonRpcRequest rpcRequest = new JsonRpcRequest();
         String className = clientFactoryBean.getType().getName();
@@ -17,7 +17,6 @@ public class RpcRequestJsonFactory extends RpcRequestFactory {
         rpcRequest.setMethodName(methodName);
         rpcRequest.setParameterTypes(method.getParameterTypes());
         rpcRequest.setParameters(args);
-        rpcRequest.setReturnType(method.getReturnType());
         return rpcRequest;
     }
 }

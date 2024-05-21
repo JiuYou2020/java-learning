@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @date 2024/4/24 下午8:19
  */
 @RemoteService(url = "http://localhost:8083", name = "demo")
-public interface StockApi {
+public interface StockService {
     @GetMapping("/testGetParam")
     String testGetParam(String stockId, int num);
 

@@ -10,17 +10,17 @@ import java.util.Map;
  * 序列化外观类, 用于封装序列化策略，对外提供序列化和反序列化方法
  */
 public class SerializationFacade {
-    private static final Map<SerializationType, SerializationStrategy> map = new HashMap<>();
+    private static final Map<Integer, SerializationStrategy> map = new HashMap<>();
 
     public SerializationFacade() {
-        addStrategy(SerializationType.JSON, new JsonSerializationStrategy());
+        addStrategy(SerializationType.JSON.getValue(), new JsonSerializationStrategy());
     }
 
-    public static void addStrategy(SerializationType type, SerializationStrategy strategy) {
+    public static void addStrategy(Integer type, SerializationStrategy strategy) {
         map.put(type, strategy);
     }
 
-    public static SerializationStrategy getStrategy(SerializationType type) {
+    public static SerializationStrategy getStrategy(Integer type) {
         return map.get(type);
     }
 

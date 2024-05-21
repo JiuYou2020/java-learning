@@ -13,6 +13,9 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        if (!(msg instanceof RpcMessage)) {
+            return;
+        }
         if (promise != null) {
             response = (RpcMessage) msg;
             promise.setSuccess();
@@ -25,10 +28,10 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {
             // 发送心跳消息
-            System.out.println("Sending heartbeat");
-            ctx.writeAndFlush("HEARTBEAT");
+//            System.out.println("Sending heartbeat");
+//            ctx.writeAndFlush("HEARTBEAT");
         } else {
-            super.userEventTriggered(ctx, evt);
+//            super.userEventTriggered(ctx, evt);
         }
     }
 

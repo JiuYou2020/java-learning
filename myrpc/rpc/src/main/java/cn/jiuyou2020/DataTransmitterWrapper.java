@@ -6,7 +6,7 @@ import cn.jiuyou2020.serialize.SerializationFacade;
 import cn.jiuyou2020.serialize.SerializationType;
 import cn.jiuyou2020.serialize.message.RpcRequest;
 import cn.jiuyou2020.serialize.message.RpcRequestFactory;
-import cn.jiuyou2020.serialize.message.RpcResponseOuterClass;
+import cn.jiuyou2020.serialize.message.RpcResponse;
 
 import java.lang.reflect.Method;
 
@@ -15,17 +15,20 @@ import java.lang.reflect.Method;
  * @description: 负责组织数据的序列化，传输和初始化
  */
 public class DataTransmitterWrapper {
-    private SerializationType serializationType;
+    private int serializationType;
 
     public Object executeDataTransmit(Method method, Object[] args, FeignClientFactoryBean clientFactoryBean) throws Exception {
-        serializationType = PropertyContext.getSerializationType();
+        serializationType = PropertyContext.getSerializationType().getValue();
         //执行序列化
         byte[] serialize = executeSerialize(method, args, clientFactoryBean);
         //进行数据传输
         NettyClient nettyClient = new NettyClient();
         byte[] receivedData = nettyClient.connect(clientFactoryBean.getUrl(), serialize);
-        RpcResponseOuterClass.RpcResponseProto rpcResponse = RpcResponseOuterClass.RpcResponseProto.parseFrom(receivedData);
-        return SerializationFacade.getStrategy(serializationType).deserialize(rpcResponse.getResult().toByteArray(), method.getReturnType());
+        //执行反序列化
+        RpcResponse response = SerializationFacade.getStrategy(serializationType)
+                .deserialize(receivedData, RpcResponse.getRpcResponse(serializationType).getClass());
+        Object result = response.getResult();
+        return result;
     }
 
     /**
@@ -34,8 +37,8 @@ public class DataTransmitterWrapper {
     private byte[] executeSerialize(Method method, Object[] args, FeignClientFactoryBean clientFactoryBean) throws Exception {
         RpcRequest rpcRequest;
         SerializationType type = PropertyContext.getSerializationType();
-        rpcRequest = RpcRequestFactory.getFactory(type).createRpcRequest(method, args, clientFactoryBean);
-        return SerializationFacade.getStrategy(type).serialize(rpcRequest);
+        rpcRequest = RpcRequestFactory.getFactory(type.getValue()).createRpcRequest(method, args, clientFactoryBean);
+        return SerializationFacade.getStrategy(type.getValue()).serialize(rpcRequest);
     }
 
 }

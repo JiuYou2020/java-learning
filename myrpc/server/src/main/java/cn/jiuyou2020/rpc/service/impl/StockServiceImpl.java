@@ -1,6 +1,6 @@
 package cn.jiuyou2020.rpc.service.impl;
 
-import cn.jiuyou2020.rpc.apis.StockApi;
+import cn.jiuyou2020.rpc.apis.StockService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  * @date 2024/4/24 下午8:09
  */
 @Service
-public class StockServiceImpl implements StockApi {
+public class StockServiceImpl implements StockService {
     @Override
     public String testGetParam(String stockId, int num) {
         return "6666666";

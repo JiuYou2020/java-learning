@@ -34,17 +34,11 @@ public class ProtobufRpcRequest extends RpcRequest {
         return parametersList.stream().map(ByteString::toByteArray).toList();
     }
 
-
-    @Override
-    public String getReturnType() {
-        return "";
-    }
-
     public byte[] toByteArray() {
         return requestProto.toByteArray();
     }
 
     public static ProtobufRpcRequest parseFrom(byte[] data) throws InvalidProtocolBufferException {
-        return new ProtobufRpcRequest(RpcRequestOuterClass.RpcRequestProto.parseFrom(data));
+        return new ProtobufRpcRequest(RpcRequestProto.parseFrom(data));
     }
 }

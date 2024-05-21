@@ -3,6 +3,7 @@ package cn.jiuyou2020.serialize.message;
 import cn.jiuyou2020.proxy.FeignClientFactoryBean;
 import cn.jiuyou2020.serialize.SerializationFacade;
 import cn.jiuyou2020.serialize.SerializationType;
+import cn.jiuyou2020.serialize.message.RpcRequestOuterClass.RpcRequestProto;
 
 import java.lang.reflect.Method;
 
@@ -10,11 +11,11 @@ import java.lang.reflect.Method;
  * @author: jiuyou2020
  * @description:
  */
-public class RpcRequestProtoFactory extends RpcRequestFactory {
+public class ProtobufRpcRequestFactory extends RpcRequestFactory {
 
     @Override
     public RpcRequest createRpcRequest(Method method, Object[] args, FeignClientFactoryBean clientFactoryBean) throws Exception {
-        RpcRequestOuterClass.RpcRequestProto.Builder requestBuilder = RpcRequestOuterClass.RpcRequestProto.newBuilder();
+        RpcRequestProto.Builder requestBuilder = RpcRequestProto.newBuilder();
         String className = clientFactoryBean.getType().getName();
         String methodName = method.getName();
         requestBuilder.setClassName(className);
@@ -24,7 +25,7 @@ public class RpcRequestProtoFactory extends RpcRequestFactory {
         }
         if (args != null) {
             for (Object arg : args) {
-                byte[] serialize = SerializationFacade.getStrategy(SerializationType.JSON).serialize(arg);
+                byte[] serialize = SerializationFacade.getStrategy(SerializationType.JSON.getValue()).serialize(arg);
                 requestBuilder.addParameters(com.google.protobuf.ByteString.copyFrom(serialize));
             }
         }
