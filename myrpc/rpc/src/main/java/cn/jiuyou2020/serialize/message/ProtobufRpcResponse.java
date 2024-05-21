@@ -1,9 +1,9 @@
 package cn.jiuyou2020.serialize.message;
 
+import cn.jiuyou2020.serialize.SerializationFacade;
+import cn.jiuyou2020.serialize.SerializationType;
 import cn.jiuyou2020.serialize.message.RpcResponseOuterClass.RpcResponseProto;
 import com.google.protobuf.InvalidProtocolBufferException;
-
-import java.util.List;
 
 /**
  * @author: jiuyou2020
@@ -18,8 +18,15 @@ public class ProtobufRpcResponse extends RpcResponse {
         this.responseProto = responseProto;
     }
 
-    public byte[] getResult() {
-        return result;
+    public Object getResult() throws Exception {
+        byte[] byteArray = responseProto.getResult().toByteArray();
+        return SerializationFacade.getStrategy(SerializationType.JSON.getValue()).deserialize(byteArray, Object.class);
+    }
+
+    @Override
+    public Object getResult(Class<?> returnType) throws Exception {
+        byte[] byteArray = responseProto.getResult().toByteArray();
+        return SerializationFacade.getStrategy(SerializationType.JSON.getValue()).deserialize(byteArray, returnType);
     }
 
     public String getErrorMessage() {

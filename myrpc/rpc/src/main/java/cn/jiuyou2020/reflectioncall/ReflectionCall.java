@@ -24,8 +24,9 @@ public class ReflectionCall {
     }
 
     public Object call(RpcMessage rpcMessage) throws Exception {
+        byte serializationType = rpcMessage.getSerializationType();
         RpcRequest rpcRequest;
-        rpcRequest = deserialize(rpcMessage);
+        rpcRequest = deserialize(rpcMessage, serializationType);
         String className = rpcRequest.getClassName();
         String methodName = rpcRequest.getMethodName();
         Class<?>[] parameterTypes = rpcRequest.getParameterTypes();
@@ -45,9 +46,8 @@ public class ReflectionCall {
         return bean.getClass().getMethod(methodName, parameterTypes).invoke(bean, parameters);
     }
 
-    private RpcRequest deserialize(RpcMessage rpcMessage) throws Exception {
+    private RpcRequest deserialize(RpcMessage rpcMessage, int serializationType) throws Exception {
         byte[] data = rpcMessage.getBody();
-        byte serializationType = rpcMessage.getSerializationType();
         SerializationType type = SerializationType.getSerializationType(serializationType);
         RpcRequest rpcRequest = RpcRequest.getRpcRequest(type.getValue());
         Class<? extends RpcRequest> aClass = rpcRequest.getClass();

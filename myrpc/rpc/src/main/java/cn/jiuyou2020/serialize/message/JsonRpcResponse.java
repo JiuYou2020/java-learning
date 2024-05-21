@@ -9,7 +9,7 @@ public class JsonRpcResponse extends RpcResponse {
     private String errorMessage;
 
     @Override
-    public Object getResult() {
+    public Object getResult(Class<?> returnType) throws Exception {
         return result;
     }
 

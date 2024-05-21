@@ -1,5 +1,7 @@
 package cn.jiuyou2020.serialize.message;
 
+import cn.jiuyou2020.serialize.SerializationFacade;
+import cn.jiuyou2020.serialize.SerializationType;
 import cn.jiuyou2020.serialize.message.RpcRequestOuterClass.RpcRequestProto;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -8,6 +10,7 @@ import java.util.List;
 
 public class ProtobufRpcRequest extends RpcRequest {
     private RpcRequestProto requestProto;
+    private Class<?>[] parameterTypes;
 
     public ProtobufRpcRequest(RpcRequestProto requestProto) {
         this.requestProto = requestProto;
@@ -24,14 +27,74 @@ public class ProtobufRpcRequest extends RpcRequest {
     }
 
     @Override
-    public String[] getParameterTypes() {
-        return requestProto.getParameterTypesList().toArray(new String[0]);
+    public Class<?>[] getParameterTypes() throws ClassNotFoundException {
+        if (parameterTypes != null) {
+            return parameterTypes;
+        }
+        List<String> parameterTypesList = requestProto.getParameterTypesList();
+        Class<?>[] classes = new Class<?>[parameterTypesList.size()];
+        getTypes(parameterTypesList, classes);
+        parameterTypes = classes;
+        return classes;
     }
 
     @Override
-    public List<byte[]> getParameters() {
+    public Object[] getParameters() throws Exception {
         List<ByteString> parametersList = requestProto.getParametersList();
-        return parametersList.stream().map(ByteString::toByteArray).toList();
+        Object[] objects = new Object[parametersList.size()];
+        getParams(parametersList, objects);
+        return objects;
+    }
+
+    private static void getTypes(List<String> parameterTypesList, Class<?>[] classes) throws ClassNotFoundException {
+        for (int i = 0; i < parameterTypesList.size(); i++) {
+            //如果是基本类型，直接获取对应的Class对象
+            switch (parameterTypesList.get(i)) {
+                case "int" -> {
+                    classes[i] = int.class;
+                    continue;
+                }
+                case "long" -> {
+                    classes[i] = long.class;
+                    continue;
+                }
+                case "short" -> {
+                    classes[i] = short.class;
+                    continue;
+                }
+                case "byte" -> {
+                    classes[i] = byte.class;
+                    continue;
+                }
+                case "float" -> {
+                    classes[i] = float.class;
+                    continue;
+                }
+                case "double" -> {
+                    classes[i] = double.class;
+                    continue;
+                }
+                case "boolean" -> {
+                    classes[i] = boolean.class;
+                    continue;
+                }
+                case "char" -> {
+                    classes[i] = char.class;
+                    continue;
+                }
+            }
+            classes[i] = Class.forName(parameterTypesList.get(i));
+        }
+    }
+
+
+    private void getParams(List<ByteString> parametersList, Object[] objects) throws Exception {
+        if (parameterTypes == null) {
+            getParameterTypes();
+        }
+        for (int i = 0; i < parametersList.size(); i++) {
+            objects[i] = SerializationFacade.getStrategy(SerializationType.JSON.getValue()).deserialize(parametersList.get(i).toByteArray(), parameterTypes[i]);
+        }
     }
 
     public byte[] toByteArray() {

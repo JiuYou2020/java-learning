@@ -21,7 +21,7 @@ public abstract class RpcResponse {
         return map.get(serializationType);
     }
 
-    public abstract <T> T getResult();
+    public abstract Object getResult(Class<?> returnType) throws Exception;
 
     public abstract String getErrorMessage();
 }

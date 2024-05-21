@@ -35,7 +35,7 @@ public class PropertyContext implements EnvironmentAware {
                 throw new IllegalArgumentException("不支持的序列化类型：" + type);
             }
         } else {
-            serializationType = SerializationType.JSON;
+            serializationType = SerializationType.PROTOBUF;
         }
         return serializationType;
     }

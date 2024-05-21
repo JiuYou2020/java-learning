@@ -23,6 +23,11 @@ public class AutoConfigurationConfig {
     @PostConstruct
     public void registerJsonStrategy() {
         SerializationFacade.addStrategy(SerializationType.JSON.getValue(), new JsonSerializationStrategy());
+    }
+
+    @PostConstruct
+    @ConditionalOnProperty(name = "rpc.serialization.type", havingValue = "json")
+    public void registerJsonRequest() {
         RpcRequestFactory.addFactory(SerializationType.JSON.getValue(), new JsonRpcRequestFactory());
         RpcRequest.addRpcRequest(SerializationType.JSON.getValue(), new JsonRpcRequest());
         RpcResponseFactory.addFactory(SerializationType.JSON.getValue(), new JsonRpcResponseFactory());

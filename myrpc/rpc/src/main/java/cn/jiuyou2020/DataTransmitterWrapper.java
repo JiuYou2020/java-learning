@@ -3,7 +3,6 @@ package cn.jiuyou2020;
 import cn.jiuyou2020.nettransmit.NettyClient;
 import cn.jiuyou2020.proxy.FeignClientFactoryBean;
 import cn.jiuyou2020.serialize.SerializationFacade;
-import cn.jiuyou2020.serialize.SerializationType;
 import cn.jiuyou2020.serialize.message.RpcRequest;
 import cn.jiuyou2020.serialize.message.RpcRequestFactory;
 import cn.jiuyou2020.serialize.message.RpcResponse;
@@ -27,8 +26,7 @@ public class DataTransmitterWrapper {
         //执行反序列化
         RpcResponse response = SerializationFacade.getStrategy(serializationType)
                 .deserialize(receivedData, RpcResponse.getRpcResponse(serializationType).getClass());
-        Object result = response.getResult();
-        return result;
+        return response.getResult(method.getReturnType());
     }
 
     /**
@@ -36,9 +34,8 @@ public class DataTransmitterWrapper {
      */
     private byte[] executeSerialize(Method method, Object[] args, FeignClientFactoryBean clientFactoryBean) throws Exception {
         RpcRequest rpcRequest;
-        SerializationType type = PropertyContext.getSerializationType();
-        rpcRequest = RpcRequestFactory.getFactory(type.getValue()).createRpcRequest(method, args, clientFactoryBean);
-        return SerializationFacade.getStrategy(type.getValue()).serialize(rpcRequest);
+        rpcRequest = RpcRequestFactory.getFactory(serializationType).createRpcRequest(method, args, clientFactoryBean);
+        return SerializationFacade.getStrategy(serializationType).serialize(rpcRequest);
     }
 
 }

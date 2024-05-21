@@ -22,8 +22,8 @@ public abstract class RpcRequest {
 
     public abstract String getMethodName();
 
-    public abstract <T> T getParameters();
+    public abstract <T> T getParameters() throws Exception;
 
-    public abstract <T> T getParameterTypes();
+    public abstract <T> T getParameterTypes() throws ClassNotFoundException;
 
 }
