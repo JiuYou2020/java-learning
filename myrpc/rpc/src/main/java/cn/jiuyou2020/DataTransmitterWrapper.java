@@ -6,6 +6,7 @@ import cn.jiuyou2020.serialize.SerializationFacade;
 import cn.jiuyou2020.serialize.message.RpcRequest;
 import cn.jiuyou2020.serialize.message.RpcRequestFactory;
 import cn.jiuyou2020.serialize.message.RpcResponse;
+import cn.jiuyou2020.serialize.strategy.SerializationStrategy;
 
 import java.lang.reflect.Method;
 
@@ -16,15 +17,16 @@ import java.lang.reflect.Method;
 public class DataTransmitterWrapper {
 
     public Object executeDataTransmit(Method method, Object[] args, FeignClientFactoryBean clientFactoryBean) throws Exception {
-        int serializationType = PropertyContext.getSerializationType().getValue();
+        int serializationType = EnvContext.getSerializationType().getValue();
         //执行序列化
         RpcRequest rpcRequest = RpcRequestFactory.getFactory(serializationType).createRpcRequest(method, args, clientFactoryBean);
-        byte[] serialize = SerializationFacade.getStrategy(serializationType).serialize(rpcRequest);
+        SerializationStrategy strategy = SerializationFacade.getStrategy(serializationType);
+        byte[] serialize = strategy.serialize(rpcRequest);
         //进行数据传输
         MessageSender messageSender = new MessageSender();
         byte[] receivedData = messageSender.connect(clientFactoryBean.getUrl(), serialize);
         //执行反序列化
-        RpcResponse rpcResponse = SerializationFacade.getStrategy(serializationType)
+        RpcResponse rpcResponse = strategy
                 .deserialize(receivedData, RpcResponse.getRpcResponse(serializationType).getClass());
         return rpcResponse.getResult(method.getReturnType());
     }

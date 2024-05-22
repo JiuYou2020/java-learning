@@ -1,6 +1,6 @@
 package cn.jiuyou2020.nettransmit;
 
-import cn.jiuyou2020.PropertyContext;
+import cn.jiuyou2020.EnvContext;
 import cn.jiuyou2020.nettransmit.protocolencoding.RpcMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -17,7 +17,7 @@ public class ServerExceptionHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         // 构建异常消息
-        int value = PropertyContext.getSerializationType().getValue();
+        int value = EnvContext.getSerializationType().getValue();
         byte[] bytes = cause.getMessage().getBytes();
 
         RpcMessage rpcMessage = new RpcMessage.Builder()

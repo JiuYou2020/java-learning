@@ -13,8 +13,10 @@ import cn.jiuyou2020.serialize.message.json.JsonRpcResponseFactory;
 import cn.jiuyou2020.serialize.message.protobuf.*;
 import cn.jiuyou2020.serialize.strategy.JsonSerializationStrategy;
 import cn.jiuyou2020.serialize.strategy.ProtobufSerializationStrategy;
-import jakarta.annotation.PostConstruct;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author: jiuyou2020
@@ -27,10 +29,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
  * RpcResponse.addRpcResponse(SerializationType.PROTOBUF.getValue(), new ProtobufRpcResponse(RpcResponseOuterClass.RpcResponseProto.newBuilder().build()));
  * </pre>
  */
+@Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties({RpcProperties.class})
 public class AutoConfigurationConfig {
 
-    @PostConstruct
-    @ConditionalOnProperty(name = "rpc.serialization.type", havingValue = "protobuf", matchIfMissing = true)
+    @Bean
+    @ConditionalOnProperty(name = "rpc.type", havingValue = "protobuf")
     public void registerProtobufStrategy() {
         SerializationFacade.addStrategy(SerializationType.PROTOBUF.getValue(), new ProtobufSerializationStrategy());
         RpcRequestFactory.addFactory(SerializationType.PROTOBUF.getValue(), new ProtobufRpcRequestFactory());
@@ -39,13 +43,13 @@ public class AutoConfigurationConfig {
         RpcResponse.addRpcResponse(SerializationType.PROTOBUF.getValue(), new ProtobufRpcResponse(RpcResponseOuterClass.RpcResponseProto.newBuilder().build()));
     }
 
-    @PostConstruct
+    @Bean
     public void registerJsonStrategy() {
         SerializationFacade.addStrategy(SerializationType.JSON.getValue(), new JsonSerializationStrategy());
     }
 
-    @PostConstruct
-    @ConditionalOnProperty(name = "rpc.serialization.type", havingValue = "json")
+    @Bean
+    @ConditionalOnProperty(name = "rpc.type", havingValue = "json", matchIfMissing = true)
     public void registerJsonRequest() {
         RpcRequestFactory.addFactory(SerializationType.JSON.getValue(), new JsonRpcRequestFactory());
         RpcRequest.addRpcRequest(SerializationType.JSON.getValue(), new JsonRpcRequest());

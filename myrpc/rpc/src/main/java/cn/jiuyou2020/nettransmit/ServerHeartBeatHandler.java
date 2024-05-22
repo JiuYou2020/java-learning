@@ -1,6 +1,6 @@
 package cn.jiuyou2020.nettransmit;
 
-import cn.jiuyou2020.PropertyContext;
+import cn.jiuyou2020.EnvContext;
 import cn.jiuyou2020.nettransmit.protocolencoding.RpcMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -22,7 +22,7 @@ public class ServerHeartBeatHandler extends ChannelInboundHandlerAdapter {
         if (rpcMessage.isHeartbeat()) {
             LOG.info("收到心跳消息" + rpcMessage);
             RpcMessage heartbeatMessage = new RpcMessage.Builder()
-                    .setSerializationType((byte) PropertyContext.getSerializationType().getValue())
+                    .setSerializationType((byte) EnvContext.getSerializationType().getValue())
                     .setIsHeartbeat(true)
                     .setIsOneWay(true)
                     .setIsResponse(true)

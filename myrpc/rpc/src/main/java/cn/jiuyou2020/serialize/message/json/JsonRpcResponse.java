@@ -10,6 +10,9 @@ public class JsonRpcResponse extends RpcResponse {
     private Object result;
     private String errorMessage;
 
+    public JsonRpcResponse() {
+    }
+
     @Override
     public Object getResult(Class<?> returnType) {
         return result;

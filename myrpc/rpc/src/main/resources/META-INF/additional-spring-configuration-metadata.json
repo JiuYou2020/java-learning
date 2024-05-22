@@ -1,0 +1,22 @@
+{
+  "groups": [
+  ],
+  "properties": [
+    {
+      "name": "rpc.port",
+      "type": "java.lang.Integer",
+      "description": "The port to listen on for RPC requests.",
+      "defaultValue": "9099"
+    },
+    {
+      "name": "rpc.type",
+      "type": "java.lang.String",
+      "description": "The type of RPC to use.  Currently 'json' or 'protobuf' is supported.",
+      "defaultValue": "json",
+      "validValues": [
+        "json",
+        "protobuf"
+      ]
+    }
+  ]
+}

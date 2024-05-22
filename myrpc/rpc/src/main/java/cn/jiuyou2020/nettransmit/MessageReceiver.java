@@ -1,5 +1,6 @@
 package cn.jiuyou2020.nettransmit;
 
+import cn.jiuyou2020.EnvContext;
 import cn.jiuyou2020.nettransmit.protocolencoding.RpcDecoder;
 import cn.jiuyou2020.nettransmit.protocolencoding.RpcEncoder;
 import cn.jiuyou2020.reflectioncall.ReflectionCall;
@@ -12,16 +13,11 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.core.env.Environment;
 
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,29 +25,10 @@ import java.util.concurrent.Executors;
  * @author: jiuyou2020
  * @description: 客户端心跳处理器，用于处理客户端的心跳消息，如果是异常消息，直接调用下一个处理器
  */
-public class MessageReceiver implements EnvironmentAware {
+public class MessageReceiver {
     private static final Log LOG = LogFactory.getLog(MessageReceiver.class);
     @Resource
     private ApplicationContext applicationContext;
-
-    private int port;
-    private Environment environment;
-
-    /**
-     * 设置port属性，从配置文件中获取
-     */
-    @PostConstruct
-    private void setPort() {
-        if (!environment.containsProperty("rpc.port")) {
-            throw new IllegalArgumentException("rpc.port 必须设置");
-        }
-        Integer serverPort = environment.getProperty("server.port", Integer.class);
-        Integer property = environment.getProperty("rpc.port", Integer.class);
-        if (Objects.equals(serverPort, property)) {
-            throw new IllegalArgumentException("rpc.port 必须与 server.port 不同");
-        }
-        port = Objects.requireNonNull(property);
-    }
 
     /**
      * 在新线程中启动Netty服务器，以免阻塞Spring Boot的主线程
@@ -83,13 +60,14 @@ public class MessageReceiver implements EnvironmentAware {
                 public void initChannel(SocketChannel ch) {
                     ch.pipeline().addLast(new RpcDecoder());
                     ch.pipeline().addLast(new RpcEncoder());
-                    ch.pipeline().addLast(new ServerBusinessHandler(new ReflectionCall(applicationContext)));
+                    ch.pipeline().addLast(new ServerBusinessHandler(new ReflectionCall()));
                     ch.pipeline().addLast(new ServerHeartBeatHandler());
                     ch.pipeline().addLast(new ServerExceptionHandler());
                 }
             });
 
             // 启动服务器
+            int port = EnvContext.getPort();
             LOG.info("Netty 服务启动成功： " + port);
             b.bind(port).sync().channel().closeFuture().sync();
 
@@ -97,10 +75,5 @@ public class MessageReceiver implements EnvironmentAware {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
-    }
-
-    @Override
-    public void setEnvironment(@Nonnull Environment environment) {
-        this.environment = environment;
     }
 }

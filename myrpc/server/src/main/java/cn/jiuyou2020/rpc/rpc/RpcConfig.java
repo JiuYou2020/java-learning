@@ -1,7 +1,6 @@
 package cn.jiuyou2020.rpc.rpc;
 
 import cn.jiuyou2020.nettransmit.MessageReceiver;
-import jakarta.annotation.Resource;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,13 +11,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RpcConfig {
-    @Resource
-    private MessageReceiver messageReceiver;
 
     @Bean
     public ApplicationRunner applicationRunner() {
         return args -> {
-            messageReceiver.run();
+            new MessageReceiver().run();
         };
     }
 }

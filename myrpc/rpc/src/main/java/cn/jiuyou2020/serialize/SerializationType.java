@@ -24,6 +24,15 @@ public enum SerializationType {
         return name;
     }
 
+    public static SerializationType getSerializationType(String value) {
+        for (SerializationType serializationType : SerializationType.values()) {
+            if (serializationType.getName().equals(value)) {
+                return serializationType;
+            }
+        }
+        throw new IllegalArgumentException("不支持的序列化类型：" + value);
+    }
+
     public static SerializationType getSerializationType(int value) {
         for (SerializationType serializationType : SerializationType.values()) {
             if (serializationType.getValue() == value) {

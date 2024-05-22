@@ -1,6 +1,6 @@
 package cn.jiuyou2020.nettransmit;
 
-import cn.jiuyou2020.PropertyContext;
+import cn.jiuyou2020.EnvContext;
 import cn.jiuyou2020.nettransmit.protocolencoding.RpcDecoder;
 import cn.jiuyou2020.nettransmit.protocolencoding.RpcEncoder;
 import cn.jiuyou2020.nettransmit.protocolencoding.RpcMessage;
@@ -36,8 +36,9 @@ public class MessageSender {
         try {
             Bootstrap bootstrap = getBootstrap(group);
             // 连接到服务器
-            URL parsedUrl = new URL(url);
-            ChannelFuture f = bootstrap.connect(parsedUrl.getHost(), parsedUrl.getPort()).sync();
+            String host = new URL(url).getHost();
+            int port = EnvContext.getPort();
+            ChannelFuture f = bootstrap.connect(host, port).sync();
 
             ClientBusinessHandler clientBusinessHandler = f.channel().pipeline().get(ClientBusinessHandler.class);
             ChannelPromise promise = getPromise(f, clientBusinessHandler);
@@ -67,7 +68,7 @@ public class MessageSender {
     private static void sendMessage(byte[] serializedData, ChannelFuture f) {
         // 构造一个RpcMessage对象
         RpcMessage message = new RpcMessage.Builder()
-                .setSerializationType((byte) PropertyContext.getSerializationType().getValue())
+                .setSerializationType((byte) EnvContext.getSerializationType().getValue())
                 .setIsHeartbeat(false)
                 .setIsOneWay(false)
                 .setIsResponse(false)

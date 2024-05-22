@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class StockServiceImpl implements StockService {
     @Override
     public String testGetParam(String stockId, int num) {
-        return "6666666";
+        return "Hello RPC";
     }
 
     @Override

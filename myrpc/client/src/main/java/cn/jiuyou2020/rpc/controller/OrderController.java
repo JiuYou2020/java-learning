@@ -36,13 +36,13 @@ public class OrderController {
     }
 
     //Delete，有一个参数
-    @DeleteMapping("/testDeleteParam")
+    @DeleteMapping("/testDeleteParam/{stockId}")
     public String testDeleteParam(@PathVariable String stockId) {
         return orderService.testDeleteParam(stockId);
     }
 
     //Put，有一个参数
-    @PutMapping("/testPut")
+    @PutMapping("/testPut/{stockId}")
     public String testPut(@PathVariable String stockId) {
         return orderService.testPut(stockId);
     }

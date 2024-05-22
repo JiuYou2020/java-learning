@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package cn.jiuyou2020.serialize.message;
+package cn.jiuyou2020.serialize.message.protobuf;
 option java_outer_classname = "RpcResponseOuterClass";
 
 message RpcResponseProto {
