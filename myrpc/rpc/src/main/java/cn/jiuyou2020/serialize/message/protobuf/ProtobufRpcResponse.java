@@ -8,12 +8,13 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 /**
  * @author: jiuyou2020
- * @description:
+ * @description: protobuf rpc响应
  */
+@SuppressWarnings("unused")
 public class ProtobufRpcResponse extends RpcResponse {
     private byte[] result;
     private String errorMessage;
-    private RpcResponseProto responseProto;
+    private final RpcResponseProto responseProto;
 
     public ProtobufRpcResponse(RpcResponseProto responseProto) {
         this.responseProto = responseProto;

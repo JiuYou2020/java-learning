@@ -9,7 +9,10 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+/**
+ * @author: jiuyou2020
+ * @description: 服务端业务处理器，用于处理服务端的业务逻辑，如果是心跳消息或者状态码不为0的消息，直接调用下一个处理器
+ */
 public class ServerBusinessHandler extends ChannelInboundHandlerAdapter {
     private static final Log LOG = LogFactory.getLog(ServerBusinessHandler.class);
     // 反射调用

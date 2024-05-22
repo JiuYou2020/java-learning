@@ -6,6 +6,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 /**
  * @author jiuyou2020
  * @description 远程服务注解
@@ -13,11 +14,13 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+@SuppressWarnings("unused")
 public @interface RemoteService {
     /**
      * The name of the service with optional protocol prefix. Synonym for {@link #name()
      * name}. A name must be specified for all clients, whether or not a url is provided.
      * Can be specified as property key, eg: ${propertyKey}.
+     *
      * @return the name of the service with optional protocol prefix
      */
     @AliasFor("name")
@@ -26,6 +29,7 @@ public @interface RemoteService {
     /**
      * This will be used as the bean name instead of name if present, but will not be used
      * as a service id.
+     *
      * @return bean name instead of name if present
      */
     String contextId() default "";
@@ -46,6 +50,7 @@ public @interface RemoteService {
      * @return an absolute URL or resolvable hostname (the protocol is optional).
      */
     String url() default "";
+
     /**
      * @return path prefix to be used by all method-level mappings.
      */

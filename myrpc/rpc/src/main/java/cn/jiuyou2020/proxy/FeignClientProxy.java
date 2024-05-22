@@ -6,6 +6,10 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+/**
+ * @author: jiuyou2020
+ * @description: 代理对象，用于调用远程方法
+ */
 @SuppressWarnings("unchecked")
 public class FeignClientProxy implements InvocationHandler {
     private final FeignClientFactoryBean clientFactoryBean;

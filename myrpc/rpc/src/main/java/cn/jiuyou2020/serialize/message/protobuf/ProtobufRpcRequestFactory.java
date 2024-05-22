@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 
 /**
  * @author: jiuyou2020
- * @description:
+ * @description: protobuf rpc请求工厂,用于创建{@link ProtobufRpcRequest}
  */
 public class ProtobufRpcRequestFactory extends RpcRequestFactory {
 

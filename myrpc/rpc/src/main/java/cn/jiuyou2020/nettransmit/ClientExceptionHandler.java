@@ -9,7 +9,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * @author: jiuyou2020
- * @description:
+ * @description: 客户端异常处理器，用于处理客户端的异常消息
  */
 public class ClientExceptionHandler extends ChannelInboundHandlerAdapter {
     private static final Log LOG = LogFactory.getLog(ClientExceptionHandler.class);
@@ -17,7 +17,7 @@ public class ClientExceptionHandler extends ChannelInboundHandlerAdapter {
 
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (!(msg instanceof RpcMessage rpcMessage)) {
             return;
         }

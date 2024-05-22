@@ -7,11 +7,15 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * @author: jiuyou2020
+ * @description: 服务端心跳处理器，用于处理服务端的心跳消息
+ */
 public class ServerHeartBeatHandler extends ChannelInboundHandlerAdapter {
     private static final Log LOG = LogFactory.getLog(ServerHeartBeatHandler.class);
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (!(msg instanceof RpcMessage rpcMessage)) {
             return;
         }

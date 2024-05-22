@@ -4,8 +4,6 @@ import cn.jiuyou2020.nettransmit.protocolencoding.RpcMessage;
 import cn.jiuyou2020.serialize.SerializationFacade;
 import cn.jiuyou2020.serialize.SerializationType;
 import cn.jiuyou2020.serialize.message.RpcRequest;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -15,14 +13,19 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ReflectionCall {
-    private static final Log LOG = LogFactory.getLog(ReflectionCall.class);
-
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     public ReflectionCall(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
+    /**
+     * 反射调用
+     *
+     * @param rpcMessage rpc消息
+     * @return 返回结果
+     * @throws Exception 异常
+     */
     public Object call(RpcMessage rpcMessage) throws Exception {
         byte serializationType = rpcMessage.getSerializationType();
         RpcRequest rpcRequest;
@@ -35,10 +38,10 @@ public class ReflectionCall {
         Class<?> type = Class.forName(className);
         String[] beanNamesForType = applicationContext.getBeanNamesForType(type);
         if (beanNamesForType.length == 0) {
-            throw new RuntimeException("No implementation found for " + className);
+            throw new RuntimeException("未找到实现类 " + className);
         }
         if (beanNamesForType.length > 1) {
-            throw new RuntimeException("More than one implementation found for " + className);
+            throw new RuntimeException("实现类多于1个： " + className);
         }
         String beanName = beanNamesForType[0];
         Object bean = applicationContext.getBean(beanName);

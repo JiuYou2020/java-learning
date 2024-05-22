@@ -8,9 +8,12 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import java.util.List;
-
+/**
+ * @author: jiuyou2020
+ * @description: protobuf rpc请求
+ */
 public class ProtobufRpcRequest extends RpcRequest {
-    private RpcRequestProto requestProto;
+    private final RpcRequestProto requestProto;
     private Class<?>[] parameterTypes;
 
     public ProtobufRpcRequest(RpcRequestProto requestProto) {

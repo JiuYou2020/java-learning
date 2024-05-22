@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * @author: jiuyou2020
- * @description:
+ * @description: rpc响应工厂的抽象类，如果要实现新的序列化方式，需要继承此类，用于创建{@link RpcResponse}
  */
 public abstract class RpcResponseFactory {
     private static final Map<Integer, RpcResponseFactory> map = new HashMap<>();

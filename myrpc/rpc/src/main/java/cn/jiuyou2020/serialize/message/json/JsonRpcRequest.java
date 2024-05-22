@@ -4,7 +4,7 @@ import cn.jiuyou2020.serialize.message.RpcRequest;
 
 /**
  * @author: jiuyou2020
- * @description:
+ * @description: json rpc请求
  */
 public class JsonRpcRequest extends RpcRequest {
     String className;

@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 /**
  * @author: jiuyou2020
- * @description:
+ * @description: json rpc请求工厂,用于创建{@link JsonRpcRequest}
  */
 public class JsonRpcRequestFactory extends RpcRequestFactory {
     public RpcRequest createRpcRequest(Method method, Object[] args, FeignClientFactoryBean clientFactoryBean) {

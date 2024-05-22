@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * @author: jiuyou2020
- * @description:
+ * @description: rpc请求的抽象类，如果要实现新的序列化方式，需要继承此类
  */
 public abstract class RpcRequest {
     private static final Map<Integer, RpcRequest> map = new HashMap<>();

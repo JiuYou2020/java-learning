@@ -4,14 +4,14 @@ import cn.jiuyou2020.serialize.message.RpcResponse;
 
 /**
  * @author: jiuyou2020
- * @description:
+ * @description: json rpc响应
  */
 public class JsonRpcResponse extends RpcResponse {
     private Object result;
     private String errorMessage;
 
     @Override
-    public Object getResult(Class<?> returnType) throws Exception {
+    public Object getResult(Class<?> returnType) {
         return result;
     }
 

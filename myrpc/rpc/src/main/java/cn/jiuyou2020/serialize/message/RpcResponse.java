@@ -5,8 +5,9 @@ import java.util.Map;
 
 /**
  * @author: jiuyou2020
- * @description:
+ * @description: rpc响应的抽象类，如果要实现新的序列化方式，需要继承此类
  */
+@SuppressWarnings("unused")
 public abstract class RpcResponse {
     public static final String SUCCESS = "success";
     public static final String ERROR = "error";

@@ -1,6 +1,7 @@
 package cn.jiuyou2020.proxy;
 
 import cn.jiuyou2020.annonation.RemoteService;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -34,17 +35,17 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
     private Environment environment;
 
     @Override
-    public void setEnvironment(Environment environment) {
+    public void setEnvironment(@Nonnull Environment environment) {
         this.environment = environment;
     }
 
     @Override
-    public void setResourceLoader(ResourceLoader resourceLoader) {
+    public void setResourceLoader(@Nonnull ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
 
     @Override
-    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+    public void registerBeanDefinitions(@Nonnull AnnotationMetadata importingClassMetadata, @Nonnull BeanDefinitionRegistry registry) {
         registerRemoteServices(importingClassMetadata, registry);
     }
 
@@ -151,6 +152,7 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
      * @param attributes 注解属性
      * @return 完整的url
      */
+    @SuppressWarnings("all")
     private static Object getUrl(Map<String, Object> attributes) {
         String url;
         Object oUrl = attributes.get("url");
@@ -239,7 +241,7 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
         return new ClassPathScanningCandidateComponentProvider(false, this.environment) {
             @Override
             //是否有资格成为候选组件
-            protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
+            protected boolean isCandidateComponent(@Nonnull AnnotatedBeanDefinition beanDefinition) {
                 boolean isCandidate = false;
                 // 判断候选组件是否独立
                 if (beanDefinition.getMetadata().isIndependent()) {

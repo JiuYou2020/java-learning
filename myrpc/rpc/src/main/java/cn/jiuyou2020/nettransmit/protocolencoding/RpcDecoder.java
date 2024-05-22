@@ -10,6 +10,7 @@ import java.util.List;
  * @author: jiuyou2020
  * @description: 自定义协议解码器
  */
+@SuppressWarnings("unused")
 public class RpcDecoder extends ByteToMessageDecoder {
 
     /**
@@ -28,10 +29,9 @@ public class RpcDecoder extends ByteToMessageDecoder {
      * @param ctx the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
      * @param in  the {@link ByteBuf} from which to read data
      * @param out the {@link List} to which decoded messages should be added
-     * @throws Exception is thrown if an error occurs
      */
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         // 检查是否有足够的数据来读取消息头
         if (in.readableBytes() < RpcMessage.HEADER_SIZE) {
             return;

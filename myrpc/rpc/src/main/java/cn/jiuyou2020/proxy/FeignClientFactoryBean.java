@@ -1,6 +1,7 @@
 package cn.jiuyou2020.proxy;
 
 
+import jakarta.annotation.Nonnull;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
@@ -14,6 +15,10 @@ import org.springframework.util.Assert;
 
 import java.util.Objects;
 
+/**
+ * @author: jiuyou2020
+ * @description: Feign客户端工厂Bean，用于创建Feign客户端的代理Bean并注入到Spring容器中
+ */
 @SuppressWarnings("unused")
 public class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, ApplicationContextAware, BeanFactoryAware {
 
@@ -64,19 +69,14 @@ public class FeignClientFactoryBean implements FactoryBean<Object>, Initializing
     }
 
 
+    /**
+     * 创建 远程客户端 的代理对象
+     *
+     * @return 代理对象，会将它注入到Spring容器中，根据 {@link ProxyRegistrar}中定义的BeanDefinition的逻辑
+     */
     @Override
     public Object getObject() {
-        return getTarget();
-    }
-
-    /**
-     * @param <T> the target type of the Feign client
-     * @return a remote client created with the specified data and the context
-     * information
-     */
-    @SuppressWarnings("unchecked")
-    <T> T getTarget() {
-        return (T) FeignClientProxy.createProxy(type, this);
+        return FeignClientProxy.createProxy(type, this);
     }
 
     @Override
@@ -137,7 +137,7 @@ public class FeignClientFactoryBean implements FactoryBean<Object>, Initializing
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext context) throws BeansException {
+    public void setApplicationContext(@Nonnull ApplicationContext context) throws BeansException {
         applicationContext = context;
         beanFactory = context;
     }
@@ -173,7 +173,7 @@ public class FeignClientFactoryBean implements FactoryBean<Object>, Initializing
     }
 
     @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+    public void setBeanFactory(@Nonnull BeanFactory beanFactory) throws BeansException {
         this.beanFactory = beanFactory;
     }
 

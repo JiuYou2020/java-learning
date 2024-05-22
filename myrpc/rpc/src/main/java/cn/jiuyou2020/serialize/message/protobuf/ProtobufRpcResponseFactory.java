@@ -8,7 +8,7 @@ import cn.jiuyou2020.serialize.message.protobuf.RpcResponseOuterClass.RpcRespons
 
 /**
  * @author: jiuyou2020
- * @description:
+ * @description: protobuf rpc响应工厂,用于创建{@link ProtobufRpcResponse}
  */
 public class ProtobufRpcResponseFactory extends RpcResponseFactory {
 

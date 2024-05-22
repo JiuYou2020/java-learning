@@ -16,9 +16,21 @@ import org.apache.commons.logging.LogFactory;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-public class NettyClient {
-    private static final Log LOG = LogFactory.getLog(NettyServer.class);
+/**
+ * @author: jiuyou2020
+ * @description: 消息发送器, 用于与远程服务器建立连接并发送消息
+ */
+public class MessageSender {
+    private static final Log LOG = LogFactory.getLog(MessageReceiver.class);
 
+    /**
+     * 连接到服务器
+     *
+     * @param url            服务器地址
+     * @param serializedData 序列化后的数据
+     * @return 服务器返回的数据
+     * @throws Exception 连接异常
+     */
     public byte[] connect(String url, byte[] serializedData) throws Exception {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
@@ -46,6 +58,12 @@ public class NettyClient {
         }
     }
 
+    /**
+     * 构建并发送消息
+     *
+     * @param serializedData 序列化后的数据
+     * @param f              ChannelFuture对象
+     */
     private static void sendMessage(byte[] serializedData, ChannelFuture f) {
         // 构造一个RpcMessage对象
         RpcMessage message = new RpcMessage.Builder()
@@ -62,6 +80,13 @@ public class NettyClient {
         f.channel().writeAndFlush(message);
     }
 
+    /**
+     * 获取一个ChannelPromise对象，并给Handlers设置Promise
+     *
+     * @param f                     ChannelFuture对象
+     * @param clientBusinessHandler 客户端业务处理器
+     * @return ChannelPromise对象
+     */
     private static ChannelPromise getPromise(ChannelFuture f, ClientBusinessHandler clientBusinessHandler) {
         // 创建一个ChannelPromise对象，用于异步操作的通知
         ChannelPromise promise = f.channel().newPromise();
@@ -91,7 +116,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     // 当一个新的连接被接受时，这个方法会被调用
                     @Override
-                    public void initChannel(SocketChannel ch) throws Exception {
+                    public void initChannel(SocketChannel ch) {
                         // 向管道中添加一个IdleStateHandler，用于检测空闲状态
                         // readerIdleTime：读超时（毫秒），1000表示在1秒内没有读操作则触发readIdle事件
                         // writerIdleTime：写超时（毫秒），0表示不检测

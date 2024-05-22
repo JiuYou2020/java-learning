@@ -1,18 +1,22 @@
 package cn.jiuyou2020.nettransmit.protocolencoding;
 
+/**
+ * @author: jiuyou2020
+ * @description: 自定义协议消息, 用于netty传输消息
+ */
 public class RpcMessage {
     public static final short MAGIC = (short) 0xCAFEBABE;      //2 bytes
     public static final short HEADER_SIZE = 21;                //2 bytes
     public static final short VERSION = 1;                     //2 bytes
-    private byte serializationType;                     //1 byte //0是json序列化，1是protobuf序列化
-    private boolean isHeartbeat;                        //1 byte
-    private boolean isOneWay;                           //1 byte
-    private boolean isResponse;                         //1 byte
-    private byte statusCode;                            //1 byte
-    private short reserved;                             //2 bytes
-    private int messageId;                              //4 bytes
-    private int bodySize;                               //4 bytes
-    private byte[] body;                                //n bytes
+    private final byte serializationType;                     //1 byte //0是json序列化，1是protobuf序列化
+    private final boolean isHeartbeat;                        //1 byte
+    private final boolean isOneWay;                           //1 byte
+    private final boolean isResponse;                         //1 byte
+    private final byte statusCode;                            //1 byte
+    private final short reserved;                             //2 bytes
+    private final int messageId;                              //4 bytes
+    private final int bodySize;                               //4 bytes
+    private final byte[] body;                                //n bytes
 
     private RpcMessage(Builder builder) {
         this.serializationType = builder.serializationType;

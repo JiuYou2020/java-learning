@@ -12,6 +12,8 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,42 +25,54 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class NettyServer implements EnvironmentAware {
+/**
+ * @author: jiuyou2020
+ * @description: 客户端心跳处理器，用于处理客户端的心跳消息，如果是异常消息，直接调用下一个处理器
+ */
+public class MessageReceiver implements EnvironmentAware {
+    private static final Log LOG = LogFactory.getLog(MessageReceiver.class);
     @Resource
     private ApplicationContext applicationContext;
 
     private int port;
     private Environment environment;
-    private static final Log LOG = LogFactory.getLog(NettyServer.class);
 
-    public NettyServer() {
-    }
-
-    public void run() {
-        setPort();
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        // 在新线程中启动Netty服务器，以免阻塞Spring Boot的主线程
-        executorService.submit(() -> {
-            try {
-                startServer();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
+    /**
+     * 设置port属性，从配置文件中获取
+     */
+    @PostConstruct
     private void setPort() {
         if (!environment.containsProperty("rpc.port")) {
-            throw new IllegalArgumentException("rpc.port must be set");
+            throw new IllegalArgumentException("rpc.port 必须设置");
         }
         Integer serverPort = environment.getProperty("server.port", Integer.class);
         Integer property = environment.getProperty("rpc.port", Integer.class);
         if (Objects.equals(serverPort, property)) {
-            throw new IllegalArgumentException("rpc.port must be different from server.port");
+            throw new IllegalArgumentException("rpc.port 必须与 server.port 不同");
         }
         port = Objects.requireNonNull(property);
     }
 
+    /**
+     * 在新线程中启动Netty服务器，以免阻塞Spring Boot的主线程
+     */
+    public void run() {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(() -> {
+            try {
+                startServer();
+            } catch (Exception e) {
+                LOG.error("Netty服务启动失败", e);
+            }
+        });
+    }
+
+
+    /**
+     * 启动Netty服务器
+     *
+     * @throws InterruptedException 线程中断异常
+     */
     private void startServer() throws InterruptedException {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -76,7 +90,7 @@ public class NettyServer implements EnvironmentAware {
             });
 
             // 启动服务器
-            LOG.info("Netty server started on port " + port);
+            LOG.info("Netty 服务启动成功： " + port);
             b.bind(port).sync().channel().closeFuture().sync();
 
         } finally {
@@ -86,7 +100,7 @@ public class NettyServer implements EnvironmentAware {
     }
 
     @Override
-    public void setEnvironment(Environment environment) {
+    public void setEnvironment(@Nonnull Environment environment) {
         this.environment = environment;
     }
 }

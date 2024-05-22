@@ -1,6 +1,6 @@
 package cn.jiuyou2020.rpc.rpc;
 
-import cn.jiuyou2020.nettransmit.NettyServer;
+import cn.jiuyou2020.nettransmit.MessageReceiver;
 import jakarta.annotation.Resource;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -13,12 +13,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RpcConfig {
     @Resource
-    private NettyServer nettyServer;
+    private MessageReceiver messageReceiver;
 
     @Bean
     public ApplicationRunner applicationRunner() {
         return args -> {
-            nettyServer.run();
+            messageReceiver.run();
         };
     }
 }

@@ -21,6 +21,7 @@ public class ProtobufSerializationStrategy implements SerializationStrategy {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T deserialize(byte[] data, Class<T> clazz) throws Exception {
         if (ProtobufRpcRequest.class.isAssignableFrom(clazz)) {
             return (T) ProtobufRpcRequest.parseFrom(data);

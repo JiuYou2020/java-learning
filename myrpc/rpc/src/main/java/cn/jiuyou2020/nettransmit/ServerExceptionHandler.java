@@ -9,13 +9,13 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * @author: jiuyou2020
- * @description:
+ * @description: 服务端异常处理器，用于处理服务端的异常消息，发送给客户端异常消息，并关闭连接
  */
 public class ServerExceptionHandler extends ChannelInboundHandlerAdapter {
     private static final Log LOG = LogFactory.getLog(ServerExceptionHandler.class);
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         // 构建异常消息
         int value = PropertyContext.getSerializationType().getValue();
         byte[] bytes = cause.getMessage().getBytes();
