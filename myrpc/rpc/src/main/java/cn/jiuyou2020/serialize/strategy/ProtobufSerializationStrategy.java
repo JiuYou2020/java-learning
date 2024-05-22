@@ -1,7 +1,7 @@
 package cn.jiuyou2020.serialize.strategy;
 
-import cn.jiuyou2020.serialize.message.ProtobufRpcRequest;
-import cn.jiuyou2020.serialize.message.ProtobufRpcResponse;
+import cn.jiuyou2020.serialize.message.protobuf.ProtobufRpcRequest;
+import cn.jiuyou2020.serialize.message.protobuf.ProtobufRpcResponse;
 
 /**
  * @author: jiuyou2020

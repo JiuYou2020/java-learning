@@ -1,4 +1,6 @@
-package cn.jiuyou2020.serialize.message;
+package cn.jiuyou2020.serialize.message.json;
+
+import cn.jiuyou2020.serialize.message.RpcResponse;
 
 /**
  * @author: jiuyou2020

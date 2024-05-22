@@ -1,8 +1,9 @@
-package cn.jiuyou2020.serialize.message;
+package cn.jiuyou2020.serialize.message.protobuf;
 
 import cn.jiuyou2020.serialize.SerializationFacade;
 import cn.jiuyou2020.serialize.SerializationType;
-import cn.jiuyou2020.serialize.message.RpcRequestOuterClass.RpcRequestProto;
+import cn.jiuyou2020.serialize.message.RpcRequest;
+import cn.jiuyou2020.serialize.message.protobuf.RpcRequestOuterClass.RpcRequestProto;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 

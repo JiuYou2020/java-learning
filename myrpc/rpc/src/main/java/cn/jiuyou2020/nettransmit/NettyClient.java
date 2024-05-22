@@ -24,35 +24,51 @@ public class NettyClient {
         try {
             Bootstrap bootstrap = getBootstrap(group);
             // 连接到服务器
-            URL parsedUrl = new java.net.URL(url);
+            URL parsedUrl = new URL(url);
             ChannelFuture f = bootstrap.connect(parsedUrl.getHost(), parsedUrl.getPort()).sync();
-            // 创建一个ChannelPromise对象，用于异步操作的通知
-            ChannelPromise promise = f.channel().newPromise();
-            ClientHandler clientHandler = f.channel().pipeline().get(ClientHandler.class);
-            clientHandler.setPromise(promise);
-            // 构造一个RpcMessage对象
-            RpcMessage message = new RpcMessage.Builder()
-                    .setSerializationType((byte) PropertyContext.getSerializationType().getValue())
-                    .setIsHeartbeat(false)
-                    .setIsOneWay(false)
-                    .setIsResponse(false)
-                    .setStatusCode((byte) 0)
-                    .setMessageId(1)
-                    .setBodySize(serializedData.length)
-                    .setBody(serializedData)
-                    .build();
-            LOG.info("Sent message to server: " + message);
-            f.channel().writeAndFlush(message);
+
+            ClientBusinessHandler clientBusinessHandler = f.channel().pipeline().get(ClientBusinessHandler.class);
+            ChannelPromise promise = getPromise(f, clientBusinessHandler);
+
+            sendMessage(serializedData, f);
             // 等待异步操作完成
             promise.await();
             // 返回异步操作的结果
-            RpcMessage response = clientHandler.getResponse();
+            RpcMessage response = clientBusinessHandler.getResponse();
+            if (response == null) {
+                throw new RuntimeException("发生异常，未收到响应消息");
+            }
             // 等待连接关闭
             f.channel().closeFuture().sync();
             return response.getBody();
         } finally {
             group.shutdownGracefully();
         }
+    }
+
+    private static void sendMessage(byte[] serializedData, ChannelFuture f) {
+        // 构造一个RpcMessage对象
+        RpcMessage message = new RpcMessage.Builder()
+                .setSerializationType((byte) PropertyContext.getSerializationType().getValue())
+                .setIsHeartbeat(false)
+                .setIsOneWay(false)
+                .setIsResponse(false)
+                .setStatusCode((byte) 0)
+                .setMessageId(1)
+                .setBodySize(serializedData.length)
+                .setBody(serializedData)
+                .build();
+        LOG.info("发送数据消息: " + message);
+        f.channel().writeAndFlush(message);
+    }
+
+    private static ChannelPromise getPromise(ChannelFuture f, ClientBusinessHandler clientBusinessHandler) {
+        // 创建一个ChannelPromise对象，用于异步操作的通知
+        ChannelPromise promise = f.channel().newPromise();
+        clientBusinessHandler.setPromise(promise);
+        f.channel().pipeline().get(ClientHeartBeatHandler.class).setPromise(promise);
+        f.channel().pipeline().get(ClientExceptionHandler.class).setPromise(promise);
+        return promise;
     }
 
     /**
@@ -77,14 +93,16 @@ public class NettyClient {
                     @Override
                     public void initChannel(SocketChannel ch) throws Exception {
                         // 向管道中添加一个IdleStateHandler，用于检测空闲状态
-                        // readerIdleTime：读超时（秒），0表示不检测
-                        // writerIdleTime：写超时（秒），4秒内没有写操作则触发IdleStateEvent
-                        // allIdleTime：读或写超时（秒），0表示不检测
-                        ch.pipeline().addLast(new IdleStateHandler(0, 4, 0, TimeUnit.SECONDS));
+                        // readerIdleTime：读超时（毫秒），1000表示在1秒内没有读操作则触发readIdle事件
+                        // writerIdleTime：写超时（毫秒），0表示不检测
+                        // allIdleTime：读或写超时（毫秒），0表示不检测
+                        ch.pipeline().addLast(new IdleStateHandler(1000, 0, 0, TimeUnit.MILLISECONDS));
                         ch.pipeline().addLast(new RpcDecoder());
                         ch.pipeline().addLast(new RpcEncoder());
                         // 向管道中添加自定义的处理器ClientHandler，用于处理业务逻辑
-                        ch.pipeline().addLast(new ClientHandler());
+                        ch.pipeline().addLast(new ClientBusinessHandler());
+                        ch.pipeline().addLast(new ClientHeartBeatHandler());
+                        ch.pipeline().addLast(new ClientExceptionHandler());
                     }
                 });
         return bootstrap;

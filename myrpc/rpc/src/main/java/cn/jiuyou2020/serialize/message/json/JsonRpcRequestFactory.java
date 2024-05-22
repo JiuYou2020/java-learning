@@ -1,6 +1,8 @@
-package cn.jiuyou2020.serialize.message;
+package cn.jiuyou2020.serialize.message.json;
 
 import cn.jiuyou2020.proxy.FeignClientFactoryBean;
+import cn.jiuyou2020.serialize.message.RpcRequest;
+import cn.jiuyou2020.serialize.message.RpcRequestFactory;
 
 import java.lang.reflect.Method;
 

@@ -69,7 +69,9 @@ public class NettyServer implements EnvironmentAware {
                 public void initChannel(SocketChannel ch) {
                     ch.pipeline().addLast(new RpcDecoder());
                     ch.pipeline().addLast(new RpcEncoder());
-                    ch.pipeline().addLast(new ServerHandler(new ReflectionCall(applicationContext)));
+                    ch.pipeline().addLast(new ServerBusinessHandler(new ReflectionCall(applicationContext)));
+                    ch.pipeline().addLast(new ServerHeartBeatHandler());
+                    ch.pipeline().addLast(new ServerExceptionHandler());
                 }
             });
 
