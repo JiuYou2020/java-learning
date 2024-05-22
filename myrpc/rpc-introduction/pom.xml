@@ -23,6 +23,11 @@
             <version>6.1.6</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.100.Final</version>
+        </dependency>
     </dependencies>
 
 </project>
