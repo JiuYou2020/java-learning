@@ -2,7 +2,7 @@
 
 > 请注意！！！是简易版，什么负载均衡，服务注册，服务发现都没有实现，和`Open Feign`等RPC框架没有任何可比性。请勿吐槽，当然，如果有改进建议，可以提出。
 
-> 源码地址：[myrpc](https://github.com/JiuYou2020/learning/tree/master/myrpc)
+> 如果图片消失，请参考源码地址：[myrpc](https://github.com/JiuYou2020/learning/tree/master/myrpc)
 
 > 测试代码待编写！！！
 
@@ -614,7 +614,7 @@ public class ClientApplication {
 
 本部分完成后的结构 ，如图4.1
 
-![4.1](./.gitbook/assets/image-20240522212233408.png)
+![4.1](./.gitbook/assets/image-20240523004445597.png)
 
 在完成动态代理后，就需要将请求的内容作为**请求（Request）**发出，包括
 
@@ -862,11 +862,46 @@ public class EnvContext implements BeanFactoryAware, ApplicationContextAware {
 
 ## 五 RPC实现 网络传输
 
-在[Netty实现RPC](# Netty实现RPC)中，已经讲述过使用Netty实现网络传输的优势~ 完成后的项目如图
+在[Netty实现RPC](# Netty实现RPC)中，已经讲述过使用Netty实现网络传输的优势~ 完成后的项目如图 5.1
+
+![5.1](./.gitbook/assets/image-20240523004508694.png)
+
+1. 定义一个自定义消息体[RpcMessage](# 代码块34)类
+2. 定义一个自定义编码器[RpcEncoder](#代码块35)类
+3. 定义一个自定义解码器[RpcDecoder](#代码块36)类
+4. 定义一个消息发送器[MessageSender](#代码块37)类
+5. 定义用于业务处理的管道处理器[ClientBusinessHandler](#代码块38)类
+6. 定义用于处理客户端异常或者接收服务器异常的[ClientExceptionHandler](#代码块39)类
+7. 定义用于发送心跳的[ClientHeartBeatHandler](#代码块40)类，心跳机制如下
+   - 如果发送数据消息后1s内没有收到数据包回复，发送心跳包
+     - 服务端回复心跳包，则再过1s再次发送心跳包
+     - 服务端没有回复，则累积10次没有回复就会关闭连接（我也知道数值不合理，别太计较这个`(,,Ծ‸Ծ,, )`）。
+   - 客户端收到数据消息，关闭连接
+8. 定义一个消息接收器[MessageReceiver](#代码块41)
+9. 定义用于业务处理的管道处理器[ServerBusinessHandler](#代码块42)类
+10. 定义用于处理服务器异常的[ServerExceptionHandler](#代码块43)类
+11. 定义用于接收并回复心跳的[ServerHeartBeatHandler](#代码块44)类
+12. 定义用于反射调用的[ReflectionCall](#代码块45)类
 
 
 
-## 七. 附录
+完成上述内容后，修改[DataTransmitterWrapper](# 代码块46)类，在server模块添加一个[RpcConfig](# 代码块47)类
+
+
+
+此时，启动client项目和server项目，并点击链接http://localhost:8080/order/testGetParam/ABC123/10 ，就可以收到消息啦！
+
+![5.2](./.gitbook/assets/image-20240523011420356.png)
+
+
+
+
+
+> 至此，简单的RPC框架就完成啦！真是辛苦我啦~ 如果有小伙伴看到这里的话，不妨点个赞呀~
+
+> coding time：Apr 22, 2024 — May 23, 2024
+
+## 六. 附录
 
 ### 环境准备部分附录
 
@@ -878,40 +913,64 @@ tree
 .
 ├── client
 │   ├── pom.xml
-│   └── src
-│       ├── main
-│       │   ├── java
-│       │   │   └── cn
-│       │   │       └── jiuyou2020
-│       │   │           └── rpc
-│       │   │               ├── ClientApplication.java
-│       │   │               ├── controller
-│       │   │               │   └── OrderController.java
-│       │   │               └── service
-│       │   │                   ├── impl
-│       │   │                   │   └── OrderServiceImpl.java
-│       │   │                   └── OrderService.java
-│       │   └── resources
-│       │       └── application.yml
-│       └── test
-│           └── java
-│               └── cn
-│                   └── jiuyou2020
-│                       └── rpc
-│                           └── ClientApplicationTests.java
+│   ├── src
+│   │   ├── main
+│   │   │   ├── java
+│   │   │   │   └── cn
+│   │   │   │       └── jiuyou2020
+│   │   │   │           └── rpc
+│   │   │   │               ├── ClientApplication.java
+│   │   │   │               ├── controller
+│   │   │   │               │   └── OrderController.java
+│   │   │   │               └── service
+│   │   │   │                   ├── impl
+│   │   │   │                   │   └── OrderServiceImpl.java
+│   │   │   │                   └── OrderService.java
+│   │   │   └── resources
+│   │   │       └── application.yml
+│   │   └── test
+│   │       └── java
+│   │           └── cn
+│   │               └── jiuyou2020
+│   │                   └── rpc
+│   │                       └── ClientApplicationTests.java
+│   └── target
+│       ├── classes
+│       │   ├── application.yml
+│       │   └── cn
+│       │       └── jiuyou2020
+│       │           └── rpc
+│       │               ├── ClientApplication.class
+│       │               ├── controller
+│       │               │   └── OrderController.class
+│       │               └── service
+│       │                   ├── impl
+│       │                   │   └── OrderServiceImpl.class
+│       │                   └── OrderService.class
+│       └── generated-sources
+│           └── annotations
 ├── common
 │   ├── pom.xml
-│   └── src
-│       ├── main
-│       │   ├── java
-│       │   │   └── cn
-│       │   │       └── jiuyou2020
-│       │   │           └── rpc
-│       │   │               └── apis
-│       │   │                   └── StockService.java
-│       │   └── resources
-│       └── test
-│           └── java
+│   ├── src
+│   │   ├── main
+│   │   │   ├── java
+│   │   │   │   └── cn
+│   │   │   │       └── jiuyou2020
+│   │   │   │           └── rpc
+│   │   │   │               └── apis
+│   │   │   │                   └── StockService.java
+│   │   │   └── resources
+│   │   └── test
+│   │       └── java
+│   └── target
+│       ├── classes
+│       │   └── cn
+│       │       └── jiuyou2020
+│       │           └── rpc
+│       │               └── apis
+│       │                   └── StockService.class
+│       └── generated-sources
+│           └── annotations
 ├── myrpc.md
 ├── pom.xml
 ├── rpc
@@ -924,10 +983,10 @@ tree
 │   │   │   │       └── jiuyou2020
 │   │   │   │           ├── annonation
 │   │   │   │           │   ├── EnableRpcClient.java
-│   │   │   │           │   ├── EnableRpcServer.java
 │   │   │   │           │   └── RemoteService.java
 │   │   │   │           ├── AutoConfigurationConfig.java
 │   │   │   │           ├── DataTransmitterWrapper.java
+│   │   │   │           ├── EnvContext.java
 │   │   │   │           ├── nettransmit
 │   │   │   │           │   ├── ClientBusinessHandler.java
 │   │   │   │           │   ├── ClientExceptionHandler.java
@@ -941,13 +1000,13 @@ tree
 │   │   │   │           │   ├── ServerBusinessHandler.java
 │   │   │   │           │   ├── ServerExceptionHandler.java
 │   │   │   │           │   └── ServerHeartBeatHandler.java
-│   │   │   │           ├── PropertyContext.java
 │   │   │   │           ├── proxy
 │   │   │   │           │   ├── FeignClientFactoryBean.java
 │   │   │   │           │   ├── FeignClientProxy.java
 │   │   │   │           │   └── ProxyRegistrar.java
 │   │   │   │           ├── reflectioncall
 │   │   │   │           │   └── ReflectionCall.java
+│   │   │   │           ├── RpcProperties.java
 │   │   │   │           └── serialize
 │   │   │   │               ├── message
 │   │   │   │               │   ├── json
@@ -973,7 +1032,11 @@ tree
 │   │   │   │                   ├── ProtobufSerializationStrategy.java
 │   │   │   │                   └── SerializationStrategy.java
 │   │   │   └── resources
-│   │   │       ├── logback.xml
+│   │   │       ├── 1-logback.xml
+│   │   │       ├── META-INF
+│   │   │       │   ├── additional-spring-configuration-metadata.json
+│   │   │       │   └── spring
+│   │   │       │       └── org.springframework.boot.autoconfigure.AutoConfiguration.imports
 │   │   │       ├── RpcRequest.proto
 │   │   │       └── RpcResponse.proto
 │   │   └── test
@@ -987,14 +1050,15 @@ tree
 │   │                   └── serialize
 │   └── target
 │       ├── classes
+│       │   ├── 1-logback.xml
 │       │   ├── cn
 │       │   │   └── jiuyou2020
 │       │   │       ├── annonation
 │       │   │       │   ├── EnableRpcClient.class
-│       │   │       │   ├── EnableRpcServer.class
 │       │   │       │   └── RemoteService.class
 │       │   │       ├── AutoConfigurationConfig.class
 │       │   │       ├── DataTransmitterWrapper.class
+│       │   │       ├── EnvContext.class
 │       │   │       ├── nettransmit
 │       │   │       │   ├── ClientBusinessHandler.class
 │       │   │       │   ├── ClientExceptionHandler.class
@@ -1011,7 +1075,6 @@ tree
 │       │   │       │   ├── ServerBusinessHandler.class
 │       │   │       │   ├── ServerExceptionHandler.class
 │       │   │       │   └── ServerHeartBeatHandler.class
-│       │   │       ├── PropertyContext.class
 │       │   │       ├── proxy
 │       │   │       │   ├── FeignClientFactoryBean.class
 │       │   │       │   ├── FeignClientProxy.class
@@ -1019,6 +1082,7 @@ tree
 │       │   │       │   └── ProxyRegistrar.class
 │       │   │       ├── reflectioncall
 │       │   │       │   └── ReflectionCall.class
+│       │   │       ├── RpcProperties.class
 │       │   │       └── serialize
 │       │   │           ├── message
 │       │   │           │   ├── json
@@ -1051,78 +1115,67 @@ tree
 │       │   │               ├── JsonSerializationStrategy.class
 │       │   │               ├── ProtobufSerializationStrategy.class
 │       │   │               └── SerializationStrategy.class
-│       │   ├── logback.xml
+│       │   ├── META-INF
+│       │   │   ├── additional-spring-configuration-metadata.json
+│       │   │   └── spring
+│       │   │       └── org.springframework.boot.autoconfigure.AutoConfiguration.imports
 │       │   ├── RpcRequest.proto
 │       │   └── RpcResponse.proto
-│       ├── generated-sources
-│       │   └── annotations
-│       ├── generated-test-sources
-│       │   └── test-annotations
-│       └── test-classes
-│           └── cn
-│               └── jiuyou2020
-│                   └── nettransmit
-│                       ├── MessageSenderTest$TestConfiguration.class
-│                       ├── MessageSenderTest.class
-│                       ├── MessageTestReceiver$1.class
-│                       ├── MessageTestReceiver.class
-│                       └── ServerTestHandler.class
-├── rpc-introduction
-│   ├── pom.xml
-│   ├── src
-│   │   ├── main
-│   │   │   ├── java
-│   │   │   │   └── cn
-│   │   │   │       └── jiuyou2020
-│   │   │   │           ├── EchoServer.java
-│   │   │   │           ├── HelloWorldClient.java
-│   │   │   │           └── Service.java
-│   │   │   └── resources
-│   │   └── test
-│   │       └── java
-│   └── target
-│       ├── classes
-│       │   └── cn
-│       │       └── jiuyou2020
-│       │           ├── EchoServer$1.class
-│       │           ├── EchoServer.class
-│       │           ├── EchoServerHandler.class
-│       │           ├── HelloWorldClient$1.class
-│       │           ├── HelloWorldClient.class
-│       │           ├── HelloWorldClientHandler.class
-│       │           ├── RpcClient.class
-│       │           ├── RpcInvocationHandler.class
-│       │           ├── Service.class
-│       │           └── ServiceImpl.class
 │       └── generated-sources
 │           └── annotations
+├── rpc-introduction
+│   ├── pom.xml
+│   └── src
+│       ├── main
+│       │   ├── java
+│       │   │   └── cn
+│       │   │       └── jiuyou2020
+│       │   │           ├── EchoServer.java
+│       │   │           ├── HelloWorldClient.java
+│       │   │           └── Service.java
+│       │   └── resources
+│       └── test
+│           └── java
 └── server
     ├── pom.xml
-    └── src
-        ├── main
-        │   ├── java
-        │   │   └── cn
-        │   │       └── jiuyou2020
-        │   │           └── rpc
-        │   │               ├── controller
-        │   │               │   └── StockController.java
-        │   │               ├── rpc
-        │   │               │   └── RpcConfig.java
-        │   │               ├── ServerApplication.java
-        │   │               └── service
-        │   │                   ├── impl
-        │   │                   │   └── StockServiceImpl.java
-        │   │                   └── StockService.java
-        │   └── resources
-        │       └── application.yml
-        └── test
-            └── java
-                └── cn
-                    └── jiuyou2020
-                        └── rpc
-                            └── ServerApplicationTests.java
-
-105 directories, 141 files
+    ├── src
+    │   ├── main
+    │   │   ├── java
+    │   │   │   └── cn
+    │   │   │       └── jiuyou2020
+    │   │   │           └── rpc
+    │   │   │               ├── controller
+    │   │   │               │   └── StockController.java
+    │   │   │               ├── rpc
+    │   │   │               │   └── RpcConfig.java
+    │   │   │               ├── ServerApplication.java
+    │   │   │               └── service
+    │   │   │                   └── impl
+    │   │   │                       └── StockServiceImpl.java
+    │   │   └── resources
+    │   │       └── application.yml
+    │   └── test
+    │       └── java
+    │           └── cn
+    │               └── jiuyou2020
+    │                   └── rpc
+    │                       └── ServerApplicationTests.java
+    └── target
+        ├── classes
+        │   ├── application.yml
+        │   └── cn
+        │       └── jiuyou2020
+        │           └── rpc
+        │               ├── controller
+        │               │   └── StockController.class
+        │               ├── rpc
+        │               │   └── RpcConfig.class
+        │               ├── ServerApplication.class
+        │               └── service
+        │                   └── impl
+        │                       └── StockServiceImpl.class
+        └── generated-sources
+            └── annotations
 ```
 
 
@@ -2496,107 +2549,852 @@ public class RpcProperties {
 }
 ```
 
-代码块3
+### 网络传输部分
 
-代码块3
+#### 代码块34
 
-代码块3
+```java
+/**
+ * @author: jiuyou2020
+ * @description: 自定义协议消息, 用于netty传输消息
+ */
+public class RpcMessage {
+    public static final short MAGIC = (short) 0xCAFEBABE;      //2 bytes
+    public static final short HEADER_SIZE = 21;                //2 bytes
+    public static final short VERSION = 1;                     //2 bytes
+    private final byte serializationType;                     //1 byte //0是json序列化，1是protobuf序列化
+    private final boolean isHeartbeat;                        //1 byte
+    private final boolean isOneWay;                           //1 byte
+    private final boolean isResponse;                         //1 byte
+    private final byte statusCode;                            //1 byte
+    private final short reserved;                             //2 bytes
+    private final int messageId;                              //4 bytes
+    private final int bodySize;                               //4 bytes
+    private final byte[] body;                                //n bytes
 
-代码块3
+    private RpcMessage(Builder builder) {
+        this.serializationType = builder.serializationType;
+        this.isHeartbeat = builder.isHeartbeat;
+        this.isOneWay = builder.isOneWay;
+        this.isResponse = builder.isResponse;
+        this.statusCode = builder.statusCode;
+        this.reserved = builder.reserved;
+        this.messageId = builder.messageId;
+        this.bodySize = builder.bodySize;
+        this.body = builder.body;
+    }
 
-代码块3
+    public static class Builder {
+        private byte serializationType;
+        private boolean isHeartbeat;
+        private boolean isOneWay;
+        private boolean isResponse;
+        private byte statusCode;
+        private short reserved;
+        private int messageId;
+        private int bodySize;
+        private byte[] body;
 
-代码块3
+        public Builder setSerializationType(byte serializationType) {
+            this.serializationType = serializationType;
+            return this;
+        }
 
-代码块3
+        public Builder setIsHeartbeat(boolean isHeartbeat) {
+            this.isHeartbeat = isHeartbeat;
+            return this;
+        }
 
-代码块3
+        public Builder setIsOneWay(boolean isOneWay) {
+            this.isOneWay = isOneWay;
+            return this;
+        }
 
-代码块3
+        public Builder setIsResponse(boolean isResponse) {
+            this.isResponse = isResponse;
+            return this;
+        }
 
-代码块3
+        public Builder setStatusCode(byte statusCode) {
+            this.statusCode = statusCode;
+            return this;
+        }
 
-代码块3
+        public Builder setReserved(short reserved) {
+            this.reserved = reserved;
+            return this;
+        }
 
-代码块3
+        public Builder setMessageId(int messageId) {
+            this.messageId = messageId;
+            return this;
+        }
 
-代码块3
+        public Builder setBodySize(int bodySize) {
+            this.bodySize = bodySize;
+            return this;
+        }
 
-代码块3
+        public Builder setBody(byte[] body) {
+            this.body = body;
+            return this;
+        }
 
-代码块3
+        public RpcMessage build() {
+            // Automatically set the body size if body is provided
+            if (this.body != null) {
+                this.bodySize = this.body.length;
+            }
+            return new RpcMessage(this);
+        }
+    }
 
-代码块3
+    // Getters
+    public byte getSerializationType() {
+        return serializationType;
+    }
 
-代码块3
+    public boolean isHeartbeat() {
+        return isHeartbeat;
+    }
 
-代码块3
+    public boolean isOneWay() {
+        return isOneWay;
+    }
 
-代码块3
+    public boolean isResponse() {
+        return isResponse;
+    }
 
-代码块3
+    public byte getStatusCode() {
+        return statusCode;
+    }
 
-代码块3
+    public short getReserved() {
+        return reserved;
+    }
 
-代码块3
+    public int getMessageId() {
+        return messageId;
+    }
 
-代码块3
+    public int getBodySize() {
+        return bodySize;
+    }
 
-代码块3
+    public byte[] getBody() {
+        return body;
+    }
+}
+```
 
-代码块3
+#### 代码块35
 
-代码块3
+```java
+/**
+ * @author: jiuyou2020
+ * @description: 自定义协议编码器
+ */
+public class RpcEncoder extends MessageToByteEncoder<RpcMessage> {
 
-代码块3
+    /**
+     * Encode a message into a {@link ByteBuf}. This method will be called for each written message that can be handled
+     *
+     * @param ctx the {@link ChannelHandlerContext} which this {@link MessageToByteEncoder} belongs to
+     * @param msg the message to encode
+     * @param out the {@link ByteBuf} into which the encoded message will be written
+     */
+    @Override
+    protected void encode(ChannelHandlerContext ctx, RpcMessage msg, ByteBuf out) {
+        out.writeShort(RpcMessage.MAGIC);
+        out.writeShort(RpcMessage.HEADER_SIZE);
+        out.writeShort(RpcMessage.VERSION);
+        out.writeByte(msg.getSerializationType());
+        out.writeBoolean(msg.isHeartbeat());
+        out.writeBoolean(msg.isOneWay());
+        out.writeBoolean(msg.isResponse());
+        out.writeByte(msg.getStatusCode());
+        out.writeShort(msg.getReserved());
+        out.writeInt(msg.getMessageId());
+        out.writeInt(msg.getBodySize());
+        out.writeBytes(msg.getBody());
+    }
+}
+```
 
-代码块3
+#### 代码块36
 
-代码块3
+```java
+/**
+ * @author: jiuyou2020
+ * @description: 自定义协议解码器
+ */
+@SuppressWarnings("unused")
+public class RpcDecoder extends ByteToMessageDecoder {
 
-代码块3
+    /**
+     * 在Netty的ByteToMessageDecoder中，decode方法的参数out是一个输出列表，用于存储解码后的消息。
+     * <p>
+     * 在这段代码中，decode方法从输入的ByteBuf中读取并解码出一个RpcMessage对象，
+     * 然后将这个对象添加到out列表中。这样，解码后的消息就可以被后续的ChannelHandler处理。
+     * <p>
+     * 当decode方法执行完毕，Netty会检查out列表，如果列表中有元素，Netty会将这些元素传递给
+     * ChannelPipeline中的下一个ChannelHandler进行处理。如果out列表为空，
+     * 那么Netty会认为当前的decode方法没有解码出任何消息，不会触发下一个ChannelHandler。
+     * <p>
+     * 因此，向out列表中添加元素的目的是将解码后的消息传递给ChannelPipeline中的
+     * 下一个ChannelHandler。
+     *
+     * @param ctx the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
+     * @param in  the {@link ByteBuf} from which to read data
+     * @param out the {@link List} to which decoded messages should be added
+     */
+    @Override
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
+        // 检查是否有足够的数据来读取消息头
+        if (in.readableBytes() < RpcMessage.HEADER_SIZE) {
+            return;
+        }
 
-代码块3
+        // 标记当前读指针的位置
+        in.markReaderIndex();
 
-代码块3
+        // 读取魔术位
+        short magic = in.readShort();
+        if (magic != RpcMessage.MAGIC) {
+            // 不是预期的魔术位，关闭连接
+            ctx.close();
+            return;
+        }
 
-代码块3
+        // 读取消息头长度
+        short headerSize = in.readShort();
+        if (headerSize != RpcMessage.HEADER_SIZE) {
+            // 消息头长度不符合预期，关闭连接
+            ctx.close();
+            return;
+        }
 
-代码块3
+        // 读取协议版本
+        short version = in.readShort();
 
-代码块3
+        // 读取消息体序列化类型
+        byte serializationType = in.readByte();
 
-代码块3
+        // 读取心跳标记
+        boolean isHeartbeat = in.readBoolean();
 
-代码块3
+        // 读取单向消息标记
+        boolean isOneWay = in.readBoolean();
 
-代码块3
+        // 读取响应消息标记
+        boolean isResponse = in.readBoolean();
 
-代码块3
+        // 读取响应消息状态码
+        byte statusCode = in.readByte();
 
-代码块3
+        // 读取保留字段
+        short reserved = in.readShort();
 
-代码块3
+        // 读取消息ID
+        int messageId = in.readInt();
 
-代码块3
+        // 读取消息体长度
+        int bodySize = in.readInt();
 
-代码块3
+        // 检查是否有足够的数据来读取消息体
+        if (in.readableBytes() < bodySize) {
+            // 没有足够的数据来读取消息体，重置读指针
+            in.resetReaderIndex();
+            return;
+        }
 
-代码块3
+        // 读取消息体
+        byte[] body = new byte[bodySize];
+        in.readBytes(body);
 
-代码块3
+        // 创建消息对象并添加到输出列表
+        RpcMessage message = new RpcMessage.Builder()
+                .setSerializationType(serializationType)
+                .setIsHeartbeat(isHeartbeat)
+                .setIsOneWay(isOneWay)
+                .setIsResponse(isResponse)
+                .setStatusCode(statusCode)
+                .setReserved(reserved)
+                .setMessageId(messageId)
+                .setBodySize(bodySize)
+                .setBody(body)
+                .build();
+        out.add(message);
 
-代码块3
+    }
+}
+```
 
-代码块3
+#### 代码块37
 
-代码块3
+```java
+/**
+ * @author: jiuyou2020
+ * @description: 消息发送器, 用于与远程服务器建立连接并发送消息
+ */
+public class MessageSender {
+    private static final Log LOG = LogFactory.getLog(MessageReceiver.class);
 
-代码块3
+    /**
+     * 连接到服务器
+     *
+     * @param url            服务器地址
+     * @param serializedData 序列化后的数据
+     * @return 服务器返回的数据
+     * @throws Exception 连接异常
+     */
+    public byte[] connect(String url, byte[] serializedData) throws Exception {
+        EventLoopGroup group = new NioEventLoopGroup();
+        try {
+            Bootstrap bootstrap = getBootstrap(group);
+            // 连接到服务器
+            String host = new URL(url).getHost();
+            int port = EnvContext.getPort();
+            ChannelFuture f = bootstrap.connect(host, port).sync();
 
-代码块3
+            ClientBusinessHandler clientBusinessHandler = f.channel().pipeline().get(ClientBusinessHandler.class);
+            ChannelPromise promise = getPromise(f, clientBusinessHandler);
 
-代码块3
+            sendMessage(serializedData, f);
+            // 等待异步操作完成
+            promise.await();
+            // 返回异步操作的结果
+            RpcMessage response = clientBusinessHandler.getResponse();
+            if (response == null) {
+                throw new RuntimeException("发生异常，未收到响应消息");
+            }
+            // 等待连接关闭
+            f.channel().closeFuture().sync();
+            return response.getBody();
+        } finally {
+            group.shutdownGracefully();
+        }
+    }
+
+    /**
+     * 构建并发送消息
+     *
+     * @param serializedData 序列化后的数据
+     * @param f              ChannelFuture对象
+     */
+    private static void sendMessage(byte[] serializedData, ChannelFuture f) {
+        // 构造一个RpcMessage对象
+        RpcMessage message = new RpcMessage.Builder()
+                .setSerializationType((byte) EnvContext.getSerializationType().getValue())
+                .setIsHeartbeat(false)
+                .setIsOneWay(false)
+                .setIsResponse(false)
+                .setStatusCode((byte) 0)
+                .setMessageId(1)
+                .setBodySize(serializedData.length)
+                .setBody(serializedData)
+                .build();
+        LOG.info("发送数据消息: " + message);
+        f.channel().writeAndFlush(message);
+    }
+
+    /**
+     * 获取一个ChannelPromise对象，并给Handlers设置Promise
+     *
+     * @param f                     ChannelFuture对象
+     * @param clientBusinessHandler 客户端业务处理器
+     * @return ChannelPromise对象
+     */
+    private static ChannelPromise getPromise(ChannelFuture f, ClientBusinessHandler clientBusinessHandler) {
+        // 创建一个ChannelPromise对象，用于异步操作的通知
+        ChannelPromise promise = f.channel().newPromise();
+        clientBusinessHandler.setPromise(promise);
+        f.channel().pipeline().get(ClientHeartBeatHandler.class).setPromise(promise);
+        f.channel().pipeline().get(ClientExceptionHandler.class).setPromise(promise);
+        return promise;
+    }
+
+    /**
+     * 获取配置好的Bootstrap实例
+     *
+     * @param group 事件循环组
+     * @return Bootstrap实例
+     */
+    private static Bootstrap getBootstrap(EventLoopGroup group) {
+        // 初始化一个Bootstrap实例，Netty客户端启动器
+        Bootstrap bootstrap = new Bootstrap();
+
+        // 配置Bootstrap使用的线程组，EventLoopGroup处理所有的事件（如连接、读、写事件）
+        bootstrap.group(group)
+                // 设置通道类型为NioSocketChannel，用于非阻塞传输的客户端通道类型
+                .channel(NioSocketChannel.class)
+                // 设置通道选项，SO_KEEPALIVE表示是否启用TCP Keep-Alive机制，保持长连接
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                // 设置用于初始化新连接的ChannelHandler
+                .handler(new ChannelInitializer<SocketChannel>() {
+                    // 当一个新的连接被接受时，这个方法会被调用
+                    @Override
+                    public void initChannel(SocketChannel ch) {
+                        // 向管道中添加一个IdleStateHandler，用于检测空闲状态
+                        // readerIdleTime：读超时（毫秒），1000表示在1秒内没有读操作则触发readIdle事件
+                        // writerIdleTime：写超时（毫秒），0表示不检测
+                        // allIdleTime：读或写超时（毫秒），0表示不检测
+                        ch.pipeline().addLast(new IdleStateHandler(1000, 0, 0, TimeUnit.MILLISECONDS));
+                        ch.pipeline().addLast(new RpcDecoder());
+                        ch.pipeline().addLast(new RpcEncoder());
+                        // 向管道中添加自定义的处理器ClientHandler，用于处理业务逻辑
+                        ch.pipeline().addLast(new ClientBusinessHandler());
+                        ch.pipeline().addLast(new ClientHeartBeatHandler());
+                        ch.pipeline().addLast(new ClientExceptionHandler());
+                    }
+                });
+        return bootstrap;
+    }
+}
+```
+
+#### 代码块38
+
+```java
+/**
+ * @author: jiuyou2020
+ * @description: 客户端业务处理器，用于处理客户端的业务逻辑，如果是心跳消息或者状态码不为0的消息，直接调用下一个处理器
+ */
+public class ClientBusinessHandler extends ChannelInboundHandlerAdapter {
+    private static final Log LOG = LogFactory.getLog(ClientBusinessHandler.class);
+    private ChannelPromise promise;
+    private RpcMessage response;
 
 
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        if (!(msg instanceof RpcMessage rpcMessage)) {
+            return;
+        }
+        if (rpcMessage.isHeartbeat() || rpcMessage.getStatusCode() != 0) {
+            //调用下一个处理器
+            ctx.fireChannelRead(msg);
+            return;
+        }
+        LOG.info("客户端收到数据消息: " + rpcMessage);
+        if (promise != null) {
+            response = rpcMessage;
+            promise.setSuccess();
+        }
+        ctx.close();
+    }
+
+    public void setPromise(ChannelPromise promise) {
+        this.promise = promise;
+    }
+
+    public RpcMessage getResponse() {
+        return response;
+    }
+}
+```
+
+#### 代码块39
+
+```java
+/**
+ * @author: jiuyou2020
+ * @description: 客户端异常处理器，用于处理客户端的异常消息
+ */
+public class ClientExceptionHandler extends ChannelInboundHandlerAdapter {
+    private static final Log LOG = LogFactory.getLog(ClientExceptionHandler.class);
+    private ChannelPromise promise;
+
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        if (!(msg instanceof RpcMessage rpcMessage)) {
+            return;
+        }
+        // 如果是异常消息
+        if (rpcMessage.getStatusCode() != 0) {
+            String exception = new String(rpcMessage.getBody());
+            LOG.error("客户端收到异常消息: " + exception);
+            ctx.close();
+            promise.setFailure(new RuntimeException("客户端收到异常消息: " + rpcMessage));
+        }
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        ctx.close();
+        LOG.error("客户端发生异常，关闭连接", cause);
+        promise.setFailure(cause);
+        throw new RuntimeException(cause);
+    }
+
+    public void setPromise(ChannelPromise promise) {
+        this.promise = promise;
+    }
+}
+```
+
+#### 代码块40
+
+```java
+/**
+ * @author: jiuyou2020
+ * @description: 客户端心跳处理器，用于处理客户端的心跳消息，如果是异常消息，直接调用下一个处理器
+ */
+public class ClientHeartBeatHandler extends ChannelInboundHandlerAdapter {
+    private static final Log LOG = LogFactory.getLog(ClientHeartBeatHandler.class);
+    private ChannelPromise promise;
+    // 发送的心跳包的次数
+    private int heartbeats = 0;
+    private final long lastDataMessageTime = System.currentTimeMillis();
+
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        if (!(msg instanceof RpcMessage rpcMessage)) {
+            return;
+        }
+        if (rpcMessage.getStatusCode() != 0) {
+            //调用下一个处理器
+            ctx.fireChannelRead(msg);
+            return;
+        }
+        // 如果是心跳消息
+        if (rpcMessage.isHeartbeat()) {
+            heartbeats++;
+            LOG.info("客户端收到心跳消息响应: " + rpcMessage);
+        }
+    }
+
+    /**
+     * 用于处理读空闲或者写空闲的事件，这里用于触发心跳包
+     *
+     * @param ctx the {@link ChannelHandlerContext} for which the event was fired
+     * @param evt the event to handle
+     * @throws Exception is thrown if an error occurred
+     */
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        if (evt instanceof IdleStateEvent event) {
+            // 在规定时间内如果读空闲(即没有收到消息)，则触发该事件，并发送心跳包
+            if (Objects.requireNonNull(event.state()) == IdleState.READER_IDLE) {
+                //构建心跳消息
+                RpcMessage heartbeatMessage = new RpcMessage.Builder()
+                        .setSerializationType((byte) EnvContext.getSerializationType().getValue())
+                        .setIsHeartbeat(true)
+                        .setIsOneWay(false)
+                        .setIsResponse(false)
+                        .setStatusCode((byte) 0)
+                        .setMessageId(heartbeats)
+                        .setBodySize(0)
+                        .setBody(new byte[0])
+                        .build();
+                LOG.info("客户端发送心跳包: " + heartbeatMessage);
+                ctx.writeAndFlush(heartbeatMessage);
+                if (System.currentTimeMillis() - lastDataMessageTime > 10000) {
+                    LOG.info("长时间未收到数据包，关闭连接");
+                    promise.setFailure(new RuntimeException("长时间未收到数据包，关闭连接"));
+                    ctx.close();
+                }
+            }
+        } else {
+            super.userEventTriggered(ctx, evt);
+        }
+    }
+
+
+    public void setPromise(ChannelPromise promise) {
+        this.promise = promise;
+    }
+}
+```
+
+#### 代码块41
+
+```java
+/**
+ * @author: jiuyou2020
+ * @description: 客户端心跳处理器，用于处理客户端的心跳消息，如果是异常消息，直接调用下一个处理器
+ */
+public class MessageReceiver {
+    private static final Log LOG = LogFactory.getLog(MessageReceiver.class);
+    @Resource
+    private ApplicationContext applicationContext;
+
+    /**
+     * 在新线程中启动Netty服务器，以免阻塞Spring Boot的主线程
+     */
+    public void run() {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(() -> {
+            try {
+                startServer();
+            } catch (Exception e) {
+                LOG.error("Netty服务启动失败", e);
+            }
+        });
+    }
+
+
+    /**
+     * 启动Netty服务器
+     *
+     * @throws InterruptedException 线程中断异常
+     */
+    private void startServer() throws InterruptedException {
+        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        try {
+            ServerBootstrap b = new ServerBootstrap();
+            b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).option(ChannelOption.SO_BACKLOG, 100).handler(new LoggingHandler(LogLevel.INFO)).childHandler(new ChannelInitializer<SocketChannel>() {
+                @Override
+                public void initChannel(SocketChannel ch) {
+                    ch.pipeline().addLast(new RpcDecoder());
+                    ch.pipeline().addLast(new RpcEncoder());
+                    ch.pipeline().addLast(new ServerBusinessHandler(new ReflectionCall()));
+                    ch.pipeline().addLast(new ServerHeartBeatHandler());
+                    ch.pipeline().addLast(new ServerExceptionHandler());
+                }
+            });
+
+            // 启动服务器
+            int port = EnvContext.getPort();
+            LOG.info("Netty 服务启动成功： " + port);
+            b.bind(port).sync().channel().closeFuture().sync();
+
+        } finally {
+            bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
+        }
+    }
+}
+```
+
+#### 代码块42
+
+```java
+/**
+ * @author: jiuyou2020
+ * @description: 服务端业务处理器，用于处理服务端的业务逻辑，如果是心跳消息或者状态码不为0的消息，直接调用下一个处理器
+ */
+public class ServerBusinessHandler extends ChannelInboundHandlerAdapter {
+    private static final Log LOG = LogFactory.getLog(ServerBusinessHandler.class);
+    // 反射调用
+    private final ReflectionCall reflectionCall;
+
+    public ServerBusinessHandler(ReflectionCall reflectionCall) {
+        this.reflectionCall = reflectionCall;
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        if (!(msg instanceof RpcMessage rpcMessage)) {
+            return;
+        }
+        if (rpcMessage.isHeartbeat()) {
+            ctx.fireChannelRead(msg);
+            return;
+        }
+        Object call = reflectionCall.call(rpcMessage);
+        // 模拟耗时
+        // Thread.sleep(10000);
+        // 模拟异常
+        // throw new RuntimeException("模拟异常");
+        int serializationType = rpcMessage.getSerializationType();
+        RpcResponse rpcResponse = RpcResponseFactory.getFactory(serializationType).createRpcResponse(call);
+        byte[] respData = SerializationFacade.getStrategy(serializationType).serialize(rpcResponse);
+        // 构建返回消息
+        RpcMessage resp = new RpcMessage.Builder()
+                .setSerializationType(rpcMessage.getSerializationType())
+                .setIsHeartbeat(false)
+                .setIsOneWay(true)
+                .setIsResponse(true)
+                .setStatusCode((byte) 0)
+                .setMessageId(rpcMessage.getMessageId())
+                .setBodySize(respData.length)
+                .setBody(respData)
+                .build();
+        LOG.info("服务端返回数据消息: " + resp);
+        ctx.writeAndFlush(resp);
+        ctx.close();
+    }
+}
+```
+
+#### 代码块43
+
+```java
+/**
+ * @author: jiuyou2020
+ * @description: 服务端异常处理器，用于处理服务端的异常消息，发送给客户端异常消息，并关闭连接
+ */
+public class ServerExceptionHandler extends ChannelInboundHandlerAdapter {
+    private static final Log LOG = LogFactory.getLog(ServerExceptionHandler.class);
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        // 构建异常消息
+        int value = EnvContext.getSerializationType().getValue();
+        byte[] bytes = cause.getMessage().getBytes();
+
+        RpcMessage rpcMessage = new RpcMessage.Builder()
+                .setSerializationType((byte) value)
+                .setIsHeartbeat(false)
+                .setIsOneWay(true)
+                .setIsResponse(true)
+                .setStatusCode((byte) 1)
+                .setMessageId(0)
+                .setBodySize(bytes.length)
+                .setBody(bytes)
+                .build();
+        LOG.error("发生异常，连接关闭，并发送异常消息", cause);
+        ctx.writeAndFlush(rpcMessage);
+        ctx.close();
+        throw new RuntimeException(cause);
+    }
+}
+```
+
+#### 代码块44
+
+```java
+/**
+ * @author: jiuyou2020
+ * @description: 服务端心跳处理器，用于处理服务端的心跳消息
+ */
+public class ServerHeartBeatHandler extends ChannelInboundHandlerAdapter {
+    private static final Log LOG = LogFactory.getLog(ServerHeartBeatHandler.class);
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        if (!(msg instanceof RpcMessage rpcMessage)) {
+            return;
+        }
+        if (rpcMessage.isHeartbeat()) {
+            LOG.info("收到心跳消息" + rpcMessage);
+            RpcMessage heartbeatMessage = new RpcMessage.Builder()
+                    .setSerializationType((byte) EnvContext.getSerializationType().getValue())
+                    .setIsHeartbeat(true)
+                    .setIsOneWay(true)
+                    .setIsResponse(true)
+                    .setStatusCode((byte) 0)
+                    .setMessageId(0)
+                    .setBodySize(0)
+                    .setBody(new byte[0])
+                    .build();
+            LOG.info("响应心跳消息：" + heartbeatMessage);
+            ctx.writeAndFlush(heartbeatMessage);
+        }
+    }
+}
+```
+
+#### 代码块45
+
+```java
+/**
+ * @author: jiuyou2020
+ * @description: 反射调用
+ */
+public class ReflectionCall {
+
+
+    /**
+     * 反射调用
+     *
+     * @param rpcMessage rpc消息
+     * @return 返回结果
+     * @throws Exception 异常
+     */
+    public Object call(RpcMessage rpcMessage) throws Exception {
+        byte serializationType = rpcMessage.getSerializationType();
+        RpcRequest rpcRequest;
+        rpcRequest = deserialize(rpcMessage, serializationType);
+        String className = rpcRequest.getClassName();
+        String methodName = rpcRequest.getMethodName();
+        Class<?>[] parameterTypes = rpcRequest.getParameterTypes();
+        Object[] parameters = rpcRequest.getParameters();
+        // 反射调用,获取该接口的所有实现类
+        Class<?> type = Class.forName(className);
+        ApplicationContext applicationContext = EnvContext.getApplicationContext();
+        String[] beanNamesForType = applicationContext.getBeanNamesForType(type);
+        if (beanNamesForType.length == 0) {
+            throw new RuntimeException("未找到实现类 " + className);
+        }
+        if (beanNamesForType.length > 1) {
+            throw new RuntimeException("实现类多于1个： " + className);
+        }
+        String beanName = beanNamesForType[0];
+        Object bean = applicationContext.getBean(beanName);
+        // 返回结果
+        return bean.getClass().getMethod(methodName, parameterTypes).invoke(bean, parameters);
+    }
+
+    private RpcRequest deserialize(RpcMessage rpcMessage, int serializationType) throws Exception {
+        byte[] data = rpcMessage.getBody();
+        SerializationType type = SerializationType.getSerializationType(serializationType);
+        RpcRequest rpcRequest = RpcRequest.getRpcRequest(type.getValue());
+        Class<? extends RpcRequest> aClass = rpcRequest.getClass();
+        return SerializationFacade.getStrategy(type.getValue()).deserialize(data, aClass);
+    }
+}
+```
+
+#### 代码块46
+
+```java
+/**
+ * @author: jiuyou2020
+ * @description: 负责组织数据的序列化，传输和初始化
+ */
+public class DataTransmitterWrapper {
+
+    public Object executeDataTransmit(Method method, Object[] args, FeignClientFactoryBean clientFactoryBean) throws Exception {
+        int serializationType = EnvContext.getSerializationType().getValue();
+        //执行序列化
+        RpcRequest rpcRequest = RpcRequestFactory.getFactory(serializationType).createRpcRequest(method, args, clientFactoryBean);
+        SerializationStrategy strategy = SerializationFacade.getStrategy(serializationType);
+        byte[] serialize = strategy.serialize(rpcRequest);
+        //进行数据传输
+        MessageSender messageSender = new MessageSender();
+        byte[] receivedData = messageSender.connect(clientFactoryBean.getUrl(), serialize);
+        //执行反序列化
+        RpcResponse rpcResponse = strategy
+                .deserialize(receivedData, RpcResponse.getRpcResponse(serializationType).getClass());
+        return rpcResponse.getResult(method.getReturnType());
+    }
+}
+```
+
+#### 代码块47
+
+```java
+/**
+ * @author: jiuyou2020
+ * @description:
+ */
+@Configuration
+public class RpcConfig {
+
+    @Bean
+    public ApplicationRunner applicationRunner() {
+        return args -> {
+            new MessageReceiver().run();
+        };
+    }
+}
+```
+
+
+
+
+
+## 参考内容
+
+《[分布式架构原理与实践](https://weread.qq.com/web/bookDetail/948326f0813ab7294g014bb7)》崔浩 著
+
+[openfeign源码](https://github.com/spring-cloud/spring-cloud-openfeign)
+
+[ChatGPT 4o](https://chatgpt.com/)
 
