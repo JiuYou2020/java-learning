@@ -17,6 +17,7 @@
         <module>myrpc</module>
         <module>spring-learning</module>
         <module>design-pattern</module>
+        <module>java-basics</module>
     </modules>
 
     <properties>

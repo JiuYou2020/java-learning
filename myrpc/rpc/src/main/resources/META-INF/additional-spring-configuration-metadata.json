@@ -11,11 +11,12 @@
     {
       "name": "rpc.type",
       "type": "java.lang.String",
-      "description": "The type of RPC to use.  Currently 'json' or 'protobuf' is supported.",
+      "description": "The type of RPC to use.  Currently 'json' or 'protobuf' is supported, or 'custom' for a custom RPC implementation.",
       "defaultValue": "json",
       "validValues": [
         "json",
-        "protobuf"
+        "protobuf",
+        "custom"
       ]
     }
   ]

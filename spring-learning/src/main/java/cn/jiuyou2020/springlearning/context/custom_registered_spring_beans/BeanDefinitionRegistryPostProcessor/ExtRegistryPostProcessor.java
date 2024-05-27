@@ -1,6 +1,6 @@
-package cn.jiuyou2020.springlearning.custom_registered_spring_beans.BeanDefinitionRegistryPostProcessor;
+package cn.jiuyou2020.springlearning.context.custom_registered_spring_beans.BeanDefinitionRegistryPostProcessor;
 
-import cn.jiuyou2020.springlearning.custom_registered_spring_beans.Ext;
+import cn.jiuyou2020.springlearning.context.custom_registered_spring_beans.Ext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;

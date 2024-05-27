@@ -1,4 +1,4 @@
-package cn.jiuyou2020.springlearning.custom_registered_spring_beans.ImportBeanDefinitionRegistrar;
+package cn.jiuyou2020.springlearning.context.custom_registered_spring_beans.ImportBeanDefinitionRegistrar;
 
 import org.springframework.context.annotation.Import;
 

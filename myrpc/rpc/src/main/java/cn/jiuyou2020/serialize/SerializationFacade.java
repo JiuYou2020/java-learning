@@ -1,6 +1,5 @@
 package cn.jiuyou2020.serialize;
 
-import cn.jiuyou2020.serialize.strategy.JsonSerializationStrategy;
 import cn.jiuyou2020.serialize.strategy.SerializationStrategy;
 
 import java.util.HashMap;
@@ -11,10 +10,6 @@ import java.util.Map;
  */
 public class SerializationFacade {
     private static final Map<Integer, SerializationStrategy> map = new HashMap<>();
-
-    public SerializationFacade() {
-        addStrategy(SerializationType.JSON.getValue(), new JsonSerializationStrategy());
-    }
 
     public static void addStrategy(Integer type, SerializationStrategy strategy) {
         map.put(type, strategy);

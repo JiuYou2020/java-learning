@@ -6,7 +6,9 @@ package cn.jiuyou2020.serialize;
  */
 public enum SerializationType {
     JSON(0, "json"),
-    PROTOBUF(1, "protobuf");
+    PROTOBUF(1, "protobuf"),
+    //供外界自定义序列化方式
+    CUSTOM(3, "custom");
 
     private final int value;
     private final String name;

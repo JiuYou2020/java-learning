@@ -1,4 +1,4 @@
-package cn.jiuyou2020.springlearning.custom_registered_spring_beans;
+package cn.jiuyou2020.springlearning.context.custom_registered_spring_beans;
 
 import lombok.Data;
 
