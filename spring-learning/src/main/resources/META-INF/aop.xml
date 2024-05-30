@@ -4,6 +4,6 @@
         <include within="cn.jiuyou2020.springlearning.aop.aspectj..*" />
     </weaver>
     <aspects>
-        <aspect name="cn.jiuyou2020.springlearning.aop.aspectj.LoggingAspect" />
+        <aspect name="cn.jiuyou2020.springlearning.dev_practices.aop.aspectj.LoggingAspect" />
     </aspects>
 </aspectj>
