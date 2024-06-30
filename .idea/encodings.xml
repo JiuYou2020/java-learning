@@ -31,6 +31,10 @@
     <file url="file://$PROJECT_DIR$/myrpc/server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/myrpc/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/myrpc/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/project-about-springboot/log-exception-email-alert/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/project-about-springboot/log-exception-email-alert/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/project-about-springboot/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/project-about-springboot/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/bus-listener-actuator/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/bus-listener-actuator/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/bus-publisher-actuator/src/main/java" charset="UTF-8" />

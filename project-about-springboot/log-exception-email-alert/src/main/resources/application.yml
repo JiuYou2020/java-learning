@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: log-exception-email-alert
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: southtang@qq.com
+    password: mrjxyqurjkaxdfeb
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    default-encoding: UTF-8
