@@ -29,6 +29,7 @@
         <module>rabbitmq-springcloud-consumer-retry</module>
         <module>rabbitmq-springcloud-error-handler</module>
         <module>bus-rabbitmq-springcloud-quickstart</module>
+        <module>rabbitmq-springboot-delayqueue</module>
     </modules>
 
     <properties>

@@ -1,4 +1,4 @@
-package cn.learning.rabbitmq.consumer_retry.producer;
+package cn.learning.rabbitmq.timed_message.producer;
 
 import cn.learning.rabbitmq.timed_message.Application;
 import cn.learning.rabbitmq.timed_message.producer.DemoProducer;
@@ -29,7 +29,7 @@ public class DemoProducerTest {
     @Test
     public void testSyncSend02() throws InterruptedException {
         // 设置发送消息的过期时间为 5000 毫秒
-        this.testSyncSendDelay(5000);
+        this.testSyncSendDelay(1000);
     }
 
     private void testSyncSendDelay(Integer delay) throws InterruptedException {

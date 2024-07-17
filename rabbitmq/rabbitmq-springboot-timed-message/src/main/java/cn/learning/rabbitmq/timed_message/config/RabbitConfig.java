@@ -19,7 +19,7 @@ public class RabbitConfig {
             return QueueBuilder.durable(DemoMessage.QUEUE) // durable: 是否持久化
                     .exclusive() // exclusive: 是否排它
                     .autoDelete() // autoDelete: 是否自动删除
-                    .ttl(10*1000)
+                    .ttl(10*1000) // 设置队列的 TTL 为 10 秒，这里的10s代表如果消息在队列中的时间超过10s，那么消息就会变成死信
                     .deadLetterExchange(DemoMessage.EXCHANGE) // 指定当前 Queue 的 DLX 为 DLX_QUEUE_EXCHANGE
                     .deadLetterRoutingKey(DemoMessage.DELAY_ROUTING_KEY) // 指定当前 Queue 的 DLK 为 DLX_QUEUE_ROUTING_KEY
                     .build();
