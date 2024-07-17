@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/myrpc/server/pom.xml" />
         <option value="$PROJECT_DIR$/spring-learning/pom.xml" />
         <option value="$PROJECT_DIR$/project-about-springboot/log-exception-email-alert/pom.xml" />
+        <option value="$PROJECT_DIR$/project-about-spring/spring-state-machine/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
@@ -21,6 +22,7 @@
         <option value="$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/pom.xml" />
         <option value="$PROJECT_DIR$/rabbitmq/rabbitmq-springboot-quickstart/consumer/pom.xml" />
         <option value="$PROJECT_DIR$/rabbitmq/rabbitmq-springboot-quickstart/producer/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-state-machine/pom.xml" />
       </set>
     </option>
   </component>

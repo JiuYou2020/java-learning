@@ -18,7 +18,7 @@
         <module>spring-learning</module>
         <module>design-pattern</module>
         <module>java-basics</module>
-        <module>project-about-springboot</module>
+        <module>project-about-spring</module>
     </modules>
 
     <properties>

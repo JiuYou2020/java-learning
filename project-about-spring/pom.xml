@@ -10,11 +10,12 @@
     </parent>
 
     <groupId>cn.jiuyou2020</groupId>
-    <artifactId>project-about-springboot</artifactId>
+    <artifactId>project-about-spring</artifactId>
     <packaging>pom</packaging>
 
     <modules>
         <module>log-exception-email-alert</module>
+        <module>spring-state-machine</module>
     </modules>
 
     <properties>

@@ -17,6 +17,7 @@ public class RabbitConfig {
     @Bean
     public Queue delayQueue() {
         return QueueBuilder.durable(ORDER_DELAY_QUEUE)
+                .autoDelete()
                 .withArgument("x-delayed-type", "direct")
                 .build();
     }
