@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jiuyou2020.elasticsearchentry.mapper.BooksMapper">
+
+    <insert id="insertBooksBatch" parameterType="java.util.List">
+        INSERT INTO books (title, subtitle, author, translator, publisher, isbn, publication_date, edition, price,
+        description, pages)
+        VALUES
+        <foreach collection="booksList" item="book" separator=",">
+            (#{book.title}, #{book.subtitle}, #{book.author}, #{book.translator}, #{book.publisher}, #{book.isbn},
+            #{book.publicationDate}, #{book.edition}, #{book.price}, #{book.description}, #{book.pages})
+        </foreach>
+    </insert>
+</mapper>

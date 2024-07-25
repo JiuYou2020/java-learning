@@ -1,0 +1,19 @@
+server:
+  port: 8001
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/elastic-search-lab?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: 123456
+    hikari:
+      connection-timeout: 30000
+      max-lifetime: 30000
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+
+
+elasticsearch:
+  serveUrl: https://a3e6861f2a52464b8078e03faf916a9c.us-central1.gcp.cloud.es.io
+  apiKey: MGZReEE0NEJDYWhGdERGWTVMd206SV9KUDJZMi1TREdGbFJ2eGJOZWt3Zw==
