@@ -11,4 +11,4 @@ public class ConcreteSubject extends Subject {
             observer.update();
         }
     }
-    }
+}

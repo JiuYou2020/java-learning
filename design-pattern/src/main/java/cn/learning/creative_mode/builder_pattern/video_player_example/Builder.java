@@ -9,9 +9,13 @@ public abstract class Builder {
     protected MainInterface mainInterface = new MainInterface();
 
     public abstract void buildMenu();
+
     public abstract void buildPlayList();
+
     public abstract void buildMainWindow();
+
     public abstract void buildControlStrip();
+
     public abstract void buildFavoriteList();
 
     public MainInterface getResult() {

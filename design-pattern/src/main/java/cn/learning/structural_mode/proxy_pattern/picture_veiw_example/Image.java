@@ -5,5 +5,6 @@ import javax.swing.*;
 // 图片接口
 interface Image {
     void displayIcon(JLabel label);
+
     void displayFullImage();
 }

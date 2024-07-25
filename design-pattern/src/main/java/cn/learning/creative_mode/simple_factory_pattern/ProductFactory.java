@@ -8,8 +8,9 @@ package cn.learning.creative_mode.simple_factory_pattern;
 public class ProductFactory {
     public static final String PRODUCT_A = "A";
     public static final String PRODUCT_B = "B";
+
     public static Product createProduct(String type) {
-        Product product=null;
+        Product product = null;
         if (PRODUCT_A.equals(type)) {
             product = new ConcreteProductA();
         } else if (PRODUCT_B.equals(type)) {

@@ -6,5 +6,6 @@ package cn.learning.behavioral_mode.visitor_pattern.oa_example;
  */
 public abstract class Department {
     public abstract void visit(FullTimeEmployee fullTimeEmployee);
+
     public abstract void visit(PartTimeEmployee partTimeEmployee);
 }

@@ -18,10 +18,12 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/dependencies-manager/pom.xml" />
+        <option value="$PROJECT_DIR$/project-about-spring/pom.xml" />
         <option value="$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/bus-publisher-actuator/pom.xml" />
         <option value="$PROJECT_DIR$/rabbitmq/bus-rabbitmq-springcloud-actuator/pom.xml" />
         <option value="$PROJECT_DIR$/rabbitmq/rabbitmq-springboot-quickstart/consumer/pom.xml" />
         <option value="$PROJECT_DIR$/rabbitmq/rabbitmq-springboot-quickstart/producer/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-learning/pom.xml" />
         <option value="$PROJECT_DIR$/spring-state-machine/pom.xml" />
       </set>
     </option>

@@ -7,13 +7,13 @@ class GraphicPane extends Pane {
         super(mediator);
     }
 
+    public String getGraphic() {
+        return graphic;
+    }
+
     public void setGraphic(String graphic) {
         this.graphic = graphic;
         mediator.paneChanged(this);
-    }
-
-    public String getGraphic() {
-        return graphic;
     }
 
     @Override

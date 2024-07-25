@@ -5,7 +5,7 @@ package cn.learning.creative_mode.factory_method_pattern.logger_example.logger;
  * @description
  * @date 2024/4/22 下午7:48
  */
-public class DatabaseLogger extends Logger{
+public class DatabaseLogger extends Logger {
     @Override
     public void writeLog() {
         System.out.println("使用数据库记录日志");

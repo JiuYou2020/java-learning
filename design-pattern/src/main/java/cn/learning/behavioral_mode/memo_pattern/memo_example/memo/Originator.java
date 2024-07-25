@@ -17,11 +17,12 @@ public class Originator {
     public void restoreMemento(Memento memento) {
         this.state = memento.getState();
     }
-    public void setState(String state) {
-        this.state = state;
-    }
 
     public String getState() {
         return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

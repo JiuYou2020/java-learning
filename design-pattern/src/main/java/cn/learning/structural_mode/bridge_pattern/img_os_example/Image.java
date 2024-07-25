@@ -13,6 +13,7 @@ public abstract class Image {
 
     /**
      * 解析文件，将文件解析为像素矩阵
+     *
      * @param fileName 文件名
      */
     public abstract void parseFile(String fileName);

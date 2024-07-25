@@ -8,13 +8,13 @@ class TextPane extends Pane {
         super(mediator);
     }
 
+    public String getText() {
+        return text;
+    }
+
     public void setText(String text) {
         this.text = text;
         mediator.paneChanged(this);
-    }
-
-    public String getText() {
-        return text;
     }
 
     @Override

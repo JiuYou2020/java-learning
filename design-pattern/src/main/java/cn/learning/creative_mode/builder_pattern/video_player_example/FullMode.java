@@ -18,7 +18,7 @@ public class FullMode extends Builder {
     }
 
     @Override
-    public void buildMainWindow(){
+    public void buildMainWindow() {
         mainInterface.setMainWindow("主窗口");
     }
 

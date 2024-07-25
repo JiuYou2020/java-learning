@@ -4,7 +4,7 @@ package cn.learning.structural_mode.bridge_pattern.img_os_example;
  * @author: jiuyou2020
  * @description: GIF
  */
-public class GIFImage extends Image{
+public class GIFImage extends Image {
 
     @Override
     public void parseFile(String fileName) {

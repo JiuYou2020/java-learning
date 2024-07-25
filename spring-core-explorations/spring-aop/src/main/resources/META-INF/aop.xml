@@ -1,0 +1,9 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<aspectj>
+    <weaver>
+        <include within="cn.southtang.aspectj..*"/>
+    </weaver>
+    <aspects>
+        <aspect name="cn.southtang.aspectj.LoggingAspect"/>
+    </aspects>
+</aspectj>

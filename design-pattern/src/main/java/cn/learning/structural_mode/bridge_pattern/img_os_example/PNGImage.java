@@ -4,7 +4,7 @@ package cn.learning.structural_mode.bridge_pattern.img_os_example;
  * @author: jiuyou2020
  * @description: IMG
  */
-public class PNGImage extends Image{
+public class PNGImage extends Image {
 
     @Override
     public void parseFile(String fileName) {

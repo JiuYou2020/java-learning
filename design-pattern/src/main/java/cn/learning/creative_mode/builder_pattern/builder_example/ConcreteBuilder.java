@@ -5,7 +5,7 @@ package cn.learning.creative_mode.builder_pattern.builder_example;
  * @description 具体建造者
  * @date 2024/4/25 下午2:35
  */
-public class ConcreteBuilder extends Builder{
+public class ConcreteBuilder extends Builder {
     @Override
     public void buildPartA() {
         product.setPartA("partA");

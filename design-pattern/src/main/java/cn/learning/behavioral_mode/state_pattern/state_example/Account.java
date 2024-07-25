@@ -38,12 +38,12 @@ public class Account {
         state.computeInterest();
     }
 
-    public void setState(AccountState state) {
-        this.state = state;
-    }
-
     public AccountState getState() {
         return state;
+    }
+
+    public void setState(AccountState state) {
+        this.state = state;
     }
 
     public String getOwner() {

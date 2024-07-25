@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -10,15 +10,12 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>elastic-search-entry</module>
-        <module>flowable</module>
-        <module>rabbitmq</module>
-        <module>springboot-event</module>
-        <module>myrpc</module>
-        <module>spring-learning</module>
         <module>design-pattern</module>
         <module>java-basics</module>
-        <module>project-about-spring</module>
+        <module>middleware</module>
+        <module>framework-implementations</module>
+        <module>technology-practices</module>
+        <module>spring-core-explorations</module>
     </modules>
 
     <properties>

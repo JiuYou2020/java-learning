@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:flowable="http://flowable.org/bpmn"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.activiti.org/processdef">
+    <!-- -请假条流程图 -->
+    <process id="vacationRequest" name="请假条流程" isExecutable="true">
+        <!-- -流程的开始 -->
+        <startEvent id="startEvent"/>
+        <sequenceFlow sourceRef="startEvent" targetRef="approveTask"/>
+        <!-- -流程的节点 -->
+        <userTask id="approveTask" name="开始请假" flowable:candidateGroups="managers"/>
+        <!-- -流程节点间的线条，上一个节点和下一个节点-->
+        <sequenceFlow sourceRef="approveTask" targetRef="decision"/>
+        <!-- -排他性网关 -->
+        <exclusiveGateway id="decision"/>
+        <!-- -同意时 -->
+        <sequenceFlow sourceRef="decision" targetRef="holidayApprovedTask">
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${approved}]]>
+            </conditionExpression>
+        </sequenceFlow>
+        <!-- -拒绝时 -->
+        <sequenceFlow sourceRef="decision" targetRef="rejectEnd">
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${!approved}]]>
+            </conditionExpression>
+        </sequenceFlow>
+        <!-- -外部服务 -->
+        <serviceTask id="externalSystemCall" name="Enter holidays in external system"
+                     flowable:class="org.javaboy.flowable02.flowable.Approve"/>
+        <sequenceFlow sourceRef="externalSystemCall" targetRef="holidayApprovedTask"/>
+
+        <userTask id="holidayApprovedTask" flowable:assignee="${employee}" name="同意请假"/>
+        <sequenceFlow sourceRef="holidayApprovedTask" targetRef="approveEnd"/>
+
+        <serviceTask id="rejectLeave" name="Send out rejection email"
+                     flowable:class="org.javaboy.flowable02.flowable.Reject"/>
+        <sequenceFlow sourceRef="rejectLeave" targetRef="rejectEnd"/>
+
+        <endEvent id="approveEnd"/>
+
+        <endEvent id="rejectEnd"/>
+        <!-- -流程的结束 -->
+    </process>
+</definitions>

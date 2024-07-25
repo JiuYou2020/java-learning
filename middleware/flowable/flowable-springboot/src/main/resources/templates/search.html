@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>已审批请假条查询页面</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- Import style -->
+    <link href="https://unpkg.com/element-plus/dist/index.css" rel="stylesheet"/>
+    <script src="https://unpkg.com/vue@3"></script>
+    <!-- Import component library -->
+    <script src="//unpkg.com/element-plus"></script>
+</head>
+<body>
+<div id="app">
+    <div style="margin-top: 50px">
+        <el-input placeholder="请输入用户名" style="width: 300px" v-model="name"></el-input>
+        <el-button @click="search" type="primary">查询</el-button>
+    </div>
+
+    <div>
+        <el-table :data="historyInfos" border strip>
+            <el-table-column label="姓名" prop="name"></el-table-column>
+            <el-table-column label="提交时间" prop="startTime"></el-table-column>
+            <el-table-column label="审批时间" prop="endTime"></el-table-column>
+            <el-table-column label="事由" prop="reason"></el-table-column>
+            <el-table-column label="天数" prop="days"></el-table-column>
+            <el-table-column label="状态">
+                <template #default="scope">
+                    <el-tag type="success" v-if="scope.row.status">已通过</el-tag>
+                    <el-tag type="danger" v-else>已拒绝</el-tag>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+</div>
+<script>
+    Vue.createApp(
+        {
+            data() {
+                return {
+                    historyInfos: [],
+                    name: 'zhangsan'
+                }
+            },
+            methods: {
+                search() {
+                    let _this = this;
+                    axios.get('/vacation/search?name=' + this.name)
+                        .then(function (response) {
+                            if (response.data.status == 200) {
+                                _this.historyInfos = response.data.data;
+                            } else {
+                                _this.$message.error(response.data.msg);
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+            }
+        }
+    ).use(ElementPlus).mount('#app')
+</script>
+</body>
+</html>

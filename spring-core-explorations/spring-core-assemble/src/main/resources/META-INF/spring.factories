@@ -1,0 +1,3 @@
+cn.southtang.d_spi.DemoDao=\
+  cn.southtang.d_spi.DemoOracleDaoImpl,\
+    cn.southtang.d_spi.DemoMySQLDaoImpl

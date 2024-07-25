@@ -56,6 +56,6 @@ class Client {
         System.out.println(clone.getDate());
         System.out.println(clone.getName());
         System.out.println(clone.getContent());
-        System.out.println(clone.getContent()==weeklyReport.getContent());
+        System.out.println(clone.getContent() == weeklyReport.getContent());
     }
 }

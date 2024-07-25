@@ -1,3 +1,0 @@
-cn.jiuyou2020.springlearning.core_context.assemble.d_spi.DemoDao=\
-  cn.jiuyou2020.springlearning.core_context.assemble.d_spi.DemoOracleDaoImpl,\
-    cn.jiuyou2020.springlearning.core_context.assemble.d_spi.DemoMySQLDaoImpl

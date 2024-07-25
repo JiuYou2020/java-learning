@@ -13,6 +13,6 @@ public class Client {
         Prototype clone = prototypeB.clone();
         System.out.println(clone);
         System.out.println(prototypeB);
-        System.out.println(clone==prototypeB);
+        System.out.println(clone == prototypeB);
     }
 }

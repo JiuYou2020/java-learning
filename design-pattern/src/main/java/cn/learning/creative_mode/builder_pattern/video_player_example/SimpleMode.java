@@ -5,7 +5,7 @@ package cn.learning.creative_mode.builder_pattern.video_player_example;
  * @description
  * @date 2024/4/25 下午3:09
  */
-public class SimpleMode extends Builder{
+public class SimpleMode extends Builder {
     @Override
     public void buildMenu() {
         mainInterface.setMenu("菜单");
