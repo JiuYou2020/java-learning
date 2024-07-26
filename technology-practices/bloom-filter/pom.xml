@@ -5,23 +5,24 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.southtang</groupId>
-        <artifactId>learning</artifactId>
+        <artifactId>technology-practices</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>technology-practices</artifactId>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>email-send</module>
-        <module>bloom-filter</module>
-        <module>traffic-calculation</module>
-    </modules>
+    <artifactId>bloom-filter</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.1-jre</version>
+        </dependency>
+    </dependencies>
 
 </project>

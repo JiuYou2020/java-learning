@@ -127,9 +127,12 @@
     <file url="file://$PROJECT_DIR$/spring-state-machine/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/technology-practices/bloom-filter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/technology-practices/bloom-filter/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/technology-practices/email-send/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/technology-practices/email-send/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/technology-practices/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/technology-practices/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/technology-practices/traffic-calculation/src/main/java" charset="UTF-8" />
   </component>
 </project>
